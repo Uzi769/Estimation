@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+        <changeSet author="kiseleva_ev" id="1">
+            <createTable tableName="estimate">
+                <column autoIncrement="true" name="id" type="integer">
+                    <constraints primaryKey="true"/>
+                </column>
+                <column name="name" type="varchar"/>
+                <column name="create_date" type="timestamp"/>
+                <column name="description" type="varchar"/>
+                <column name="risk" type="integer"/>
+                <column name="status" type="integer"/>
+                <column name="client" type="varchar"/>
+                <column name="creator" type="varchar"/>
+            </createTable>
+        </changeSet>
+
+        <changeSet author="kiseleva_ev" id="2">
+            <createTable tableName="phase">
+                <column autoIncrement="true" name="id" type="integer">
+                    <constraints primaryKey="true"/>
+                </column>
+                <column name="name" type="varchar"/>
+                <column name="estimate" type="integer"/>
+                <column name="sort_order" type="integer"/>
+                <column name="management_reserve" type="integer"/>
+                <column name="bags_reserve" type="integer"/>
+                <column name="qa_reserve" type="integer"/>
+                <column name="risk_reserve" type="integer"/>
+                <column name="estimate_role" type="varchar"/>
+            </createTable>
+
+            <addForeignKeyConstraint
+                    baseTableName="phase"
+                    baseColumnNames="estimate"
+                    constraintName="fk_estimate_id"
+                    referencedTableName="estimate"
+                    referencedColumnNames="id"
+            />
+        </changeSet>
+</databaseChangeLog>
