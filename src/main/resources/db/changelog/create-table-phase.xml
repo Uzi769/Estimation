@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="kiseleva_ev" id="create-phase-table">
+        <createTable tableName="phase">
+            <column autoIncrement="true" name="id" type="integer">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="estimate" type="integer"/>
+            <column name="sort_order" type="integer"/>
+            <column name="management_reserve" type="integer"/>
+            <column name="bags_reserve" type="integer"/>
+            <column name="qa_reserve" type="integer"/>
+            <column name="risk_reserve" type="integer"/>
+            <column name="estimate_role" type="varchar"/>
+        </createTable>
+
+        <createSequence sequenceName="SEQUENCE_PHASES"
+                        startValue="1"
+                        incrementBy="1"
+                        minValue="1"
+                        maxValue="100000"
+                        schemaName="public"
+        />
+
+        <addForeignKeyConstraint
+                baseTableName="phase"
+                baseColumnNames="estimate"
+                constraintName="fk_estimate_id"
+                referencedTableName="estimate"
+                referencedColumnNames="id"
+        />
+    </changeSet>
+
+</databaseChangeLog>

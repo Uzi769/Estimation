@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="kiseleva_ev" id="create-estimate-table">
+        <createTable tableName="estimate">
+            <column autoIncrement="true" name="id" type="integer">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar"/>
+            <column name="create_date" type="timestamp"/>
+            <column name="description" type="varchar"/>
+            <column name="risk" type="integer"/>
+            <column name="status" type="integer"/>
+            <column name="client" type="varchar"/>
+            <column name="creator" type="varchar"/>
+        </createTable>
+
+        <createSequence sequenceName="SEQUENCE_ESTIMATES"
+                        startValue="1"
+                        incrementBy="1"
+                        minValue="1"
+                        maxValue="100000"
+                        schemaName="public"
+        />
+    </changeSet>
+
+</databaseChangeLog>
