@@ -24,7 +24,6 @@
                         startValue="1"
                         incrementBy="1"
                         minValue="1"
-                        maxValue="NO MAXVALUE"
                         schemaName="public"
         />
 
