@@ -24,7 +24,7 @@ public class Phase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHASES_SEQ")
-    @SequenceGenerator(name = "PHASES_SEQ", sequenceName = "SEQUENCE_PHASES", allocationSize=1)
+    @SequenceGenerator(name = "PHASES_SEQ", sequenceName = "SEQUENCE_PHASES", allocationSize = 1)
     @Column(columnDefinition = "id")
     private Long id;
     @Column(columnDefinition = "name")

@@ -24,7 +24,7 @@ public class Estimate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATES_SEQ")
-    @SequenceGenerator(name = "ESTIMATES_SEQ", sequenceName = "SEQUENCE_ESTIMATES", allocationSize=1)
+    @SequenceGenerator(name = "ESTIMATES_SEQ", sequenceName = "SEQUENCE_ESTIMATES", allocationSize = 1)
     @Column(columnDefinition = "id")
     private Long id;
     @Column(columnDefinition = "name")
