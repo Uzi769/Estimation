@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ForeignKey;
 import javax.persistence.OneToMany;
 
 import java.time.Instant;
@@ -35,14 +38,17 @@ public class Estimate {
     private String description;
     @Column(columnDefinition = "risk")
     private Integer risk;
-    @Column(columnDefinition = "status")
-    private Integer status;
+
+    @ManyToOne
+    @JoinColumn(name = "status", foreignKey = @ForeignKey(name="FK_STATUS"))
+    private StatusDictionary status;
+
     @Column(columnDefinition = "client")
     private String client;
     @Column(columnDefinition = "creator")
     private String creator;
 
     @OneToMany(mappedBy = "estimate")
-    private List<Phase> phase;
+    private List<Phase> phases;
 
 }

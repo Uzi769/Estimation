@@ -25,6 +25,14 @@
                         minValue="1"
                         schemaName="public"
         />
+
+        <addForeignKeyConstraint
+                baseTableName="estimate"
+                baseColumnNames="status"
+                constraintName="fk_status_id"
+                referencedTableName="status_dictionary"
+                referencedColumnNames="id"
+        />
     </changeSet>
 
 </databaseChangeLog>
