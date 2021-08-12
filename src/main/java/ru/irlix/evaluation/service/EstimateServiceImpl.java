@@ -15,10 +15,9 @@ public class EstimateServiceImpl implements EstimateService{
     private EstimateMapper mapper;
 
     @Override
-    public boolean saveEstimate(EstimateDTO estimateDTO) {
+    public void saveEstimate(EstimateDTO estimateDTO) {
 
         Estimate estimate = mapper.estimateDtoToEstimate(estimateDTO);
-            estimateRepository.save(estimate);
-        return true;
+        estimateRepository.save(estimate);
     }
 }
