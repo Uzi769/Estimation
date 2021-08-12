@@ -22,30 +22,32 @@ import java.util.List;
 
 @Entity
 @Table(name="estimate")
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Estimate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATES_SEQ")
-    @SequenceGenerator(name = "ESTIMATES_SEQ", sequenceName = "SEQUENCE_ESTIMATES", allocationSize = 1)
-    @Column(columnDefinition = "id")
+    @SequenceGenerator(name = "ESTIMATES_SEQ", sequenceName = "SEQUENCE_ESTIMATE", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    @Column(columnDefinition = "name")
+    @Column(name = "name")
     private String name;
-    @Column(columnDefinition = "create_date")
+    @Column(name = "create_date")
     private Instant createDate;
-    @Column(columnDefinition = "description")
+    @Column(name = "description")
     private String description;
-    @Column(columnDefinition = "risk")
+    @Column(name = "risk")
     private Integer risk;
 
     @ManyToOne
     @JoinColumn(name = "status", foreignKey = @ForeignKey(name="FK_STATUS"))
-    private StatusDictionary status;
+    private Status status;
 
-    @Column(columnDefinition = "client")
+    @Column(name = "client")
     private String client;
-    @Column(columnDefinition = "creator")
+    @Column(name = "creator")
     private String creator;
 
     @OneToMany(mappedBy = "estimate")

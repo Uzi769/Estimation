@@ -24,27 +24,27 @@ public class Phase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHASES_SEQ")
-    @SequenceGenerator(name = "PHASES_SEQ", sequenceName = "SEQUENCE_PHASES", allocationSize = 1)
-    @Column(columnDefinition = "id")
+    @SequenceGenerator(name = "PHASES_SEQ", sequenceName = "SEQUENCE_PHASE", allocationSize = 1)
+    @Column(name = "id")
     private Long id;
-    @Column(columnDefinition = "name")
+    @Column(name = "name")
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "estimate", foreignKey = @ForeignKey(name="FK_ESTIMATE"))
     private Estimate estimate;
 
-    @Column(columnDefinition = "sort_order")
+    @Column(name = "sort_order")
     private Integer sortOrder;
-    @Column(columnDefinition = "management_reserve")
+    @Column(name = "management_reserve")
     private Integer managementReserve;
-    @Column(columnDefinition = "bags_reserve")
+    @Column(name = "bags_reserve")
     private Integer bagsReserve;
-    @Column(columnDefinition = "qa_reserve")
+    @Column(name = "qa_reserve")
     private Integer qaReserve;
-    @Column(columnDefinition = "risk_reserve")
+    @Column(name = "risk_reserve")
     private Integer riskReserve;
-    @Column(columnDefinition = "estimate_role")
-    private String estimateRole;
+    @Column(name = "estimate_role")
+    private String role;
 
 }

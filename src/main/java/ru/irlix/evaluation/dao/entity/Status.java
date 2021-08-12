@@ -12,10 +12,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name="status_dictionary")
-public class StatusDictionary {
+public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "STATUSES_SEQ")
-    @SequenceGenerator(name = "STATUSES_SEQ", sequenceName = "SEQUENCE_STATUSES", allocationSize = 1)
+    @SequenceGenerator(name = "STATUSES_SEQ", sequenceName = "SEQUENCE_STATUS", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 

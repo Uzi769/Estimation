@@ -1,25 +1,22 @@
 package ru.irlix.evaluation.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.irlix.evaluation.dto.EstimateDTO;
-import ru.irlix.evaluation.mapper.EstimateMapper;
 import ru.irlix.evaluation.service.EstimateService;
 
 @RestController
-public class MainController {
+@AllArgsConstructor
+@RequestMapping("/")
+public class EstimateController {
 
     private EstimateService estimateService;
 
-    @Autowired
-    public void setEstimateService(EstimateService estimateService) {
-        this.estimateService = estimateService;
-    }
-
     @PostMapping("/save")
     public String saveEstimate(EstimateDTO estimateDTO){
-
+        estimateService.saveEstimate(estimateDTO);
         return "saving page";
     }
 

@@ -3,23 +3,26 @@ java:
     version: 8
 
 server:
-  port: 8080
+  port: ${APP_PORT:8080}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: 123456
+    url: ${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQL10Dialect
     show:-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
     enabled: true
-
 

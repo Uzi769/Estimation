@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import ru.irlix.evaluation.dao.entity.Estimate;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.EstimateDTO;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EstimateMapper {
+
     Estimate estimateDtoToEstimate(EstimateDTO estimateDto);
     EstimateDTO estimateToEstimateDto(Estimate estimate);
 

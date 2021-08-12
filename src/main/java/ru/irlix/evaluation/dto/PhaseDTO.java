@@ -12,5 +12,5 @@ public class PhaseDTO {
     private Integer bagsReserve;
     private Integer qaReserve;
     private Integer riskReserve;
-    private String estimateRole;
+    private String role;
 }

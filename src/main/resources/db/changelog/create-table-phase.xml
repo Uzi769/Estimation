@@ -7,11 +7,11 @@
 
     <changeSet author="kiseleva_ev" id="create-phase-table">
         <createTable tableName="phase">
-            <column autoIncrement="true" name="id" type="integer">
+            <column autoIncrement="true" name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar"/>
-            <column name="estimate" type="integer"/>
+            <column name="estimate" type="bigint"/>
             <column name="sort_order" type="integer"/>
             <column name="management_reserve" type="integer"/>
             <column name="bags_reserve" type="integer"/>
@@ -20,7 +20,7 @@
             <column name="estimate_role" type="varchar"/>
         </createTable>
 
-        <createSequence sequenceName="SEQUENCE_PHASES"
+        <createSequence sequenceName="SEQUENCE_PHASE"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"
