@@ -28,8 +28,8 @@ import java.util.List;
 public class Estimate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ESTIMATES_SEQ")
-    @SequenceGenerator(name = "ESTIMATES_SEQ", sequenceName = "SEQUENCE_ESTIMATE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estimate_seq")
+    @SequenceGenerator(name = "estimate_seq", sequenceName = "sequence_estimate", allocationSize = 1)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")

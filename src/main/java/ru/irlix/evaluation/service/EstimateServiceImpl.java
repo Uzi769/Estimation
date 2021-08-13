@@ -16,7 +16,6 @@ public class EstimateServiceImpl implements EstimateService{
 
     @Override
     public void saveEstimate(EstimateDTO estimateDTO) {
-
         Estimate estimate = mapper.estimateDtoToEstimate(estimateDTO);
         estimateRepository.save(estimate);
     }

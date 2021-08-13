@@ -11,11 +11,11 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name="status_dictionary")
-public class Status {
+@Table(name="role_dictionary")
+public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "status_seq")
-    @SequenceGenerator(name = "status_seq", sequenceName = "sequence_status", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+    @SequenceGenerator(name = "role_seq", sequenceName = "sequence_role", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -25,7 +25,7 @@ public class Status {
     @Column(name = "display_value")
     private String displayValue;
 
-    @OneToMany(mappedBy = "status")
-    private List<Estimate> estimates;
+    @OneToMany(mappedBy = "role")
+    private List<Phase> phases;
 
 }

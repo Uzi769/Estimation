@@ -23,8 +23,8 @@ import javax.persistence.ForeignKey;
 public class Phase {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "PHASES_SEQ")
-    @SequenceGenerator(name = "PHASES_SEQ", sequenceName = "SEQUENCE_PHASE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phase_seq")
+    @SequenceGenerator(name = "phase_seq", sequenceName = "sequence_phase", allocationSize = 1)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
@@ -44,7 +44,9 @@ public class Phase {
     private Integer qaReserve;
     @Column(name = "risk_reserve")
     private Integer riskReserve;
-    @Column(name = "estimate_role")
-    private String role;
+
+    @ManyToOne
+    @JoinColumn(name = "estimate_role", foreignKey = @ForeignKey(name="fk_estimate_role"))
+    private Role role;
 
 }

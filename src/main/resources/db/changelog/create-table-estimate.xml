@@ -19,7 +19,7 @@
             <column name="creator" type="varchar"/>
         </createTable>
 
-        <createSequence sequenceName="SEQUENCE_ESTIMATE"
+        <createSequence sequenceName="sequence_estimate"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"
