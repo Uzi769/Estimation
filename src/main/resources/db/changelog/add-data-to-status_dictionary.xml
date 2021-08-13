@@ -7,17 +7,17 @@
 
     <changeSet author="kiseleva_ev" id="add-data-to-status_dictionary">
         <insert  tableName="status_dictionary">
-            <column  name="id"  valueSequenceNext="sequence_status"/>
+            <column  name="id"  valueSequenceNext="status_id_seq"/>
             <column  name="value"  value="draft"/>
             <column  name="display_value"  value="черновик"/>
         </insert>
         <insert  tableName="status_dictionary">
-            <column  name="id"  valueSequenceNext="sequence_status"/>
+            <column  name="id"  valueSequenceNext="status_id_seq"/>
             <column  name="value"  value="in_progress"/>
             <column  name="display_value"  value="в работе"/>
         </insert>
         <insert  tableName="status_dictionary">
-            <column  name="id"  valueSequenceNext="sequence_status"/>
+            <column  name="id"  valueSequenceNext="status_id_seq"/>
             <column  name="value"  value="done"/>
             <column  name="display_value"  value="завершена"/>
         </insert>

@@ -7,7 +7,7 @@
 
     <changeSet author="kiseleva_ev" id="create-phase-table">
         <createTable tableName="phase">
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar"/>
@@ -20,7 +20,7 @@
             <column name="estimate_role" type="bigint"/>
         </createTable>
 
-        <createSequence sequenceName="sequence_phase"
+        <createSequence sequenceName="phase_id_seq"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"

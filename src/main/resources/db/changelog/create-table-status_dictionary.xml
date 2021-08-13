@@ -7,14 +7,14 @@
 
     <changeSet author="kiseleva_ev" id="create-status_dictionary-table">
         <createTable tableName="status_dictionary">
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="value" type="varchar"/>
             <column name="display_value" type="varchar"/>
         </createTable>
 
-        <createSequence sequenceName="sequence_status"
+        <createSequence sequenceName="status_id_seq"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"

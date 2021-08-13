@@ -5,7 +5,6 @@ import ru.irlix.evaluation.service.EstimateService;
 import ru.irlix.evaluation.utils.Utils;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,9 +16,8 @@ public class EstimateController {
     private EstimateService estimateService;
 
     @RequestMapping(value = Utils.BASE_URL + "estimation", method = RequestMethod.POST)
-    public ResponseEntity saveEstimate(@RequestBody EstimateDTO estimateDTO) {
+    public void saveEstimate(@RequestBody EstimateDTO estimateDTO) {
         estimateService.saveEstimate(estimateDTO);
-        return ResponseEntity.ok().body("success");
     }
 
 }

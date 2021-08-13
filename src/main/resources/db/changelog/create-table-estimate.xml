@@ -7,7 +7,7 @@
 
     <changeSet author="kiseleva_ev" id="create-estimate-table">
         <createTable tableName="estimate">
-            <column autoIncrement="true" name="id" type="bigint">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar"/>
@@ -19,7 +19,7 @@
             <column name="creator" type="varchar"/>
         </createTable>
 
-        <createSequence sequenceName="sequence_estimate"
+        <createSequence sequenceName="estimate_id_seq"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"

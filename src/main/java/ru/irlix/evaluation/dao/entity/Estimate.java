@@ -29,7 +29,7 @@ public class Estimate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "estimate_seq")
-    @SequenceGenerator(name = "estimate_seq", sequenceName = "sequence_estimate", allocationSize = 1)
+    @SequenceGenerator(name = "estimate_seq", sequenceName = "estimate_id_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
@@ -42,7 +42,7 @@ public class Estimate {
     private Integer risk;
 
     @ManyToOne
-    @JoinColumn(name = "status", foreignKey = @ForeignKey(name="FK_STATUS"))
+    @JoinColumn(name = "status", foreignKey = @ForeignKey(name="fk_status"))
     private Status status;
 
     @Column(name = "client")

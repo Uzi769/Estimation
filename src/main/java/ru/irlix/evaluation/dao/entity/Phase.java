@@ -24,14 +24,14 @@ public class Phase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phase_seq")
-    @SequenceGenerator(name = "phase_seq", sequenceName = "sequence_phase", allocationSize = 1)
+    @SequenceGenerator(name = "phase_seq", sequenceName = "phase_id_seq", allocationSize = 1)
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "estimate", foreignKey = @ForeignKey(name="FK_ESTIMATE"))
+    @JoinColumn(name = "estimate", foreignKey = @ForeignKey(name="fk_estimate"))
     private Estimate estimate;
 
     @Column(name = "sort_order")
