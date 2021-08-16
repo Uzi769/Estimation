@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.irlix.evaluation.dao.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dao.dto.response.EstimationResponse;
-import ru.irlix.evaluation.service.EstimationService;
-import ru.irlix.evaluation.utils.Utils;
+import ru.irlix.evaluation.service.estimation.EstimationService;
+import ru.irlix.evaluation.utils.Constants;
 
 @RestController
-@RequestMapping(Utils.BASE_URL + "/estimation")
+@RequestMapping(Constants.BASE_URL + "/estimation")
 @RequiredArgsConstructor
 public class EstimationController {
 

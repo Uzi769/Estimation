@@ -10,7 +10,7 @@ import lombok.*;
 public class PhaseResponse {
     private Long id;
     private String name;
-    private String estimateName;
+    private String estimationName;
     private Integer sortOrder;
     private Integer managementReserve;
     private Integer bagsReserve;

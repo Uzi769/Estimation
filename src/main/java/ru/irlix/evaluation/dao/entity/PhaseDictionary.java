@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "phase_dictionary")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 public class PhaseDictionary {
 
@@ -21,6 +20,6 @@ public class PhaseDictionary {
 
     private String name;
 
-    @Column(name = "standart_hours")
-    private Integer standartHours;
+    @Column(name = "standard_hours")
+    private Integer standardHours;
 }

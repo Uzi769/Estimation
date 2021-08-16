@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Table(name = "task_dictionary")
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 public class TaskDictionary {
 

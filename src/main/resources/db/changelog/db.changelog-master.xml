@@ -5,12 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <include file="create-table-status_dictionary.xml" relativeToChangelogFile="true"/>
-    <include file="create-table-role_dictionary.xml" relativeToChangelogFile="true"/>
-    <include file="create-table-estimate.xml" relativeToChangelogFile="true"/>
-    <include file="create-table-phase.xml" relativeToChangelogFile="true"/>
-    <include file="add-data-to-status_dictionary.xml" relativeToChangelogFile="true"/>
-    <include file="add-data-to-role_dictionary.xml" relativeToChangelogFile="true"/>
-    <include file="estimation-fix-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-status-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-role-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-estimation-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-phase-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-type-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-phase-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-relations-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

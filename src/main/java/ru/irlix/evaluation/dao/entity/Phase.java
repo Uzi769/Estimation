@@ -39,7 +39,7 @@ public class Phase {
     private Integer riskReserve;
 
     @ManyToOne
-    @JoinColumn(name = "estimate_role")
+    @JoinColumn(name = "estimation_role")
     private Role role;
 
     private Boolean done;
