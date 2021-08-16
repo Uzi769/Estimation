@@ -1,6 +1,6 @@
 package ru.irlix.evaluation.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.irlix.evaluation.dao.entity.Estimate;
 import ru.irlix.evaluation.dao.entity.Phase;
@@ -13,23 +13,21 @@ import ru.irlix.evaluation.mapper.EstimateMapper;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
-public class EstimateServiceImpl implements EstimateService {
+@RequiredArgsConstructor
+public class EstimateServiceImpl implements EstimateService{
 
-    private EstimateRepository estimateRepository;
-    private PhaseRepository phaseRepository;
-    private EstimateMapper mapper;
+    private final EstimateRepository estimateRepository;
+    private final PhaseRepository phaseRepository;
+    private final EstimateMapper mapper;
 
     @Override
     public void saveEstimate(EstimateDTO estimateDTO) {
 
-        Estimate estimate = EstimateMapper.ESTIMATE_MAPPER.estimateDtoToEstimate(estimateDTO);
+        Estimate estimate = mapper.estimateDtoToEstimate(estimateDTO);
         List<PhaseDTO> phasesDTO = estimateDTO.getPhases();
-        for (PhaseDTO phaseDTO : phasesDTO) {
-        }
-        List<Phase> phases = EstimateMapper.ESTIMATE_MAPPER.phasesDtoToPhases(phasesDTO);
-        savePhases(phases);
+        List<Phase> phases = mapper.phasesDtoToPhases(phasesDTO);
         estimateRepository.save(estimate);
+        savePhases(phases);
     }
 
     @Override
@@ -43,4 +41,7 @@ public class EstimateServiceImpl implements EstimateService {
     public void savePhase(Phase phase) {
         phaseRepository.save(phase);
     }
+
+
+
 }

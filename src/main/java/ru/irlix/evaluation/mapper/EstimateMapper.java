@@ -1,7 +1,6 @@
 package ru.irlix.evaluation.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import ru.irlix.evaluation.dao.entity.Estimate;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
@@ -13,8 +12,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface EstimateMapper {
-
-    EstimateMapper ESTIMATE_MAPPER = Mappers.getMapper(EstimateMapper.class);
 
     Estimate estimateDtoToEstimate(EstimateDTO estimateDto);
     EstimateDTO estimateToEstimateDto(Estimate estimate);
@@ -28,4 +25,6 @@ public interface EstimateMapper {
     RoleDTO roleToRoleDto(Role role);
     Role roleDtoToRole(RoleDTO roleDTO);
 
+
 }
+
