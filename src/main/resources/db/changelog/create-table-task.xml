@@ -5,41 +5,43 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet author="kiseleva_ev" id="create-phase-table">
-        <createTable tableName="phase">
+    <changeSet author="kiseleva_ev" id="create-task-table">
+        <createTable tableName="task">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar"/>
-            <column name="estimate" type="bigint"/>
-            <column name="sort_order" type="integer"/>
-            <column name="management_reserve" type="integer"/>
+            <column name="type" type="integer"/>
+            <column name="reapit_count" type="integer"/>
             <column name="bags_reserve" type="integer"/>
             <column name="qa_reserve" type="integer"/>
+            <column name="management_reserve" type="integer"/>
             <column name="risk_reserve" type="integer"/>
-            <column name="estimate_role" type="bigint"/>
-            <column name="done" type="boolean"/>
+            <column name="comment" type="varchar"/>
+            <column name="hours_min" type="integer"/>
+            <column name="hours_max" type="integer"/>
+            <column name="phase" type="integer"/>
+            <column name="estimation_role" type="integer"/>
+            <column name="parent" type="integer"/>
         </createTable>
 
-        <createSequence sequenceName="phase_id_seq"
+        <createSequence sequenceName="task_id_seq"
                         startValue="1"
                         incrementBy="1"
                         minValue="1"
                         schemaName="public"
         />
-
         <addForeignKeyConstraint
-                baseTableName="phase"
-                baseColumnNames="estimate"
-                constraintName="fk_estimate_id"
-                referencedTableName="estimate"
+                baseTableName="task"
+                baseColumnNames="phase"
+                constraintName="fk_phase_id"
+                referencedTableName="phase"
                 referencedColumnNames="id"
         />
-
         <addForeignKeyConstraint
-                baseTableName="phase"
-                baseColumnNames="estimate_role"
-                constraintName="fk_estimate_role"
+                baseTableName="task"
+                baseColumnNames="estimation_role"
+                constraintName="fk_estimation_role_id"
                 referencedTableName="role_dictionary"
                 referencedColumnNames="id"
         />

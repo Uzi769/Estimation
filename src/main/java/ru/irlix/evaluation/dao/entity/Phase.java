@@ -42,4 +42,5 @@ public class Phase {
     @JoinColumn(name = "estimate_role")
     private Role role;
 
+    private Boolean done;
 }

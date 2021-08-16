@@ -25,4 +25,8 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<Phase> phases;
+
+    @OneToMany(mappedBy = "role")
+    private List <Task> tasks;
+
 }
