@@ -26,8 +26,9 @@ public class EstimateServiceImpl implements EstimateService{
         Estimate estimate = mapper.estimateDtoToEstimate(estimateDTO);
         List<PhaseDTO> phasesDTO = estimateDTO.getPhases();
         List<Phase> phases = mapper.phasesDtoToPhases(phasesDTO);
-        estimateRepository.save(estimate);
         savePhases(phases);
+        estimateRepository.save(estimate);
+
     }
 
     @Override
@@ -41,7 +42,5 @@ public class EstimateServiceImpl implements EstimateService{
     public void savePhase(Phase phase) {
         phaseRepository.save(phase);
     }
-
-
 
 }
