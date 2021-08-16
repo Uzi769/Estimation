@@ -1,7 +1,8 @@
 package ru.irlix.evaluation.dto;
 
 import lombok.Data;
-import ru.irlix.evaluation.dao.entity.Role;
+
+import java.util.List;
 
 @Data
 public class PhaseDTO {
@@ -14,5 +15,6 @@ public class PhaseDTO {
     private Integer qaReserve;
     private Integer riskReserve;
     private RoleDTO role;
+    private List<TaskDTO> tasks;
     private Boolean done;
 }
