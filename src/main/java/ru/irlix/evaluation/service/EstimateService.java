@@ -1,8 +1,8 @@
 package ru.irlix.evaluation.service;
 
-import ru.irlix.evaluation.dao.entity.Estimate;
+import ru.irlix.evaluation.dto.EstimateDTO;
 
 public interface EstimateService {
-    void saveEstimate(Estimate estimate);
+    void saveEstimate(EstimateDTO estimateDTO);
 
 }
