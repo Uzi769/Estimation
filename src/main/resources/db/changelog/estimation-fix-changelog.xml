@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1629112781294-6" author="Ivan Kalachikov">
+        <createTable tableName="estimation">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_estimation"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="create_date" type="DATETIME"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="risk" type="INT"/>
+            <column name="status" type="BIGINT"/>
+            <column name="client" type="VARCHAR(255)"/>
+            <column name="creator" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1629112781294-7" author="Ivan Kalachikov">
+        <addColumn tableName="phase">
+            <column name="estimation" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1629112781294-8" author="Ivan Kalachikov">
+        <addForeignKeyConstraint baseColumnNames="status" baseTableName="estimation"
+                                 constraintName="FK_ESTIMATION_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status_dictionary"/>
+    </changeSet>
+    <changeSet id="1629112781294-9" author="Ivan Kalachikov">
+        <addForeignKeyConstraint baseColumnNames="estimation" baseTableName="phase"
+                                 constraintName="FK_PHASE_ON_ESTIMATION" referencedColumnNames="id"
+                                 referencedTableName="estimation"/>
+    </changeSet>
+    <changeSet id="1629112781294-10" author="Ivan Kalachikov">
+        <dropForeignKeyConstraint baseTableName="phase" constraintName="fk_estimate_id"/>
+    </changeSet>
+    <changeSet id="1629112781294-11" author="Ivan Kalachikov">
+        <dropForeignKeyConstraint baseTableName="estimate" constraintName="fk_status_id"/>
+    </changeSet>
+    <changeSet id="1629112781294-12" author="Ivan Kalachikov">
+        <dropTable cascadeConstraints="true" tableName="estimate"/>
+    </changeSet>
+    <changeSet id="1629112781294-13" author="Ivan Kalachikov">
+        <dropColumn columnName="estimate" tableName="phase"/>
+    </changeSet>
+    <changeSet id="1629112781294-1" author="Ivan Kalachikov">
+        <modifyDataType columnName="display_value" newDataType="VARCHAR(255)" tableName="role_dictionary"/>
+    </changeSet>
+    <changeSet id="1629112781294-2" author="Ivan Kalachikov">
+        <modifyDataType columnName="display_value" newDataType="VARCHAR(255)" tableName="status_dictionary"/>
+    </changeSet>
+    <changeSet id="1629112781294-3" author="Ivan Kalachikov">
+        <modifyDataType columnName="name" newDataType="VARCHAR(255)" tableName="phase"/>
+    </changeSet>
+    <changeSet id="1629112781294-4" author="Ivan Kalachikov">
+        <modifyDataType columnName="value" newDataType="VARCHAR(255)" tableName="role_dictionary"/>
+    </changeSet>
+    <changeSet id="1629112781294-5" author="Ivan Kalachikov">
+        <modifyDataType columnName="value" newDataType="VARCHAR(255)" tableName="status_dictionary"/>
+    </changeSet>
+
+</databaseChangeLog>

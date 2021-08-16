@@ -1,13 +1,17 @@
-package ru.irlix.evaluation.dto;
+package ru.irlix.evaluation.dao.dto.response;
 
-import lombok.Data;
+import lombok.*;
 import ru.irlix.evaluation.dao.entity.Status;
 
 import java.time.Instant;
 import java.util.List;
 
-@Data
-public class EstimateDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class EstimationResponse {
     private Long id;
     private String name;
     private Instant createDate;
@@ -16,5 +20,5 @@ public class EstimateDTO {
     private Status status;
     private String client;
     private String creator;
-    private List<PhaseDTO> phases;
+    private List<PhaseResponse> phases;
 }

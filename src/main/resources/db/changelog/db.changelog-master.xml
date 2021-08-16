@@ -9,8 +9,8 @@
     <include file="create-table-role_dictionary.xml" relativeToChangelogFile="true"/>
     <include file="create-table-estimate.xml" relativeToChangelogFile="true"/>
     <include file="create-table-phase.xml" relativeToChangelogFile="true"/>
-
     <include file="add-data-to-status_dictionary.xml" relativeToChangelogFile="true"/>
     <include file="add-data-to-role_dictionary.xml" relativeToChangelogFile="true"/>
-    
+    <include file="estimation-fix-changelog.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

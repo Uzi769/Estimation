@@ -13,13 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name="role_dictionary")
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(name = "role_seq", sequenceName = "role_id_seq", allocationSize = 1)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "value")
     private String value;
 
     @Column(name = "display_value")
@@ -27,5 +25,4 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<Phase> phases;
-
 }
