@@ -44,4 +44,7 @@ public class Phase {
     @OneToMany(mappedBy = "phase")
     private List<Task> tasks;
 
+    @Column(name = "done")
+    private Boolean done;
+
 }

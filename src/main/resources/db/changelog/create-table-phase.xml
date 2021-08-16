@@ -18,6 +18,7 @@
             <column name="qa_reserve" type="integer"/>
             <column name="risk_reserve" type="integer"/>
             <column name="estimate_role" type="bigint"/>
+            <column name="done" type="boolean"/>
         </createTable>
 
         <createSequence sequenceName="phase_id_seq"

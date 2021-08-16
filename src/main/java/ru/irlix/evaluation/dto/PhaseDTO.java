@@ -14,4 +14,5 @@ public class PhaseDTO {
     private Integer qaReserve;
     private Integer riskReserve;
     private RoleDTO role;
+    private Boolean done;
 }
