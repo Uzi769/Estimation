@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -42,6 +41,6 @@ public class Estimate {
     private String creator;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "estimate")
-    private List<Phase> phases = new ArrayList<>();
+    private List<Phase> phases;
 
 }
