@@ -1,6 +1,8 @@
 stages:
     - build jar
     - build image
+    - pull configurations
+    - push image
 
 build:
   stage: build jar
@@ -32,3 +34,40 @@ docker:
     - echo "$CI_COMMIT_BRANCH"
   only:
     - develop
+
+git:
+  stage: pull configurations
+  tags:
+    - git
+  script:
+    - update-ca-certificates
+    - eval $(ssh-agent -s)
+    - echo "$SSH_DEPLOY_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
+    - ssh-keyscan gitlab.lan >> ~/.ssh/known_hosts
+    - git clone git@gitlab.lan:devops/ansible.git
+  artifacts:
+    paths:
+      - ansible/social-network
+  only:
+    - develop
+    - test
+    - devops
+    - prod
+
+deploy:
+  stage: push image
+  tags:
+    - ansible
+  script:
+    - mkdir -p /etc/ansible/
+    - mv ansible/$PROJECT_NAME/* .
+    - cp deployment/ansible/ansible.cfg /etc/ansible/ansible.cfg
+    - pip3 install docker-compose
+    - ansible-playbook -i deployment/ansible/hosts deployment/ansible/deploy_app.yml -e "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH LOCATION=$LOCATION"
+  only:
+    - develop
+    - test
+    - devops
+    - prod
+
