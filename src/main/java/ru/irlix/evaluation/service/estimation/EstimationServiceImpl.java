@@ -47,7 +47,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
-        List<Estimation> estimationList = estimationRepository.findAll(request.getPageable()).getContent();
+        List<Estimation> estimationList = estimationRepository.filter(request);
         return mapper.estimationsToEstimationResponseList(estimationList);
     }
 
