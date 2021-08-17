@@ -42,5 +42,8 @@ public class Phase {
     @JoinColumn(name = "estimation_role")
     private Role role;
 
+    @OneToMany(mappedBy = "phase", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    private List<Task> tasks;
+
     private Boolean done;
 }

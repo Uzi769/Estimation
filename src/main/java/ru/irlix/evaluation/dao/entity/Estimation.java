@@ -48,6 +48,6 @@ public class Estimation {
 
     private String creator;
 
-    @OneToMany(mappedBy = "estimation")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "estimation")
     private List<Phase> phases;
 }

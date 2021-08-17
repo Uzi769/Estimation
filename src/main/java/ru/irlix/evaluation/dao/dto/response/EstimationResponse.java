@@ -17,7 +17,6 @@ public class EstimationResponse {
     private Instant createDate;
     private String description;
     private Integer risk;
-    private Status status;
     private String client;
     private String creator;
     private List<PhaseResponse> phases;

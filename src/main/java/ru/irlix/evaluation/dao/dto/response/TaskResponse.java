@@ -6,7 +6,7 @@ import lombok.Data;
 public class TaskResponse {
     private Long id;
     private String name;
-    private Integer reapitCount;
+    private Integer repeatCount;
     private Integer bagsReserve;
     private Integer qaReserve;
     private Integer managementReserve;
