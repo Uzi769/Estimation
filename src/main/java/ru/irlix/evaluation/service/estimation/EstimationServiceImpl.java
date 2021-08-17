@@ -8,18 +8,36 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.repository.EstimationRepository;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class EstimationServiceImpl implements EstimationService {
 
-    private EstimationRepository estimationRepository;
-    private EstimationMapper mapper;
+    private final EstimationRepository estimationRepository;
+    private final EstimationMapper mapper;
 
     @Override
-    public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
+    public EstimationResponse createOrUpdateEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
-
         return mapper.estimationToEstimationResponse(savedEstimation);
+    }
+
+    @Override
+    public EstimationResponse findEstimationById(Long id) {
+        return mapper.estimationToEstimationResponse(estimationRepository.findEstimationById(id));
+    }
+
+    @Override
+    public List<EstimationResponse> findAll() {
+        return mapper.estimationListToEstimationsResponseList(estimationRepository.findAll());
+    }
+
+    @Override
+    public void deleteEstimationById(Long id) {
+        if(estimationRepository.existsById(id)){
+            estimationRepository.deleteById(id);
+        }
     }
 }

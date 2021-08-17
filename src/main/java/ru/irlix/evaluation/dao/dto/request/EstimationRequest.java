@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class EstimationRequest {
+    private Long id;
     private String name;
     private String client;
     private String description;
