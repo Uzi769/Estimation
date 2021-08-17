@@ -19,7 +19,6 @@ public class EstimateController {
 
     @RequestMapping(value = Utils.BASE_URL + "estimation", method = RequestMethod.POST)
     public void saveEstimate(@RequestBody EstimateDTO estimateDTO) {
-        phaseService.savePhases(estimateDTO.getPhases());
         estimateService.saveEstimate(estimateDTO);
     }
 

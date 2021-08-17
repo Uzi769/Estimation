@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class TaskDTO {
-    private Long id;
     private String name;
     private Integer reapitCount;
     private Integer bagsReserve;
@@ -14,7 +13,5 @@ public class TaskDTO {
     private String comment;
     private Integer hoursMin;
     private Integer hoursMax;
-    private PhaseDTO phase;
-    private RoleDTO role;
     private Integer parent;
 }

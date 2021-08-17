@@ -41,7 +41,7 @@ public class Phase {
     @JoinColumn(name = "estimate_role", foreignKey = @ForeignKey(name="fk_estimate_role"))
     private Role role;
 
-    @OneToMany(mappedBy = "phase")
+    @OneToMany(mappedBy = "phase", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     private List<Task> tasks;
 
     @Column(name = "done")
