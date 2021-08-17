@@ -1,7 +1,6 @@
 package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +20,9 @@ public class EstimationController {
     private final EstimationService estimationService;
 
     @PostMapping
-    public ResponseEntity<Long> createEstimation(@RequestBody EstimationRequest request) {
-        Long id = estimationService.createEstimation(request);
-        return new ResponseEntity<>(id, HttpStatus.CREATED);
+    public ResponseEntity<EstimationResponse> createEstimation(@RequestBody EstimationRequest request) {
+        EstimationResponse savedEstimation = estimationService.createEstimation(request);
+        return new ResponseEntity<>(savedEstimation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -43,5 +42,11 @@ public class EstimationController {
     public ResponseEntity<List<EstimationResponse>> findAllEstimations(EstimationFilterRequest request) {
         List<EstimationResponse> estimationsList = estimationService.findAllEstimations(request);
         return new ResponseEntity<>(estimationsList, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EstimationResponse> findEstimationById(@PathVariable Long id) {
+        EstimationResponse estimation = estimationService.findById(id);
+        return new ResponseEntity<>(estimation, HttpStatus.OK);
     }
 }

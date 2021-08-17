@@ -9,7 +9,7 @@ import ru.irlix.evaluation.dao.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
-import ru.irlix.evaluation.repository.EstimationRepository;
+import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.status.StatusService;
 
 import java.util.List;
@@ -23,16 +23,16 @@ public class EstimationServiceImpl implements EstimationService {
     private EstimationMapper mapper;
 
     @Override
-    public Long createEstimation(EstimationRequest estimationRequest) {
+    public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusService);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
-        return savedEstimation.getId();
+        return mapper.estimationToEstimationResponse(savedEstimation);
     }
 
     @Override
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
-        Estimation estimationToUpdate = findEstimationById(id);
+        Estimation estimationToUpdate = findEstimationEntityById(id);
         Estimation updatedEstimation = checkAndUpdateFields(estimationToUpdate, estimationRequest);
 
         Estimation savedEstimation = estimationRepository.save(updatedEstimation);
@@ -41,7 +41,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public void deleteEstimation(Long id) {
-        Estimation estimationToDelete = findEstimationById(id);
+        Estimation estimationToDelete = findEstimationEntityById(id);
         estimationRepository.delete(estimationToDelete);
     }
 
@@ -51,7 +51,13 @@ public class EstimationServiceImpl implements EstimationService {
         return mapper.estimationsToEstimationResponseList(estimationList);
     }
 
-    private Estimation findEstimationById(Long id) {
+    @Override
+    public EstimationResponse findById(Long id) {
+        Estimation estimation = findEstimationEntityById(id);
+        return mapper.estimationToEstimationResponse(estimation);
+    }
+
+    private Estimation findEstimationEntityById(Long id) {
         return estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
