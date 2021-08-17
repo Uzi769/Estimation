@@ -48,7 +48,7 @@ git:
     - git clone git@gitlab.lan:devops/ansible.git
   artifacts:
     paths:
-      - ansible/social-network
+      - ansible
   only:
     - develop
 
