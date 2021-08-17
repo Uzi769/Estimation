@@ -51,9 +51,6 @@ git:
       - ansible/social-network
   only:
     - develop
-    - test
-    - devops
-    - prod
 
 deploy:
   stage: push image
@@ -67,7 +64,4 @@ deploy:
     - ansible-playbook -i deployment/ansible/hosts deployment/ansible/deploy_app.yml -e "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH LOCATION=$LOCATION"
   only:
     - develop
-    - test
-    - devops
-    - prod
 
