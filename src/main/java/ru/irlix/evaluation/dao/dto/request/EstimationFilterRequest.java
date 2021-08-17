@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.dao.dto.request;
 
 import lombok.*;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 
@@ -9,12 +10,12 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EstimationRequest {
+public class EstimationFilterRequest {
     private String name;
     private String client;
-    private String description;
-    private Instant createDate;
-    private Integer risk;
     private String status;
-    private String creator;
+    private Instant beginDate;
+    private Instant endDate;
+
+    private Pageable pageable;
 }
