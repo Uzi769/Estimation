@@ -15,5 +15,9 @@
     <include file="create-task-dictionary-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-phase-dictionary-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-relations-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-phase-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-task-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-data-to-status-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-data-to-role-dictionary-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

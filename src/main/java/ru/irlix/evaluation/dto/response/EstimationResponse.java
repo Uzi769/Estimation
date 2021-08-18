@@ -1,7 +1,6 @@
-package ru.irlix.evaluation.dao.dto.response;
+package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
-import ru.irlix.evaluation.dao.entity.Status;
 
 import java.time.Instant;
 import java.util.List;
@@ -19,5 +18,6 @@ public class EstimationResponse {
     private Integer risk;
     private String client;
     private String creator;
+    private StatusResponse status;
     private List<PhaseResponse> phases;
 }

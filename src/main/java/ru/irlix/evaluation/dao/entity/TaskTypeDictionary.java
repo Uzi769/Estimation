@@ -22,4 +22,7 @@ public class TaskTypeDictionary {
 
     @OneToMany(mappedBy = "type")
     private List<Task> taskList;
+
+    @OneToMany(mappedBy = "type")
+    private List<TaskDictionary> taskDictionaryList;
 }

@@ -1,6 +1,6 @@
 package ru.irlix.evaluation.service.phase;
 
-import ru.irlix.evaluation.dao.dto.request.PhaseRequest;
+import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dao.entity.Phase;
 
 import java.util.List;

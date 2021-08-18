@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="kiseleva_ev" id="add-data-to-role_dictionary">
+        <insert  tableName="role_dictionary">
+            <column  name="value"  value="analyst"/>
+            <column  name="display_value"  value="Аналитик"/>
+        </insert>
+        <insert  tableName="role_dictionary">
+            <column  name="value"  value="designer"/>
+            <column  name="display_value"  value="Дизайнер"/>
+        </insert>
+        <insert  tableName="role_dictionary">
+            <column  name="value"  value="tester"/>
+            <column  name="display_value"  value="Тестировщик"/>
+        </insert>
+        <insert  tableName="role_dictionary">
+            <column  name="value"  value="developer"/>
+            <column  name="display_value"  value="Разработчик"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

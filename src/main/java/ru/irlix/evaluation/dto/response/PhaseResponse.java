@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.dao.dto.response;
+package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
 
@@ -10,11 +10,14 @@ import lombok.*;
 public class PhaseResponse {
     private Long id;
     private String name;
-    private String estimationName;
+    private Long estimation;
     private Integer sortOrder;
     private Integer managementReserve;
     private Integer bagsReserve;
     private Integer qaReserve;
     private Integer riskReserve;
-    private RoleResponse role;
+    private Boolean done;
+    private Boolean managementReserveOn;
+    private Boolean qaReserveOn;
+    private Boolean bagsReserveOn;
 }

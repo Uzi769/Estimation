@@ -24,7 +24,6 @@ public class Estimation {
 
     private String name;
 
-    @Column(name = "create_date")
     @CreationTimestamp
     private Instant createDate;
 

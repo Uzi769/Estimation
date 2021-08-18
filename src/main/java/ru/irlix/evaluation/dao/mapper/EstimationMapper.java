@@ -1,14 +1,24 @@
 package ru.irlix.evaluation.dao.mapper;
 
-import org.mapstruct.Mapper;
-import ru.irlix.evaluation.dao.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dao.dto.response.EstimationResponse;
+import org.mapstruct.*;
+import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.service.service.StatusService;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = PhaseMapper.class)
 public interface EstimationMapper {
-
-    Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
+    @Mapping(target = "status", ignore = true)
+    Estimation estimationRequestToEstimation(EstimationRequest estimationRequest, @Context StatusService statusService);
 
     EstimationResponse estimationToEstimationResponse(Estimation estimation);
+
+    List<EstimationResponse> estimationsToEstimationResponseList(List<Estimation> estimationList);
+
+    @AfterMapping
+    default void map(@MappingTarget Estimation estimation, EstimationRequest req, @Context StatusService statusService) {
+        estimation.setStatus(statusService.findByName(req.getStatus()));
+    }
 }
