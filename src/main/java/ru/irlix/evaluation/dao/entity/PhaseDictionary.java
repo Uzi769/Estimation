@@ -1,11 +1,11 @@
 package ru.irlix.evaluation.dao.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "phase_dictionary")
@@ -20,6 +20,8 @@ public class PhaseDictionary {
 
     private String name;
 
-    @Column(name = "standard_hours")
     private Integer standardHours;
+
+    @ManyToMany(mappedBy = "phaseDictionarySet")
+    private Set<TaskDictionary> taskDictionarySet;
 }

@@ -22,7 +22,7 @@ public class EstimationController {
     @PostMapping
     public ResponseEntity<EstimationResponse> createEstimation(@RequestBody EstimationRequest request) {
         EstimationResponse savedEstimation = estimationService.createEstimation(request);
-        return new ResponseEntity<>(savedEstimation, HttpStatus.CREATED);
+        return new ResponseEntity<>(savedEstimation, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

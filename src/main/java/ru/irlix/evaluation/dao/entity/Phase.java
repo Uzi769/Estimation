@@ -24,27 +24,27 @@ public class Phase {
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 
-    @Column(name = "sort_order")
     private Integer sortOrder;
 
-    @Column(name = "management_reserve")
     private Integer managementReserve;
 
-    @Column(name = "bags_reserve")
     private Integer bagsReserve;
 
-    @Column(name = "qa_reserve")
     private Integer qaReserve;
 
-    @Column(name = "risk_reserve")
     private Integer riskReserve;
-
-    @ManyToOne
-    @JoinColumn(name = "estimation_role")
-    private Role role;
 
     @OneToMany(mappedBy = "phase", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     private List<Task> tasks;
 
     private Boolean done;
+
+    private Boolean bagsReserveOn;
+
+    private Boolean qaReserveOn;
+
+    private Boolean managementReserveOn;
+
+    private Boolean riskReserveOn;
+
 }

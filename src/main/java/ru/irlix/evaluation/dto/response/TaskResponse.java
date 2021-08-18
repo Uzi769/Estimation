@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.dao.dto.response;
+package ru.irlix.evaluation.dto.response;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class TaskResponse {
     private String comment;
     private Integer hoursMin;
     private Integer hoursMax;
-    private PhaseResponse phase;
-    private RoleResponse role;
-    private Integer parent;
+    private Long phase;
+    private Long role;
+    private Long parent;
 }

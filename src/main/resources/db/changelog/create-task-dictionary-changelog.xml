@@ -14,5 +14,11 @@
             <column name="hours_max" type="INT"/>
         </createTable>
     </changeSet>
+    <changeSet id="add-name-and-type" author="ivan_kalachikov">
+        <addColumn tableName="task_dictionary">
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="type" type="BIGINT"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

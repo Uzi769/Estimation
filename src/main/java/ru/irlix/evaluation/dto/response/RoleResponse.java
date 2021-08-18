@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.dao.dto.response;
+package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
 

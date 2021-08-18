@@ -33,5 +33,27 @@
         <addForeignKeyConstraint baseColumnNames="type" baseTableName="task" constraintName="FK_TASK_ON_TYPE"
                                  referencedColumnNames="id" referencedTableName="task_type_dictionary"/>
     </changeSet>
+    <changeSet id="alter-relation-on-dictioanaries" author="User (generated)">
+        <createTable tableName="task_phase">
+            <column name="phase_dictionary_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_phase"/>
+            </column>
+            <column name="task_dictionary_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_phase"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="type" baseTableName="task_dictionary"
+                                 constraintName="FK_TASK_DICTIONARY_ON_TYPE" referencedColumnNames="id"
+                                 referencedTableName="task_type_dictionary"/>
+
+        <addForeignKeyConstraint baseColumnNames="phase_dictionary_id" baseTableName="task_phase"
+                                 constraintName="fk_taspha_on_phase_dictionary" referencedColumnNames="id"
+                                 referencedTableName="phase_dictionary"/>
+
+        <addForeignKeyConstraint baseColumnNames="task_dictionary_id" baseTableName="task_phase"
+                                 constraintName="fk_taspha_on_task_dictionary" referencedColumnNames="id"
+                                 referencedTableName="task_dictionary"/>
+    </changeSet>
 
 </databaseChangeLog>

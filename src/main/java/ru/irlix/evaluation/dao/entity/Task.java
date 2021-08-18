@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="task")
@@ -23,28 +24,18 @@ public class Task {
     @JoinColumn(name = "type")
     private TaskTypeDictionary type;
 
-    @Column(name = "repeat_count")
     private Integer repeatCount;
 
-    @Column(name = "bags_reserve")
     private Integer bagsReserve;
 
-    @Column(name = "qa_reserve")
     private Integer qaReserve;
 
-    @Column(name = "management_reserve")
     private Integer managementReserve;
 
-    @Column(name = "risk_reserve")
-    private Integer riskReserve;
-
-    @Column(name = "comment")
     private String comment;
 
-    @Column(name = "hours_min")
     private Integer hoursMin;
 
-    @Column(name = "hours_max")
     private Integer hoursMax;
 
     @ManyToOne
@@ -55,5 +46,16 @@ public class Task {
     @JoinColumn(name = "estimation_role")
     private Role role;
 
-    private Integer parent;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Task parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Task> taskList;
+
+    private boolean bagsReverseOn;
+
+    private boolean qaReverseOn;
+
+    private boolean managementReverseOn;
+
 }

@@ -20,13 +20,8 @@ public class Role {
 
     private String value;
 
-    @Column(name = "display_value")
     private String displayValue;
 
     @OneToMany(mappedBy = "role")
-    private List<Phase> phases;
-
-    @OneToMany(mappedBy = "role")
     private List <Task> tasks;
-
 }

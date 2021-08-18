@@ -19,7 +19,6 @@ public class Status {
 
     private String value;
 
-    @Column(name = "display_value")
     private String displayValue;
 
     @OneToMany(mappedBy = "status")

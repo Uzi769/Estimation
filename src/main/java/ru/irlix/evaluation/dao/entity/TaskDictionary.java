@@ -1,11 +1,11 @@
 package ru.irlix.evaluation.dao.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "task_dictionary")
@@ -18,9 +18,20 @@ public class TaskDictionary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "hours_min")
+    private String name;
+
     private Integer hoursMin;
 
-    @Column(name = "hours_max")
     private Integer hoursMax;
+
+    @ManyToOne
+    @JoinColumn(name = "type")
+    private TaskTypeDictionary type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "task_phase",
+            joinColumns = @JoinColumn(name = "task_dictionary_id"),
+            inverseJoinColumns = @JoinColumn(name = "phase_dictionary_id"))
+    private Set<PhaseDictionary> phaseDictionarySet;
 }
