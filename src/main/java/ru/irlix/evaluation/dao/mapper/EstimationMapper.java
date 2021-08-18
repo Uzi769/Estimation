@@ -1,10 +1,10 @@
 package ru.irlix.evaluation.dao.mapper;
 
 import org.mapstruct.*;
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.service.service.StatusService;
+import ru.irlix.evaluation.service.status.StatusService;
 
 import java.util.List;
 

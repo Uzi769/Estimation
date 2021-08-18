@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dao.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dao.dto.response.EstimationResponse;
+import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.service.estimation.EstimationService;
 import ru.irlix.evaluation.utils.Constants;
 
