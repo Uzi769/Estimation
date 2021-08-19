@@ -26,7 +26,6 @@ public class PhaseServiceImpl implements PhaseService {
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest, estimationService);
         Phase savedPhase = phaseRepository.save(phase);
-
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -35,7 +34,6 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         Phase updatedPhase = checkAndUpdateFields(phase, phaseRequest);
         Phase savedPhase = phaseRepository.save(updatedPhase);
-
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -111,10 +109,8 @@ public class PhaseServiceImpl implements PhaseService {
     public Set<PhaseResponse> getPhaseSetByEstimationId(Long id) {
         Estimation estimation = estimationService.findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
-
         return mapper.phaseToPhaseResponse(phases);
     }
-
 
     @Override
     public void createPhases(Set<Phase> phases) {
