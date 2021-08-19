@@ -29,7 +29,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable("id") Long id) {
-        roleService.deleteRoleById(id);
+        roleService.deleteRole(id);
     }
 
     @GetMapping("/{id}")

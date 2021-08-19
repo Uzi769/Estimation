@@ -35,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void deleteRoleById(Long id) {
+    public void deleteRole(Long id) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Role with id" + id + "not found"));
         roleRepository.delete(role);
