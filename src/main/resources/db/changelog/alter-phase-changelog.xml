@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="alter-phase" author="ivan_kalachikov">
+        <addColumn tableName="phase">
+            <column name="bags_reserve_on" type="BOOLEAN"/>
+            <column name="management_reserve_on" type="BOOLEAN"/>
+            <column name="qa_reserve_on" type="BOOLEAN"/>
+            <column name="risk_reserve_on" type="BOOLEAN"/>
+        </addColumn>
+
+        <dropForeignKeyConstraint baseTableName="phase" constraintName="fk_phase_on_estimation_role"/>
+
+        <dropColumn columnName="estimation_role" tableName="phase"/>
+    </changeSet>
+
+</databaseChangeLog>

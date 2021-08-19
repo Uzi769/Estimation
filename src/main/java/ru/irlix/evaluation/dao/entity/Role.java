@@ -8,14 +8,13 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "role_dictionary")
 @Getter
 @Setter
-@NoArgsConstructor
-@Table(name="role_dictionary")
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-    @SequenceGenerator(name = "role_seq", sequenceName = "role_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -26,6 +25,5 @@ public class Role {
     private String displayValue;
 
     @OneToMany(mappedBy = "role")
-    private List<Phase> phases;
-
+    private List<Task> tasks;
 }

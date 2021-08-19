@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create-relation-estimation-to-status" author="kiseleva_ev">
+        <addForeignKeyConstraint baseColumnNames="status" baseTableName="estimation"
+                                 constraintName="FK_ESTIMATION_ON_STATUS" referencedColumnNames="id"
+                                 referencedTableName="status_dictionary"/>
+    </changeSet>
+    <changeSet id="create-relation-phase-to-estimation" author="kiseleva_ev">
+        <addForeignKeyConstraint baseColumnNames="estimation" baseTableName="phase"
+                                 constraintName="FK_PHASE_ON_ESTIMATION" referencedColumnNames="id"
+                                 referencedTableName="estimation"/>
+    </changeSet>
+    <changeSet id="create-relation-phase-to-role" author="kiseleva_ev">
+        <addForeignKeyConstraint baseColumnNames="estimation_role" baseTableName="phase"
+                                 constraintName="FK_PHASE_ON_ESTIMATION_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role_dictionary"/>
+    </changeSet>
+    <changeSet id="create-relation-task-to-role" author="kiseleva_ev">
+        <addForeignKeyConstraint baseColumnNames="estimation_role" baseTableName="task"
+                                 constraintName="FK_TASK_ON_ESTIMATION_ROLE" referencedColumnNames="id"
+                                 referencedTableName="role_dictionary"/>
+    </changeSet>
+    <changeSet id="create-relation-task-to-phase" author="kiseleva_ev">
+        <addForeignKeyConstraint baseColumnNames="phase" baseTableName="task" constraintName="FK_TASK_ON_PHASE"
+                                 referencedColumnNames="id" referencedTableName="phase"/>
+    </changeSet>
+    <changeSet id="create-relation-task-to-task-type" author="ivan_kalachikov">
+        <addForeignKeyConstraint baseColumnNames="type" baseTableName="task" constraintName="FK_TASK_ON_TYPE"
+                                 referencedColumnNames="id" referencedTableName="task_type_dictionary"/>
+    </changeSet>
+    <changeSet id="alter-relation-on-dictioanaries" author="User (generated)">
+        <createTable tableName="task_phase">
+            <column name="phase_dictionary_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_phase"/>
+            </column>
+            <column name="task_dictionary_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_task_phase"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="type" baseTableName="task_dictionary"
+                                 constraintName="FK_TASK_DICTIONARY_ON_TYPE" referencedColumnNames="id"
+                                 referencedTableName="task_type_dictionary"/>
+
+        <addForeignKeyConstraint baseColumnNames="phase_dictionary_id" baseTableName="task_phase"
+                                 constraintName="fk_taspha_on_phase_dictionary" referencedColumnNames="id"
+                                 referencedTableName="phase_dictionary"/>
+
+        <addForeignKeyConstraint baseColumnNames="task_dictionary_id" baseTableName="task_phase"
+                                 constraintName="fk_taspha_on_task_dictionary" referencedColumnNames="id"
+                                 referencedTableName="task_dictionary"/>
+    </changeSet>
+
+</databaseChangeLog>
