@@ -29,7 +29,7 @@ public class StatusController {
 
     @DeleteMapping("/{id}")
     public void deleteStatus(@PathVariable("id") Long id) {
-        statusService.deleteStatusById(id);
+        statusService.deleteStatus(id);
     }
 
     @GetMapping("/{id}")

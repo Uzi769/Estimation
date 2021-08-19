@@ -11,7 +11,7 @@ public interface StatusService {
 
     StatusResponse updateStatus(Long id, StatusRequest statusRequest);
 
-    void deleteStatusById(Long id);
+    void deleteStatus(Long id);
 
     StatusResponse findStatusResponseById(Long id);
 

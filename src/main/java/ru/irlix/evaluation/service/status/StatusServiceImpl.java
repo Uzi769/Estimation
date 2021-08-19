@@ -35,7 +35,7 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public void deleteStatusById(Long id) {
+    public void deleteStatus(Long id) {
         Status status = statusRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
         statusRepository.delete(status);
