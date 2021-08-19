@@ -2,11 +2,7 @@ package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class RoleResponse {
     private Long id;
     private String value;
