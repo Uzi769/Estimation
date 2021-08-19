@@ -9,16 +9,17 @@ import ru.irlix.evaluation.service.status.StatusService;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = PhaseMapper.class)
-public interface EstimationMapper {
+public abstract class EstimationMapper {
+
     @Mapping(target = "status", ignore = true)
-    Estimation estimationRequestToEstimation(EstimationRequest estimationRequest, @Context StatusService statusService);
+    public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest, @Context StatusService statusService);
 
-    EstimationResponse estimationToEstimationResponse(Estimation estimation);
+    public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
-    List<EstimationResponse> estimationsToEstimationResponseList(List<Estimation> estimationList);
+    public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimationList);
 
     @AfterMapping
-    default void map(@MappingTarget Estimation estimation, EstimationRequest req, @Context StatusService statusService) {
+    protected void map(@MappingTarget Estimation estimation, EstimationRequest req, @Context StatusService statusService) {
         estimation.setStatus(statusService.findByName(req.getStatus()));
     }
 }

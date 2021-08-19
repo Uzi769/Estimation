@@ -9,15 +9,15 @@ import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
 @Mapper(componentModel = "spring", uses = EstimationMapper.class)
-public interface PhaseMapper {
+public abstract class PhaseMapper {
 
-    Phase phaseRequestToPhase(PhaseRequest phaseRequest);
+    public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest);
 
     @Mapping(target = "estimation", ignore = true)
-    PhaseResponse phaseToPhaseResponse(Phase phase);
+    public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
 
     @AfterMapping
-    default void map(@MappingTarget PhaseResponse response, Phase phase) {
+    protected void map(@MappingTarget PhaseResponse response, Phase phase) {
         response.setEstimation(phase.getEstimation().getId());
     }
 }

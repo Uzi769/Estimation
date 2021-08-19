@@ -1,19 +1,17 @@
 package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.service.estimation.EstimationService;
-import ru.irlix.evaluation.utils.Constants;
+import ru.irlix.evaluation.utils.UrlConstants;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(Constants.BASE_URL + "/estimations")
+@RequestMapping(UrlConstants.BASE_URL + "/estimations")
 @RequiredArgsConstructor
 public class EstimationController {
 

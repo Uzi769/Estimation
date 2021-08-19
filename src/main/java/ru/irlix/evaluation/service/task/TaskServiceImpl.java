@@ -12,7 +12,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
 
     @Override
-    public void saveTask(TaskRequest taskRequest) {
+    public void createTask(TaskRequest taskRequest) {
 
     }
 }
