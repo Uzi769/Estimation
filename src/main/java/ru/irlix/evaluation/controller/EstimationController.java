@@ -8,6 +8,7 @@ import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.service.estimation.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +19,7 @@ public class EstimationController {
     private final EstimationService estimationService;
 
     @PostMapping
-    public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
+    public EstimationResponse createEstimation(@RequestBody @Valid EstimationRequest request) {
         return estimationService.createEstimation(request);
     }
 

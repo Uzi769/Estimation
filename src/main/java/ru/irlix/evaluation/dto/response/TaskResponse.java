@@ -2,6 +2,8 @@ package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,7 +15,17 @@ public class TaskResponse {
 
     private String name;
 
+    private String type;
+
     private Integer repeatCount;
+
+    private Integer hoursMin;
+
+    private Integer hoursMax;
+
+    private Long roleId;
+
+    private Long parentId;
 
     private Integer bagsReserve;
 
@@ -21,17 +33,15 @@ public class TaskResponse {
 
     private Integer managementReserve;
 
-    private Integer riskReserve;
+    private boolean bagsReverseOn;
+
+    private boolean qaReverseOn;
+
+    private boolean managementReverseOn;
 
     private String comment;
 
-    private Integer hoursMin;
+    private Long phaseId;
 
-    private Integer hoursMax;
-
-    private Long phase;
-
-    private Long role;
-
-    private Long parent;
+    private Set<TaskResponse> tasks;
 }
