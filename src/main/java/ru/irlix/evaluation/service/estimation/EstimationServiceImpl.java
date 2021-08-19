@@ -7,7 +7,7 @@ import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.repository.EstimationRepository;
-import ru.irlix.evaluation.service.service.StatusService;
+import ru.irlix.evaluation.service.status.StatusService;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public List<EstimationResponse> findAllEstimations() {
-        List<Estimation> estimationList = estimationRepository.findAll();
-        return mapper.estimationsToEstimationResponseList(estimationList);
+        List<Estimation> estimations = estimationRepository.findAll();
+        return mapper.estimationToEstimationResponse(estimations);
     }
 }

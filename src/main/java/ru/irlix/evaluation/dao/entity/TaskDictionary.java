@@ -11,17 +11,20 @@ import java.util.Set;
 @Table(name = "task_dictionary")
 @Getter
 @Setter
-@NoArgsConstructor
 public class TaskDictionary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "hours_min")
     private Integer hoursMin;
 
+    @Column(name = "hours_max")
     private Integer hoursMax;
 
     @ManyToOne
@@ -33,5 +36,5 @@ public class TaskDictionary {
             name = "task_phase",
             joinColumns = @JoinColumn(name = "task_dictionary_id"),
             inverseJoinColumns = @JoinColumn(name = "phase_dictionary_id"))
-    private Set<PhaseDictionary> phaseDictionarySet;
+    private Set<PhaseDictionary> phaseDictionaries;
 }

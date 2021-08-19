@@ -1,7 +1,8 @@
-package ru.irlix.evaluation.service.service;
+package ru.irlix.evaluation.service.status;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.repository.StatusRepository;
 
@@ -14,7 +15,7 @@ public class StatusServiceImpl implements StatusService {
     @Override
     public Status findByName(String name) {
         return statusRepository.findByDisplayValue(name)
-                .orElse(null);
+                .orElseThrow(() -> new NotFoundException("Status with name " + name + " not found"));
     }
 
 }
