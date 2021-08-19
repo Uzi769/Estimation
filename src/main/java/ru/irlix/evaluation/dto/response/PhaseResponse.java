@@ -13,7 +13,7 @@ public class PhaseResponse {
 
     private String name;
 
-    private Long estimation;
+    private Long estimationId;
 
     private Integer sortOrder;
 
