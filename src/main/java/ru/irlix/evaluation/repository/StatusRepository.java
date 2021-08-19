@@ -6,5 +6,5 @@ import ru.irlix.evaluation.dao.entity.Status;
 import java.util.Optional;
 
 public interface StatusRepository extends JpaRepository<Status, Long> {
-    Optional<Status> findByDisplayValue(String displayValue);
+    Optional<Status> findByValue(String displayValue);
 }

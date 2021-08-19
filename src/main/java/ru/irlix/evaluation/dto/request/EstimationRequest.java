@@ -11,10 +11,16 @@ import java.time.Instant;
 @Builder
 public class EstimationRequest {
     private String name;
+
     private String client;
+
     private String description;
+
     private Instant createDate;
+
     private Integer risk;
+
     private String status;
+
     private String creator;
 }

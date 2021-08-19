@@ -2,9 +2,11 @@ package ru.irlix.evaluation.dao.mapper;
 
 import org.mapstruct.*;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.service.status.StatusService;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.List;
 
@@ -20,6 +22,11 @@ public abstract class EstimationMapper {
 
     @AfterMapping
     protected void map(@MappingTarget Estimation estimation, EstimationRequest req, @Context StatusService statusService) {
-        estimation.setStatus(statusService.findByName(req.getStatus()));
+        if (req.getStatus() == null) {
+            req.setStatus(EntityConstants.DEFAULT_STATUS);
+        }
+
+        Status status = statusService.findByValue(req.getStatus());
+        estimation.setStatus(status);
     }
 }

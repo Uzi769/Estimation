@@ -13,8 +13,8 @@ public class StatusServiceImpl implements StatusService {
     private final StatusRepository statusRepository;
 
     @Override
-    public Status findByName(String name) {
-        return statusRepository.findByDisplayValue(name)
-                .orElseThrow(() -> new NotFoundException("Status with name " + name + " not found"));
+    public Status findByValue(String value) {
+        return statusRepository.findByValue(value)
+                .orElseThrow(() -> new NotFoundException("Status with value " + value + " not found"));
     }
 }

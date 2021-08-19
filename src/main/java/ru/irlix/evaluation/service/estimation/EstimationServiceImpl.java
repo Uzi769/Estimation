@@ -3,7 +3,7 @@ package ru.irlix.evaluation.service.estimation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
-import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
@@ -48,7 +48,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
-        return mapper.estimationsToEstimationResponseList(estimationList);
+        return mapper.estimationToEstimationResponse(estimationList);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class EstimationServiceImpl implements EstimationService {
         }
 
         if (request.getStatus() != null) {
-            Status status = statusService.findByName(request.getStatus());
+            Status status = statusService.findByValue(request.getStatus());
             estimation.setStatus(status);
         }
 

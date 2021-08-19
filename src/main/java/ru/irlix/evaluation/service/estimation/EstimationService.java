@@ -1,6 +1,6 @@
 package ru.irlix.evaluation.service.estimation;
 
-import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 
