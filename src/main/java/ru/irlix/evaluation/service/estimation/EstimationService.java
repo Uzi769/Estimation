@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.service.estimation;
 
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -15,5 +16,7 @@ public interface EstimationService {
 
     List<EstimationResponse> findAllEstimations(EstimationFilterRequest request);
 
-    EstimationResponse findById(Long id);
+    EstimationResponse findEstimationResponseById(Long id);
+
+    Estimation findEstimationById(Long id);
 }

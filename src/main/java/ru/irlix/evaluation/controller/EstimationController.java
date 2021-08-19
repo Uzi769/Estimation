@@ -40,6 +40,6 @@ public class EstimationController {
 
     @GetMapping("/{id}")
     public EstimationResponse findEstimationById(@PathVariable Long id) {
-        return estimationService.findById(id);
+        return estimationService.findEstimationResponseById(id);
     }
 }

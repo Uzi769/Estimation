@@ -35,7 +35,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
-        Estimation estimationToUpdate = findEstimationEntityById(id);
+        Estimation estimationToUpdate = findEstimationById(id);
         Estimation updatedEstimation = checkAndUpdateFields(estimationToUpdate, estimationRequest);
 
         Estimation savedEstimation = estimationRepository.save(updatedEstimation);
@@ -44,7 +44,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public void deleteEstimation(Long id) {
-        Estimation estimationToDelete = findEstimationEntityById(id);
+        Estimation estimationToDelete = findEstimationById(id);
         estimationRepository.delete(estimationToDelete);
     }
 
@@ -55,12 +55,13 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
-    public EstimationResponse findById(Long id) {
-        Estimation estimation = findEstimationEntityById(id);
+    public EstimationResponse findEstimationResponseById(Long id) {
+        Estimation estimation = findEstimationById(id);
         return mapper.estimationToEstimationResponse(estimation);
     }
 
-    private Estimation findEstimationEntityById(Long id) {
+    @Override
+    public Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
