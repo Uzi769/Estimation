@@ -27,7 +27,8 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public StatusResponse updateStatus(Long id, StatusRequest statusRequest) {
-        Status status = statusRepository.findById(id).orElse(null);
+        Status status = statusRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
         Status updatedStatus = checkAndUpdateFields(status, statusRequest);
         Status savedStatus = statusRepository.save(updatedStatus);
         return mapper.statusToStatusResponse(savedStatus);
@@ -35,20 +36,22 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public void deleteStatusById(Long id) {
-        Status status = statusRepository.findById(id).orElse(null);
+        Status status = statusRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
         statusRepository.delete(status);
     }
 
     @Override
     public StatusResponse findStatusResponseById(Long id) {
-        Status status = statusRepository.findById(id).orElse(null);
+        Status status = statusRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
         return mapper.statusToStatusResponse(status);
     }
 
     @Override
     public Status findStatusById(Long id) {
-        Status status = statusRepository.findById(id).orElse(null);
-        return status;
+        return statusRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
     }
 
     @Override
