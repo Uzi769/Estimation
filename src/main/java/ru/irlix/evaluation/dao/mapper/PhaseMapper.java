@@ -25,7 +25,6 @@ public abstract class PhaseMapper {
     public abstract Set<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
 
     @AfterMapping
-    @Transactional
     protected void map(@MappingTarget Phase phase,
                        PhaseRequest request,
                        @Context EstimationRepository estimationRepository) {
@@ -35,7 +34,6 @@ public abstract class PhaseMapper {
     }
 
     @AfterMapping
-    @Transactional
     protected void map(@MappingTarget PhaseResponse response, Phase phase) {
         response.setEstimationId(phase.getEstimation().getId());
     }
