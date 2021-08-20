@@ -22,7 +22,7 @@ public class PhaseController {
         return phaseService.createPhase(phaseRequest);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public PhaseResponse updatePhase(@PathVariable Long id,
                                      @RequestBody PhaseRequest phaseRequest) {
         return phaseService.updatePhase(id, phaseRequest);

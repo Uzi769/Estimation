@@ -31,4 +31,6 @@ public class PhaseResponse {
     private Boolean qaReserveOn;
 
     private Boolean bagsReserveOn;
+
+    private Boolean riskReserveOn;
 }

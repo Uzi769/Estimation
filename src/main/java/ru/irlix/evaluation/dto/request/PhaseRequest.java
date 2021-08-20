@@ -33,4 +33,6 @@ public class PhaseRequest {
     private Boolean qaReserveOn;
 
     private Boolean bagsReserveOn;
+
+    private Boolean riskReserveOn;
 }
