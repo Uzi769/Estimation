@@ -1,20 +1,46 @@
 package ru.irlix.evaluation.dto.response;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskResponse {
+
     private Long id;
+
     private String name;
+
+    private String type;
+
     private Integer repeatCount;
-    private Integer bagsReserve;
-    private Integer qaReserve;
-    private Integer managementReserve;
-    private Integer riskReserve;
-    private String comment;
+
     private Integer hoursMin;
+
     private Integer hoursMax;
-    private Long phase;
-    private Long role;
-    private Long parent;
+
+    private Long roleId;
+
+    private Long parentId;
+
+    private Integer bagsReserve;
+
+    private Integer qaReserve;
+
+    private Integer managementReserve;
+
+    private boolean bagsReverseOn;
+
+    private boolean qaReverseOn;
+
+    private boolean managementReverseOn;
+
+    private String comment;
+
+    private Long phaseId;
+
+    private Set<TaskResponse> tasks;
 }

@@ -8,19 +8,19 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EstimationRequest {
+public class EstimationFilterRequest {
 
     private String name;
 
     private String client;
 
-    private String description;
-
-    private Instant createDate;
-
-    private Integer risk;
-
     private Long status;
 
-    private String creator;
+    private Instant beginDate;
+
+    private Instant endDate;
+
+    private Integer page = 0;
+
+    private Integer size = 25;
 }
