@@ -27,8 +27,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
-        Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
+        Role role = findRoleById(id);
         checkAndUpdateFields(role, roleRequest);
         Role savedRole = roleRepository.save(role);
         return mapper.roleToRoleResponse(savedRole);
@@ -42,8 +41,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleResponse findRoleResponseById(Long id) {
-        Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
+        Role role = findRoleById(id);
         return mapper.roleToRoleResponse(role);
     }
 
