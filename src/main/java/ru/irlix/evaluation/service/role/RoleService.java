@@ -15,5 +15,5 @@ public interface RoleService {
 
     RoleResponse findRoleResponseById(Long id);
 
-    List<RoleResponse> findAll();
+    List<RoleResponse> findAllRoles();
 }

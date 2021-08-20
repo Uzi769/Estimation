@@ -33,12 +33,12 @@ public class RoleController {
     }
 
     @GetMapping("/{id}")
-    public RoleResponse getRoleById(@PathVariable("id") Long id) {
+    public RoleResponse findRoleById(@PathVariable("id") Long id) {
         return roleService.findRoleResponseById(id);
     }
 
     @GetMapping
-    public List<RoleResponse> getAllRoles() {
-        return roleService.findAll();
+    public List<RoleResponse> findAllRoles() {
+        return roleService.findAllRoles();
     }
 }
