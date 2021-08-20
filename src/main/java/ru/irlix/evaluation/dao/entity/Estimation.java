@@ -6,7 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="estimation")
@@ -43,5 +43,5 @@ public class Estimation {
     private String creator;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "estimation")
-    private List<Phase> phases;
+    private Set<Phase> phases;
 }

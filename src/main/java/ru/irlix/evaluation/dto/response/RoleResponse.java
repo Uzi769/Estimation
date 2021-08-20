@@ -4,11 +4,13 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class RoleResponse {
+
     private Long id;
+
     private String value;
+
     private String displayValue;
 }
