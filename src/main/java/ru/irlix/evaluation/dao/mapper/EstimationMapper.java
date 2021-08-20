@@ -5,7 +5,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.helper.StatusHelper;
@@ -30,8 +29,7 @@ public abstract class EstimationMapper {
     public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimationList);
 
     @AfterMapping
-    protected void map(@MappingTarget Estimation estimation,
-                       EstimationRequest req) {
+    protected void map(@MappingTarget Estimation estimation, EstimationRequest req) {
         if (req.getStatus() == null) {
             req.setStatus(EntityConstants.DEFAULT_STATUS_ID);
         }
