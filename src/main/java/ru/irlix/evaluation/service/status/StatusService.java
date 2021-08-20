@@ -1,6 +1,5 @@
 package ru.irlix.evaluation.service.status;
 
-import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dto.request.StatusRequest;
 import ru.irlix.evaluation.dto.response.StatusResponse;
 
@@ -15,9 +14,5 @@ public interface StatusService {
 
     StatusResponse findStatusResponseById(Long id);
 
-    Status findStatusById(Long id);
-
-    List<StatusResponse> findAll();
-
-    Status findByName(String name);
+    List<StatusResponse> findAllStatuses();
 }

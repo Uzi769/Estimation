@@ -33,12 +33,12 @@ public class StatusController {
     }
 
     @GetMapping("/{id}")
-    public StatusResponse getStatusById(@PathVariable("id") Long id) {
+    public StatusResponse findStatusById(@PathVariable("id") Long id) {
         return statusService.findStatusResponseById(id);
     }
 
     @GetMapping
-    public List<StatusResponse> getAllStatus() {
-        return statusService.findAll();
+    public List<StatusResponse> findAllStatuses() {
+        return statusService.findAllStatuses();
     }
 }

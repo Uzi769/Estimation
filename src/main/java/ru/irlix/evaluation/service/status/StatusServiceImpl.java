@@ -27,53 +27,42 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public StatusResponse updateStatus(Long id, StatusRequest statusRequest) {
-        Status status = statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
-        Status updatedStatus = checkAndUpdateFields(status, statusRequest);
-        Status savedStatus = statusRepository.save(updatedStatus);
+        Status status = findStatusById(id);
+        checkAndUpdateFields(status, statusRequest);
+        Status savedStatus = statusRepository.save(status);
         return mapper.statusToStatusResponse(savedStatus);
     }
 
     @Override
     public void deleteStatus(Long id) {
-        Status status = statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
+        Status status = findStatusById(id);
         statusRepository.delete(status);
     }
 
     @Override
     public StatusResponse findStatusResponseById(Long id) {
-        Status status = statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
+        Status status = findStatusById(id);
         return mapper.statusToStatusResponse(status);
     }
 
-    @Override
-    public Status findStatusById(Long id) {
+    private Status findStatusById(Long id) {
         return statusRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
     }
 
     @Override
-    public List<StatusResponse> findAll() {
+    public List<StatusResponse> findAllStatuses() {
         List<Status> statusList = statusRepository.findAll();
         return mapper.statusesToStatusResponseList(statusList);
     }
 
-    @Override
-    public Status findByName(String name) {
-        return statusRepository.findByDisplayValue(name)
-                .orElseThrow(() -> new NotFoundException("Status with name " + name + " not found"));
-    }
-
-    private Status checkAndUpdateFields(Status status, StatusRequest statusRequest) {
+    private void checkAndUpdateFields(Status status, StatusRequest statusRequest) {
         if (statusRequest.getValue() != null) {
             status.setValue(statusRequest.getValue());
         }
         if (statusRequest.getDisplayValue() != null) {
             status.setDisplayValue(statusRequest.getDisplayValue());
         }
-        return status;
     }
 
 }
