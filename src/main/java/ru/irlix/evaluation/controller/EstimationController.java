@@ -5,10 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.service.estimation.EstimationService;
+import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,12 +18,12 @@ public class EstimationController {
     private final EstimationService estimationService;
 
     @PostMapping
-    public EstimationResponse createEstimation(@RequestBody @Valid EstimationRequest request) {
+    public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
         return estimationService.createEstimation(request);
     }
 
     @PutMapping("/{id}")
-    public EstimationResponse deleteEstimation(@PathVariable Long id, @RequestBody EstimationRequest request) {
+    public EstimationResponse updateEstimation(@PathVariable Long id, @RequestBody EstimationRequest request) {
         return estimationService.updateEstimation(id, request);
     }
 

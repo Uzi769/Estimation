@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.estimation;
+package ru.irlix.evaluation.service;
 
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;

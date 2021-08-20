@@ -10,11 +10,18 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class EstimationFilterRequest {
+
     private String name;
+
     private String client;
+
     private Long status;
+
     private Instant beginDate;
+
     private Instant endDate;
+
     private Integer page = 0;
+
     private Integer size = 25;
 }

@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.estimation;
+package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
+import ru.irlix.evaluation.service.EstimationService;
 
 import java.util.List;
 

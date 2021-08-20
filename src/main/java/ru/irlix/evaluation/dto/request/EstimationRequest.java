@@ -2,9 +2,7 @@ package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
 
-import javax.validation.Valid;
 import java.time.Instant;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,7 +24,4 @@ public class EstimationRequest {
     private Long status;
 
     private String creator;
-
-    @Valid
-    private Set<PhaseRequest> phases;
 }
