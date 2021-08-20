@@ -9,7 +9,6 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
@@ -22,14 +21,12 @@ public class EstimationServiceImpl implements EstimationService {
 
     private EstimationRepository estimationRepository;
     private StatusRepository statusRepository;
-    private PhaseRepository phaseRepository;
     private EstimationMapper mapper;
 
     @Override
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusRepository);
         Estimation savedEstimation = estimationRepository.save(estimation);
-        savePhases(savedEstimation);
 
         return mapper.estimationToEstimationResponse(savedEstimation);
     }
@@ -96,10 +93,5 @@ public class EstimationServiceImpl implements EstimationService {
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
         }
-    }
-
-    private void savePhases(Estimation estimation) {
-        estimation.getPhases().forEach(p -> p.setEstimation(estimation));
-        phaseRepository.saveAll(estimation.getPhases());
     }
 }
