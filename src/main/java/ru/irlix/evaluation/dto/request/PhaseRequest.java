@@ -10,12 +10,19 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class PhaseRequest {
 
-    @NotNull
+    public interface New {
+    }
+
+    public interface Update {
+    }
+
+    @NotNull(groups = {New.class, Update.class})
     private String name;
 
+    @NotNull(groups = {New.class, Update.class})
     private Long estimationId;
 
-    @NotNull
+    @NotNull(groups = New.class)
     private Integer sortOrder;
 
     private Integer managementReserve;
