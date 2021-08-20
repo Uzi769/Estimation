@@ -18,6 +18,6 @@ public class EstimationResponse {
     private Integer risk;
     private String client;
     private String creator;
-    private StatusResponse status;
+    private Long status;
     private List<PhaseResponse> phases;
 }
