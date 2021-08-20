@@ -1,20 +1,23 @@
 package ru.irlix.evaluation.dao.mapper;
 
 import org.mapstruct.*;
-import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
+import ru.irlix.evaluation.dao.mapper.helper.EstimationHelper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
-import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 
-@Mapper(componentModel = "spring", uses = EstimationMapper.class)
+import java.util.Set;
+
+@Mapper(componentModel = "spring")
 public abstract class PhaseMapper {
 
+    @Autowired
+    protected EstimationHelper estimationHelper;
+
     @Mapping(target = "estimation", ignore = true)
-    public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest,
-                                              @Context EstimationRepository estimationRepository);
+    public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest);
 
     @Mapping(target = "estimationId", ignore = true)
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
@@ -23,11 +26,8 @@ public abstract class PhaseMapper {
     public abstract Set<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
 
     @AfterMapping
-    protected void map(@MappingTarget Phase phase,
-                       PhaseRequest request,
-                       @Context EstimationRepository estimationRepository) {
-        Estimation estimation = estimationRepository.findById(request.getEstimationId())
-                .orElseThrow(() -> new NotFoundException("Estimation with id " + request.getEstimationId() + " not found"));
+    protected void map(@MappingTarget Phase phase, PhaseRequest request) {
+        Estimation estimation = estimationHelper.findEstimationById(request.getEstimationId());
         phase.setEstimation(estimation);
     }
 
@@ -35,5 +35,4 @@ public abstract class PhaseMapper {
     protected void map(@MappingTarget PhaseResponse response, Phase phase) {
         response.setEstimationId(phase.getEstimation().getId());
     }
-
 }

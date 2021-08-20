@@ -25,7 +25,7 @@ public class PhaseServiceImpl implements PhaseService {
 
     @Override
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
-        Phase phase = mapper.phaseRequestToPhase(phaseRequest, estimationRepository);
+        Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
 
         return mapper.phaseToPhaseResponse(savedPhase);

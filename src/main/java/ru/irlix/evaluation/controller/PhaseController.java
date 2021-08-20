@@ -7,6 +7,7 @@ import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
@@ -17,7 +18,7 @@ public class PhaseController {
     private final PhaseService phaseService;
 
     @PostMapping
-    public PhaseResponse createPhase(@RequestBody PhaseRequest phaseRequest) {
+    public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
         return phaseService.createPhase(phaseRequest);
     }
 
