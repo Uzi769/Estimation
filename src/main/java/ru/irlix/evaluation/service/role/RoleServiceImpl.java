@@ -28,30 +28,29 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id" + id + "not found"));
-        Role updatedRole = checkAndUpdateFields(role, roleRequest);
-        Role savedRole = roleRepository.save(updatedRole);
+                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
+        checkAndUpdateFields(role, roleRequest);
+        Role savedRole = roleRepository.save(role);
         return mapper.roleToRoleResponse(savedRole);
     }
 
     @Override
     public void deleteRole(Long id) {
-        Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id" + id + "not found"));
+        Role role = findRoleById(id);
         roleRepository.delete(role);
     }
 
     @Override
     public RoleResponse findRoleResponseById(Long id) {
         Role role = roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id" + id + "not found"));
+                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
         return mapper.roleToRoleResponse(role);
     }
 
     @Override
     public Role findRoleById(Long id) {
         return roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id" + id + "not found"));
+                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
     }
 
     @Override
@@ -60,13 +59,12 @@ public class RoleServiceImpl implements RoleService {
         return mapper.rolesToRoleResponseList(roleList);
     }
 
-    private Role checkAndUpdateFields(Role role, RoleRequest roleRequest) {
+    private void checkAndUpdateFields(Role role, RoleRequest roleRequest) {
         if (roleRequest.getValue() != null) {
             role.setValue(roleRequest.getValue());
         }
         if (roleRequest.getDisplayValue() != null) {
             role.setDisplayValue(roleRequest.getDisplayValue());
         }
-        return role;
     }
 }
