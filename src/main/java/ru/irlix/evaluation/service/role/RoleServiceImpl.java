@@ -47,8 +47,7 @@ public class RoleServiceImpl implements RoleService {
         return mapper.roleToRoleResponse(role);
     }
 
-    @Override
-    public Role findRoleById(Long id) {
+    private Role findRoleById(Long id) {
         return roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
     }
