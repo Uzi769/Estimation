@@ -14,7 +14,6 @@ import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.List;
 
-
 @Mapper(componentModel = "spring", uses = PhaseMapper.class)
 public abstract class EstimationMapper {
 
