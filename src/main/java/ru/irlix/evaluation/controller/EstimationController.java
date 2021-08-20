@@ -24,12 +24,12 @@ public class EstimationController {
     }
 
     @PutMapping("/{id}")
-    public EstimationResponse updateEstimation(@PathVariable Long id, @RequestBody EstimationRequest request) {
+    public EstimationResponse deleteEstimation(@PathVariable Long id, @RequestBody EstimationRequest request) {
         return estimationService.updateEstimation(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void updateEstimation(@PathVariable Long id) {
+    public void deleteEstimation(@PathVariable Long id) {
         estimationService.deleteEstimation(id);
     }
 

@@ -12,7 +12,7 @@ import java.time.Instant;
 public class EstimationFilterRequest {
     private String name;
     private String client;
-    private String status;
+    private Long status;
     private Instant beginDate;
     private Instant endDate;
     private Integer page = 0;

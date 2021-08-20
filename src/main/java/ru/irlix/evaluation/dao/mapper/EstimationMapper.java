@@ -28,17 +28,17 @@ public abstract class EstimationMapper {
                        EstimationRequest req,
                        @Context StatusService statusService) {
         if (req.getStatus() == null) {
-            req.setStatus(EntityConstants.DEFAULT_STATUS);
+            req.setStatus(EntityConstants.DEFAULT_STATUS_ID);
         }
 
-        Status status = statusService.findByValue(req.getStatus());
+        Status status = statusService.findById(req.getStatus());
         estimation.setStatus(status);
     }
 
     @AfterMapping
     protected void map(@MappingTarget EstimationResponse response, Estimation estimation) {
         if (estimation.getStatus() != null) {
-            response.setStatus(estimation.getStatus().getDisplayValue());
+            response.setStatus(estimation.getStatus().getId());
         }
     }
 }

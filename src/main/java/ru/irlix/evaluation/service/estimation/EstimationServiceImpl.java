@@ -36,9 +36,9 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
         Estimation estimationToUpdate = findEstimationById(id);
-        Estimation updatedEstimation = checkAndUpdateFields(estimationToUpdate, estimationRequest);
+        checkAndUpdateFields(estimationToUpdate, estimationRequest);
 
-        Estimation savedEstimation = estimationRepository.save(updatedEstimation);
+        Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
         return mapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -66,7 +66,7 @@ public class EstimationServiceImpl implements EstimationService {
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
 
-    private Estimation checkAndUpdateFields(Estimation estimation, EstimationRequest request) {
+    private void checkAndUpdateFields(Estimation estimation, EstimationRequest request) {
         if (request.getName() != null) {
             estimation.setName(request.getName());
         }
@@ -88,15 +88,13 @@ public class EstimationServiceImpl implements EstimationService {
         }
 
         if (request.getStatus() != null) {
-            Status status = statusService.findByValue(request.getStatus());
+            Status status = statusService.findById(request.getStatus());
             estimation.setStatus(status);
         }
 
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
         }
-
-        return estimation;
     }
 
     private void savePhases(Estimation estimation) {

@@ -23,7 +23,7 @@ public class EstimationRequest {
 
     private Integer risk;
 
-    private String status;
+    private Long status;
 
     private String creator;
 
