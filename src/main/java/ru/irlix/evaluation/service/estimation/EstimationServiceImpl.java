@@ -9,9 +9,9 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.repository.PhaseRepository;
+import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
-import ru.irlix.evaluation.service.phase.PhaseService;
-import ru.irlix.evaluation.service.status.StatusService;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ import java.util.List;
 public class EstimationServiceImpl implements EstimationService {
 
     private EstimationRepository estimationRepository;
-    private StatusService statusService;
-    private PhaseService phaseService;
+    private StatusRepository statusRepository;
+    private PhaseRepository phaseRepository;
     private EstimationMapper mapper;
 
     @Override
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
-        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusService);
+        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusRepository);
         Estimation savedEstimation = estimationRepository.save(estimation);
         savePhases(savedEstimation);
 
@@ -60,8 +60,7 @@ public class EstimationServiceImpl implements EstimationService {
         return mapper.estimationToEstimationResponse(estimation);
     }
 
-    @Override
-    public Estimation findEstimationById(Long id) {
+    private Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
@@ -88,7 +87,8 @@ public class EstimationServiceImpl implements EstimationService {
         }
 
         if (request.getStatus() != null) {
-            Status status = statusService.findById(request.getStatus());
+            Status status = statusRepository.findById(request.getStatus())
+                    .orElseThrow(() -> new NotFoundException("Status with id " + request.getStatus() + " not found"));
             estimation.setStatus(status);
         }
 
@@ -99,6 +99,6 @@ public class EstimationServiceImpl implements EstimationService {
 
     private void savePhases(Estimation estimation) {
         estimation.getPhases().forEach(p -> p.setEstimation(estimation));
-        phaseService.createPhases(estimation.getPhases());
+        phaseRepository.saveAll(estimation.getPhases());
     }
 }
