@@ -10,18 +10,11 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 public class EstimationRequest {
-
     private String name;
-
     private String client;
-
     private String description;
-
     private Instant createDate;
-
     private Integer risk;
-
-    private Long status;
-
+    private String status;
     private String creator;
 }

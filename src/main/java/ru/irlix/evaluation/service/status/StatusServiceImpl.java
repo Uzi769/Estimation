@@ -64,5 +64,4 @@ public class StatusServiceImpl implements StatusService {
             status.setDisplayValue(statusRequest.getDisplayValue());
         }
     }
-
 }

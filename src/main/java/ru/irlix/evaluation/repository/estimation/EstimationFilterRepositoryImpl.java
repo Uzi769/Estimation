@@ -2,7 +2,7 @@ package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 
 import javax.persistence.EntityManager;
@@ -38,8 +38,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.like(root.get("client"), "%" + request.getClient() + "%"));
         }
 
-        if (request.getStatus() != null) {
-            filterPredicates.add(builder.equal(root.get("status").get("id"), request.getStatus()));
+        if (request.getStatus() != null && !request.getStatus().isEmpty()) {
+            filterPredicates.add(builder.like(root.get("status").get("displayValue"), "%" + request.getStatus() + "%"));
         }
 
         if (request.getBeginDate() != null) {
