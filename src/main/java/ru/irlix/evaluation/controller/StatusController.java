@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.StatusRequest;
 import ru.irlix.evaluation.dto.response.StatusResponse;
-import ru.irlix.evaluation.service.status.StatusService;
+import ru.irlix.evaluation.service.StatusService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
 import java.util.List;

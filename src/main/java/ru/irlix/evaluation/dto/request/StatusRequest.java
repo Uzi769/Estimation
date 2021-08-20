@@ -1,8 +1,11 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StatusRequest {
     private String value;
     private String displayValue;

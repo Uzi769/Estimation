@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.status;
+package ru.irlix.evaluation.service;
 
 import ru.irlix.evaluation.dto.request.StatusRequest;
 import ru.irlix.evaluation.dto.response.StatusResponse;
