@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public interface EstimationRepository extends PagingAndSortingRepository<Estimation, Long>, EstimationFilterRepository {
 
-    @Query("select e from Estimation e join fetch e.phases p join fetch p.tasks t where t.parent is null")
+    @Query("select distinct e" +
+            " from Estimation e " +
+            " left join fetch e.phases p " +
+            " left join fetch p.tasks t " +
+            " where t.parent is null and e.id = ?1")
     @NonNull
     Optional<Estimation> findById(@NonNull Long id);
 }

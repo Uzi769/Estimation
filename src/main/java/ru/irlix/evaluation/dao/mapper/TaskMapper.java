@@ -4,6 +4,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
@@ -21,9 +22,16 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public abstract class TaskMapper {
 
+    @Autowired
     protected PhaseHelper phaseHelper;
+
+    @Autowired
     protected TaskHelper taskHelper;
+
+    @Autowired
     protected TaskTypeHelper taskTypeHelper;
+
+    @Autowired
     protected RoleHelper roleHelper;
 
     @Mapping(target = "type", ignore = true)

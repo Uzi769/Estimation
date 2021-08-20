@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface EstimationFilterRepository {
 
-    @Query("select e from Estimation e join fetch e.phases p join fetch p.tasks t where t.parent is null")
     List<Estimation> filter(EstimationFilterRequest request);
 }

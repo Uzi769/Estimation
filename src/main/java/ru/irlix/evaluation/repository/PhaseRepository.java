@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface PhaseRepository extends JpaRepository<Phase, Long> {
 
-    @Query("select p from Phase p join fetch p.tasks t where t.parent is null")
+    @Query("select distinct p from Phase p left join fetch p.tasks t where t.parent is null order by p.id")
     @NonNull
     List<Phase> findAll();
 
-    @Query("select p from Phase p join fetch p.tasks t where t.parent is null")
+    @Query("select distinct p from Phase p left join fetch p.tasks t where t.parent is null")
     @NonNull
     Optional<Phase> findById(@NonNull Long id);
 }

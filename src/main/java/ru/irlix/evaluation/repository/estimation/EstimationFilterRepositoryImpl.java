@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +50,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
 
         query.select(root).where(builder.and(filterPredicates.toArray(new Predicate[0])));
+
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(request.getSize());
