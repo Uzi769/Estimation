@@ -8,7 +8,6 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class EstimationFilterRequest {
 
     private String name;

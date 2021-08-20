@@ -8,7 +8,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TaskResponse {
 
     private Long id;

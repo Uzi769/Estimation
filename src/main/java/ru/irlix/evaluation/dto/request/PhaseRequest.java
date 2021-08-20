@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class PhaseRequest {
 
     @NotNull
