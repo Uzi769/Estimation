@@ -9,8 +9,6 @@ import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 
-import java.util.Set;
-
 @Mapper(componentModel = "spring", uses = EstimationMapper.class)
 public abstract class PhaseMapper {
 

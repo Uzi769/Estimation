@@ -25,7 +25,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
-        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusRepository);
+        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
         return mapper.estimationToEstimationResponse(savedEstimation);
