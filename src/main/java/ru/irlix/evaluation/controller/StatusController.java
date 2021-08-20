@@ -10,7 +10,7 @@ import ru.irlix.evaluation.utils.UrlConstants;
 import java.util.List;
 
 @RestController
-@RequestMapping(UrlConstants.BASE_URL + "statuses")
+@RequestMapping(UrlConstants.BASE_URL + "/statuses")
 @RequiredArgsConstructor
 public class StatusController {
 

@@ -1,11 +1,10 @@
 package ru.irlix.evaluation.dao.entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="task")
@@ -58,15 +57,15 @@ public class Task {
     private Task parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<Task> tasks;
+    private Set<Task> tasks;
 
     @Column(name = "bags_reverse_on")
-    private boolean bagsReverseOn;
+    private Boolean bagsReverseOn;
 
     @Column(name = "qa_reverse_on")
-    private boolean qaReverseOn;
+    private Boolean qaReverseOn;
 
     @Column(name = "management_reverse_on")
-    private boolean managementReverseOn;
+    private Boolean managementReverseOn;
 
 }

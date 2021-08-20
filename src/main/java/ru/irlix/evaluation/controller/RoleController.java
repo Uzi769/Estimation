@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.RoleRequest;
 import ru.irlix.evaluation.dto.response.RoleResponse;
-import ru.irlix.evaluation.service.role.RoleService;
+import ru.irlix.evaluation.service.RoleService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(UrlConstants.BASE_URL + "roles")
+@RequestMapping(UrlConstants.BASE_URL + "/roles")
 @RequiredArgsConstructor
 public class RoleController {
 

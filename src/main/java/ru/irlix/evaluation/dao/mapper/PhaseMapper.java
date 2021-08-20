@@ -10,7 +10,7 @@ import ru.irlix.evaluation.dto.response.PhaseResponse;
 
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = TaskMapper.class)
 public abstract class PhaseMapper {
 
     @Autowired

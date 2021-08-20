@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.role;
+package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,7 @@ import ru.irlix.evaluation.dao.mapper.RoleMapper;
 import ru.irlix.evaluation.dto.request.RoleRequest;
 import ru.irlix.evaluation.dto.response.RoleResponse;
 import ru.irlix.evaluation.repository.RoleRepository;
+import ru.irlix.evaluation.service.RoleService;
 
 import java.util.List;
 

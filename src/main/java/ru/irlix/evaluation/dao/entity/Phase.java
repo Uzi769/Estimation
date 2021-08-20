@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="phase")
@@ -40,7 +40,7 @@ public class Phase {
     private Integer riskReserve;
 
     @OneToMany(mappedBy = "phase", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    private List<Task> tasks;
+    private Set<Task> tasks;
 
     @Column(name = "done")
     private Boolean done;
