@@ -2,10 +2,10 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.irlix.evaluation.dao.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.service.estimation.EstimationService;
+import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
 import java.util.List;
@@ -18,33 +18,28 @@ public class EstimationController {
     private final EstimationService estimationService;
 
     @PostMapping
-    public ResponseEntity<EstimationResponse> createEstimation(@RequestBody EstimationRequest request) {
-        EstimationResponse savedEstimation = estimationService.createEstimation(request);
-        return new ResponseEntity<>(savedEstimation, HttpStatus.OK);
+    public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
+        return estimationService.createEstimation(request);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EstimationResponse> updateEstimation(@PathVariable Long id,
-                                                               @RequestBody EstimationRequest request) {
-        EstimationResponse updatedEstimation = estimationService.updateEstimation(id, request);
-        return new ResponseEntity<>(updatedEstimation, HttpStatus.OK);
+    public EstimationResponse updateEstimation(@PathVariable Long id, @RequestBody EstimationRequest request) {
+        return estimationService.updateEstimation(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EstimationResponse> updateEstimation(@PathVariable Long id) {
+    public void deleteEstimation(@PathVariable Long id) {
         estimationService.deleteEstimation(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<EstimationResponse>> findAllEstimations(EstimationFilterRequest request) {
-        List<EstimationResponse> estimationsList = estimationService.findAllEstimations(request);
-        return new ResponseEntity<>(estimationsList, HttpStatus.OK);
+    public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+        return estimationService.findAllEstimations(request);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EstimationResponse> findEstimationById(@PathVariable Long id) {
-        EstimationResponse estimation = estimationService.findById(id);
-        return new ResponseEntity<>(estimation, HttpStatus.OK);
+    public EstimationResponse findEstimationById(@PathVariable Long id) {
+        return estimationService.findEstimationResponseById(id);
     }
 }
+
