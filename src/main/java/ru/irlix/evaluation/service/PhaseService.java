@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.phase;
+package ru.irlix.evaluation.service;
 
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
@@ -16,8 +16,4 @@ public interface PhaseService {
     void deletePhase(Long id);
 
     Set<PhaseResponse> getPhaseSetByEstimationId(Long id);
-
-    Phase findPhaseById(Long id);
-
-    void createPhases(Set<Phase> phases);
 }

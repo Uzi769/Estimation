@@ -2,11 +2,12 @@ package ru.irlix.evaluation.dao.mapper;
 
 import org.mapstruct.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
-import ru.irlix.evaluation.service.estimation.EstimationService;
+import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 
 import java.util.Set;
 
@@ -14,7 +15,8 @@ import java.util.Set;
 public abstract class PhaseMapper {
 
     @Mapping(target = "estimation", ignore = true)
-    public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest, @Context EstimationService estimationService);
+    public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest,
+                                              @Context EstimationRepository estimationRepository);
 
     @Mapping(target = "estimationId", ignore = true)
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
@@ -24,8 +26,11 @@ public abstract class PhaseMapper {
 
     @AfterMapping
     @Transactional
-    protected void map(@MappingTarget Phase phase, PhaseRequest request, @Context EstimationService estimationService) {
-        Estimation estimation = estimationService.findEstimationById(request.getEstimationId());
+    protected void map(@MappingTarget Phase phase,
+                       PhaseRequest request,
+                       @Context EstimationRepository estimationRepository) {
+        Estimation estimation = estimationRepository.findById(request.getEstimationId())
+                .orElseThrow(() -> new NotFoundException("Estimation with id " + request.getEstimationId() + " not found"));
         phase.setEstimation(estimation);
     }
 

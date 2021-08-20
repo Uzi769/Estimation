@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
-import ru.irlix.evaluation.service.phase.PhaseService;
+import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
 import java.util.Set;
@@ -28,7 +28,7 @@ public class PhaseController {
     }
 
     @GetMapping("/{id}")
-    public PhaseResponse getPhaseById(@PathVariable("id") Long id) {
+    public PhaseResponse findPhaseById(@PathVariable("id") Long id) {
         return phaseService.findPhaseResponseById(id);
     }
 
@@ -38,8 +38,7 @@ public class PhaseController {
     }
 
     @GetMapping("/estimation/{id}")
-    public Set<PhaseResponse> getPhasesByEstimationId(@PathVariable Long id) {
+    public Set<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         return phaseService.getPhaseSetByEstimationId(id);
     }
-
 }

@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.phase;
+package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,8 @@ import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.repository.PhaseRepository;
-import ru.irlix.evaluation.service.estimation.EstimationService;
+import ru.irlix.evaluation.repository.estimation.EstimationRepository;
+import ru.irlix.evaluation.service.PhaseService;
 
 import java.util.Set;
 
@@ -19,13 +20,14 @@ import java.util.Set;
 public class PhaseServiceImpl implements PhaseService {
 
     private final PhaseRepository phaseRepository;
-    private final EstimationService estimationService;
+    private final EstimationRepository estimationRepository;
     private final PhaseMapper mapper;
 
     @Override
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
-        Phase phase = mapper.phaseRequestToPhase(phaseRequest, estimationService);
+        Phase phase = mapper.phaseRequestToPhase(phaseRequest, estimationRepository);
         Phase savedPhase = phaseRepository.save(phase);
+
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -34,6 +36,7 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         checkAndUpdateFields(phase, phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
+
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -43,7 +46,7 @@ public class PhaseServiceImpl implements PhaseService {
         }
 
         if (phaseRequest.getEstimationId() != null) {
-            Estimation estimation = estimationService.findEstimationById(phaseRequest.getEstimationId());
+            Estimation estimation = findEstimationById(phaseRequest.getEstimationId());
             phase.setEstimation(estimation);
         }
 
@@ -91,12 +94,6 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
-    public Phase findPhaseById(Long id) {
-        return phaseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
-    }
-
-    @Override
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
@@ -105,13 +102,19 @@ public class PhaseServiceImpl implements PhaseService {
     @Override
     @Transactional
     public Set<PhaseResponse> getPhaseSetByEstimationId(Long id) {
-        Estimation estimation = estimationService.findEstimationById(id);
+        Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
+
         return mapper.phaseToPhaseResponse(phases);
     }
 
-    @Override
-    public void createPhases(Set<Phase> phases) {
-        phaseRepository.saveAll(phases);
+    private Phase findPhaseById(Long id) {
+        return phaseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
+    }
+
+    private Estimation findEstimationById(Long id) {
+        return estimationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
 }
