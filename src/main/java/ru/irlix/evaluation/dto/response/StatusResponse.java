@@ -2,9 +2,15 @@ package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StatusResponse {
+
     private Long id;
+
     private String value;
+
     private String displayValue;
 }

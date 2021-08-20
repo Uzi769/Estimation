@@ -1,9 +1,11 @@
 package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -30,11 +32,11 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
         List<Predicate> filterPredicates = new ArrayList<>();
 
-        if (request.getName() != null && !request.getName().isEmpty()) {
+        if (StringUtils.isNotEmpty(request.getName())) {
             filterPredicates.add(builder.like(root.get("name"), "%" + request.getName() + "%"));
         }
 
-        if (request.getClient() != null && !request.getClient().isEmpty()) {
+        if (StringUtils.isNotEmpty(request.getClient())) {
             filterPredicates.add(builder.like(root.get("client"), "%" + request.getClient() + "%"));
         }
 
