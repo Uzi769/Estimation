@@ -1,5 +1,5 @@
 package ru.irlix.evaluation.utils;
 
 public class EntityConstants {
-    public static String DEFAULT_STATUS = "draft";
+    public static Long DEFAULT_STATUS_ID = 1L;
 }

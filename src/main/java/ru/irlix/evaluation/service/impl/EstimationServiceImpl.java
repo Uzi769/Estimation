@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.estimation;
+package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,8 +9,9 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
-import ru.irlix.evaluation.service.status.StatusService;
+import ru.irlix.evaluation.service.EstimationService;
 
 import java.util.List;
 
@@ -19,12 +20,12 @@ import java.util.List;
 public class EstimationServiceImpl implements EstimationService {
 
     private EstimationRepository estimationRepository;
-    private StatusService statusService;
+    private StatusRepository statusRepository;
     private EstimationMapper mapper;
 
     @Override
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
-        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusService);
+        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest, statusRepository);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
         return mapper.estimationToEstimationResponse(savedEstimation);
@@ -33,9 +34,9 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
         Estimation estimationToUpdate = findEstimationById(id);
-        Estimation updatedEstimation = checkAndUpdateFields(estimationToUpdate, estimationRequest);
+        checkAndUpdateFields(estimationToUpdate, estimationRequest);
 
-        Estimation savedEstimation = estimationRepository.save(updatedEstimation);
+        Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
         return mapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -57,13 +58,12 @@ public class EstimationServiceImpl implements EstimationService {
         return mapper.estimationToEstimationResponse(estimation);
     }
 
-    @Override
-    public Estimation findEstimationById(Long id) {
+    private Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
 
-    private Estimation checkAndUpdateFields(Estimation estimation, EstimationRequest request) {
+    private void checkAndUpdateFields(Estimation estimation, EstimationRequest request) {
         if (request.getName() != null) {
             estimation.setName(request.getName());
         }
@@ -85,14 +85,13 @@ public class EstimationServiceImpl implements EstimationService {
         }
 
         if (request.getStatus() != null) {
-            Status status = statusService.findByValue(request.getStatus());
+            Status status = statusRepository.findById(request.getStatus())
+                    .orElseThrow(() -> new NotFoundException("Status with id " + request.getStatus() + " not found"));
             estimation.setStatus(status);
         }
 
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
         }
-
-        return estimation;
     }
 }

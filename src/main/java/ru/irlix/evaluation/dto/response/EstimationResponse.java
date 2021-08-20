@@ -26,7 +26,7 @@ public class EstimationResponse {
 
     private String creator;
 
-    private String status;
+    private Long status;
 
     private List<PhaseResponse> phases;
 }

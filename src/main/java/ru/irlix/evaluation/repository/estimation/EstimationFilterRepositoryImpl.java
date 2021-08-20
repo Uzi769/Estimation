@@ -38,8 +38,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.like(root.get("client"), "%" + request.getClient() + "%"));
         }
 
-        if (request.getStatus() != null && !request.getStatus().isEmpty()) {
-            filterPredicates.add(builder.like(root.get("status").get("displayValue"), "%" + request.getStatus() + "%"));
+        if (request.getStatus() != null) {
+            filterPredicates.add(builder.equal(root.get("status").get("id"), request.getStatus()));
         }
 
         if (request.getBeginDate() != null) {

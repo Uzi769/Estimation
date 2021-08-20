@@ -2,7 +2,7 @@ package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -11,12 +11,12 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class PhaseRequest {
 
-    @NotBlank
+    @NotNull
     private String name;
 
     private Long estimationId;
 
-    @NotBlank
+    @NotNull
     private Integer sortOrder;
 
     private Integer managementReserve;
