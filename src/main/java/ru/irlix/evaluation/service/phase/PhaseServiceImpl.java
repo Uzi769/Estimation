@@ -32,12 +32,12 @@ public class PhaseServiceImpl implements PhaseService {
     @Override
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
         Phase phase = findPhaseById(id);
-        Phase updatedPhase = checkAndUpdateFields(phase, phaseRequest);
-        Phase savedPhase = phaseRepository.save(updatedPhase);
+        checkAndUpdateFields(phase, phaseRequest);
+        Phase savedPhase = phaseRepository.save(phase);
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
-    private Phase checkAndUpdateFields(Phase phase, PhaseRequest phaseRequest) {
+    private void checkAndUpdateFields(Phase phase, PhaseRequest phaseRequest) {
         if (phaseRequest.getName() != null) {
             phase.setName(phaseRequest.getName());
         }
@@ -82,8 +82,6 @@ public class PhaseServiceImpl implements PhaseService {
         if (phaseRequest.getBagsReserveOn() != null) {
             phase.setBagsReserveOn(phaseRequest.getBagsReserveOn());
         }
-
-        return phase;
     }
 
     @Override
