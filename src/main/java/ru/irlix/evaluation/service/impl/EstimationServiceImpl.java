@@ -76,10 +76,6 @@ public class EstimationServiceImpl implements EstimationService {
             estimation.setDescription(request.getDescription());
         }
 
-        if (request.getCreateDate() != null) {
-            estimation.setCreateDate(request.getCreateDate());
-        }
-
         if (request.getRisk() != null) {
             estimation.setRisk(request.getRisk());
         }

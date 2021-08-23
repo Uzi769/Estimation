@@ -2,8 +2,6 @@ package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,8 +13,6 @@ public class EstimationRequest {
     private String client;
 
     private String description;
-
-    private Instant createDate;
 
     private Integer risk;
 
