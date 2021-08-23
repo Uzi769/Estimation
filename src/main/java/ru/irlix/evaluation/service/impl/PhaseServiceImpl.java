@@ -87,6 +87,9 @@ public class PhaseServiceImpl implements PhaseService {
         if (phaseRequest.getBagsReserveOn() != null) {
             phase.setBagsReserveOn(phaseRequest.getBagsReserveOn());
         }
+        if (phaseRequest.getRiskReserveOn() != null) {
+            phase.setRiskReserveOn(phaseRequest.getRiskReserveOn());
+        }
     }
 
     @Override

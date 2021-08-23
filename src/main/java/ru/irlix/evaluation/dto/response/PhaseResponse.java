@@ -35,4 +35,6 @@ public class PhaseResponse {
     private Boolean bagsReserveOn;
 
     private Set<TaskResponse> tasks;
+    
+    private Boolean riskReserveOn;
 }
