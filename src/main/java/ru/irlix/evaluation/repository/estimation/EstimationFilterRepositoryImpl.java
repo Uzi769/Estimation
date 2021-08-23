@@ -51,6 +51,9 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
+        if(StringUtils.isNotEmpty(request.getCreator())) {
+            filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
+        }
         query.select(root).where(builder.and(filterPredicates.toArray(new Predicate[0])));
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
