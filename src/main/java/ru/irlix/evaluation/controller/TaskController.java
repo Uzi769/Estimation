@@ -12,6 +12,7 @@ import java.util.Set;
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/tasks")
 @RequiredArgsConstructor
+@CrossOrigin
 public class TaskController {
 
     private final TaskService taskService;
