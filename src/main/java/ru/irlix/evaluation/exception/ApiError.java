@@ -15,8 +15,6 @@ public class ApiError {
 
     private String message;
 
-    private HttpStatus status;
-
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<String> errors;
 
@@ -26,7 +24,6 @@ public class ApiError {
 
     public ApiError(String message, HttpStatus status) {
         this.message = message;
-        this.status = status;
     }
 
     public ApiError(String message, List<String> errors) {

@@ -2,7 +2,7 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.mapper.RoleMapper;
 import ru.irlix.evaluation.dto.request.RoleRequest;

@@ -23,7 +23,6 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = new ArrayList<>();
         ApiError apiError = new ApiError("Exception", errors);
         apiError.setMessage("Validation Error");
-        apiError.setStatus(HttpStatus.BAD_REQUEST);
 
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
@@ -33,8 +32,8 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(org.webjars.NotFoundException.class)
-    protected ResponseEntity<Object> handleNotFoundException(org.webjars.NotFoundException e) {
+    @ExceptionHandler({NotFoundException.class})
+    protected ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
         ApiError apiError = new ApiError(e.getMessage(), HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
@@ -49,9 +48,9 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(x -> x.getField() + " " + x.getDefaultMessage())
+                .map(x -> x.getField())
                 .collect(Collectors.toList());
-        ApiError apiError = new ApiError("Arguments Not Valid: " + errors);
+        ApiError apiError = new ApiError("Поля, не прошедшие валидацию: " + errors);
         return new ResponseEntity<>(apiError, status);
     }
 }
