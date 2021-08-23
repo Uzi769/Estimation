@@ -8,6 +8,7 @@ import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
+import ru.irlix.evaluation.utils.ValidationMessage;
 
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -26,13 +27,13 @@ public class EstimationController {
     }
 
     @PutMapping("/{id}")
-    public EstimationResponse updateEstimation(@PathVariable @Positive Long id,
+    public EstimationResponse updateEstimation(@PathVariable @Positive(message = ValidationMessage.ID) Long id,
                                                @RequestBody EstimationRequest request) {
         return estimationService.updateEstimation(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEstimation(@PathVariable @Positive Long id) {
+    public void deleteEstimation(@PathVariable @Positive(message = ValidationMessage.ID) Long id) {
         estimationService.deleteEstimation(id);
     }
 
@@ -42,7 +43,7 @@ public class EstimationController {
     }
 
     @GetMapping("/{id}")
-    public EstimationResponse findEstimationById(@PathVariable @Positive Long id) {
+    public EstimationResponse findEstimationById(@PathVariable @Positive(message = ValidationMessage.ID) Long id) {
         return estimationService.findEstimationResponseById(id);
     }
 }
