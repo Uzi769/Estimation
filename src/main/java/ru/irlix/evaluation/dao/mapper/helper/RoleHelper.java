@@ -5,18 +5,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
-import ru.irlix.evaluation.dao.entity.Status;
-import ru.irlix.evaluation.repository.StatusRepository;
+import ru.irlix.evaluation.dao.entity.Role;
+import ru.irlix.evaluation.repository.RoleRepository;
 
 @Component
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.MANDATORY)
-public class StatusHelper {
+public class RoleHelper {
 
-    private final StatusRepository statusRepository;
+    private final RoleRepository roleRepository;
 
-    public Status findStatusById(Long id) {
-        return statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
+    public Role findRoleById(Long id) {
+        return roleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
     }
 }

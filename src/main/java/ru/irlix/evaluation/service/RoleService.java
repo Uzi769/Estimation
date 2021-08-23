@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.service.role;
+package ru.irlix.evaluation.service;
 
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dto.request.RoleRequest;

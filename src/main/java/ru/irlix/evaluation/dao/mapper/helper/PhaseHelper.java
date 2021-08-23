@@ -5,18 +5,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
-import ru.irlix.evaluation.dao.entity.Status;
-import ru.irlix.evaluation.repository.StatusRepository;
+import ru.irlix.evaluation.dao.entity.Phase;
+import ru.irlix.evaluation.repository.PhaseRepository;
 
 @Component
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.MANDATORY)
-public class StatusHelper {
+public class PhaseHelper {
 
-    private final StatusRepository statusRepository;
+    private final PhaseRepository phaseRepository;
 
-    public Status findStatusById(Long id) {
-        return statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
+    public Phase findPhaseById(Long id) {
+        return phaseRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
     }
 }

@@ -42,6 +42,6 @@ public class PhaseController {
 
     @GetMapping("/estimation/{id}")
     public Set<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
-        return phaseService.getPhaseSetByEstimationId(id);
+        return phaseService.findPhasesByEstimationId(id);
     }
 }

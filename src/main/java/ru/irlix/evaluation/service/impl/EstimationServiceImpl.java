@@ -2,6 +2,7 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
@@ -24,6 +25,7 @@ public class EstimationServiceImpl implements EstimationService {
     private EstimationMapper mapper;
 
     @Override
+    @Transactional
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
@@ -32,6 +34,7 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
+    @Transactional
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
         Estimation estimationToUpdate = findEstimationById(id);
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
@@ -41,18 +44,21 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
+    @Transactional
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
         estimationRepository.delete(estimationToDelete);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
         return mapper.estimationToEstimationResponse(estimationList);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
         return mapper.estimationToEstimationResponse(estimation);
