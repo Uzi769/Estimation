@@ -31,7 +31,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class})
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
-        ApiError apiError = new ApiError(e.getMessage(), HttpStatus.NOT_FOUND);
+        ApiError apiError = new ApiError(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
