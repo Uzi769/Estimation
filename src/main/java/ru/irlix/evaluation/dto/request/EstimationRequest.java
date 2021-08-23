@@ -1,8 +1,7 @@
 package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
-
-import java.time.Instant;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 @Getter
 @Setter
@@ -16,11 +15,9 @@ public class EstimationRequest {
 
     private String description;
 
-    private Instant createDate;
-
     private Integer risk;
 
-    private Long status;
+    private Long status = EntityConstants.DEFAULT_STATUS_ID;
 
     private String creator;
 }

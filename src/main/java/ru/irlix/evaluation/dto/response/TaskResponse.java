@@ -14,7 +14,7 @@ public class TaskResponse {
 
     private String name;
 
-    private String type;
+    private Long type;
 
     private Integer repeatCount;
 

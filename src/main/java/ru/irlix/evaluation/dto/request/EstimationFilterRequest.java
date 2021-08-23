@@ -20,6 +20,8 @@ public class EstimationFilterRequest {
 
     private Instant endDate;
 
+    private String creator;
+
     private Integer page = 0;
 
     private Integer size = 25;

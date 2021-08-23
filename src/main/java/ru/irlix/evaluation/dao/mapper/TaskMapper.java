@@ -80,7 +80,7 @@ public abstract class TaskMapper {
         response.setPhaseId(task.getPhase().getId());
 
         if (task.getType() != null) {
-            response.setType(task.getType().getValue());
+            response.setType(task.getType().getId());
         }
 
         if (task.getParent() != null) {

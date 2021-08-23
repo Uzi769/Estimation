@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/estimations")
 @RequiredArgsConstructor
+@CrossOrigin
 public class EstimationController {
 
     private final EstimationService estimationService;

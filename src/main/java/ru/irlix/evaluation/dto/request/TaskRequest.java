@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 @Getter
 @Setter
@@ -17,7 +18,7 @@ public class TaskRequest {
 
     private Long featureId;
 
-    private Long type;
+    private Long type = EntityConstants.TASK_ID;
 
     private Integer repeatCount;
 
