@@ -15,5 +15,5 @@ public interface PhaseService {
 
     void deletePhase(Long id);
 
-    Set<PhaseResponse> getPhaseSetByEstimationId(Long id);
+    Set<PhaseResponse> findPhasesByEstimationId(Long id);
 }

@@ -50,14 +50,15 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TaskResponse findTaskResponseById(Long id) {
         Task task = findTaskById(id);
         return mapper.taskToResponse(task);
     }
 
     @Override
-    @Transactional
-    public Set<TaskResponse> findTasksByPhase(Long phaseId) {
+    @Transactional(readOnly = true)
+    public Set<TaskResponse> findTasks(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
         Set<Task> tasks = phase.getTasks();
 

@@ -12,7 +12,7 @@ public interface TaskService {
 
     TaskResponse findTaskResponseById(Long id);
 
-    Set<TaskResponse> findTasksByPhase(Long phaseId);
+    Set<TaskResponse> findTasks(Long phaseId);
 
     void deleteTask(Long id);
 }

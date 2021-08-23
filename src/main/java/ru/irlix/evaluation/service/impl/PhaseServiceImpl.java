@@ -93,6 +93,7 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
         Phase phase = findPhaseById(id);
         return mapper.phaseToPhaseResponse(phase);
@@ -106,7 +107,8 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
-    public Set<PhaseResponse> getPhaseSetByEstimationId(Long id) {
+    @Transactional(readOnly = true)
+    public Set<PhaseResponse> findPhasesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
 

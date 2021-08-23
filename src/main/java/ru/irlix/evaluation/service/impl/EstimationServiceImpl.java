@@ -51,12 +51,14 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
         return mapper.estimationToEstimationResponse(estimationList);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
         return mapper.estimationToEstimationResponse(estimation);
