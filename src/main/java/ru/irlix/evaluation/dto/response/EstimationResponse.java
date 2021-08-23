@@ -3,6 +3,7 @@ package ru.irlix.evaluation.dto.response;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,4 +26,6 @@ public class EstimationResponse {
     private String creator;
 
     private Long status;
+
+    private List<PhaseResponse> phases;
 }
