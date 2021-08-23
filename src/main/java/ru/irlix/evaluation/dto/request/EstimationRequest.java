@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Positive;
 import java.time.Instant;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 @Getter
 @Setter
@@ -17,12 +18,10 @@ public class EstimationRequest {
 
     private String description;
 
-    private Instant createDate;
-
     private Integer risk;
 
     @Positive(message = "Status id cant be negative or zero")
-    private Long status;
+    private Long status = EntityConstants.DEFAULT_STATUS_ID;
 
     private String creator;
 }

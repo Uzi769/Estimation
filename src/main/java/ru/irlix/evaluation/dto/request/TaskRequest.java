@@ -8,6 +8,7 @@ import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 @Getter
 @Setter
@@ -25,7 +26,7 @@ public class TaskRequest {
     private Long featureId;
 
     @Positive(message = "Type id cant be negative or zero")
-    private Long type;
+    private Long type = EntityConstants.TASK_ID;
 
     @Positive(message = "Repeat count cant be negative or zero")
     private Integer repeatCount;

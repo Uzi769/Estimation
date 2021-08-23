@@ -19,6 +19,7 @@ import java.util.Set;
 @RequestMapping(UrlConstants.BASE_URL + "/phases")
 @RequiredArgsConstructor
 @Validated
+@CrossOrigin
 public class PhaseController {
 
     private final PhaseService phaseService;
