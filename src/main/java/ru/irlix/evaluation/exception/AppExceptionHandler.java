@@ -11,7 +11,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolation;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,9 +19,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(javax.validation.ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(javax.validation.ConstraintViolationException ex) {
-        List<String> errors = new ArrayList<>();
-        ApiError apiError = new ApiError("Exception", errors);
-        apiError.setMessage("Validation Error");
+        ApiError apiError = new ApiError("Ошибка валидации: ");
 
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
