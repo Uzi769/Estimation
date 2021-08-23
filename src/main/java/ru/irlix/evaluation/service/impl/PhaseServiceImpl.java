@@ -24,6 +24,7 @@ public class PhaseServiceImpl implements PhaseService {
     private final PhaseMapper mapper;
 
     @Override
+    @Transactional
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
@@ -32,6 +33,7 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
+    @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
         Phase phase = findPhaseById(id);
         checkAndUpdateFields(phase, phaseRequest);
@@ -94,13 +96,13 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
+    @Transactional
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
     }
 
     @Override
-    @Transactional
     public Set<PhaseResponse> getPhaseSetByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();

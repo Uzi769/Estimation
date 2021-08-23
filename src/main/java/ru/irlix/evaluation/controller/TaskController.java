@@ -36,8 +36,8 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
-    @GetMapping("/phase/{id}")
-    public Set<TaskResponse> findTasksByPhaseId(@PathVariable Long id) {
+    @GetMapping()
+    public Set<TaskResponse> findTasksByPhaseId(@RequestParam("phaseId") Long id) {
         return taskService.findTasksByPhase(id);
     }
 }

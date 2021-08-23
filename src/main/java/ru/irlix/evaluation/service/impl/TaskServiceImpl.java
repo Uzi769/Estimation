@@ -2,6 +2,7 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
@@ -30,6 +31,7 @@ public class TaskServiceImpl implements TaskService {
     private final PhaseHelper phaseHelper;
 
     @Override
+    @Transactional
     public TaskResponse createTask(TaskRequest request) {
         Task task = mapper.taskRequestToTask(request);
         Task savedTask = taskRepository.save(task);
@@ -38,6 +40,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskResponse updateTask(Long id, TaskRequest taskRequest) {
         Task task = findTaskById(id);
         checkAndUpdateFields(task, taskRequest);
@@ -53,6 +56,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public Set<TaskResponse> findTasksByPhase(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
         Set<Task> tasks = phase.getTasks();
@@ -61,6 +65,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public void deleteTask(Long id) {
         Task task = findTaskById(id);
         taskRepository.delete(task);

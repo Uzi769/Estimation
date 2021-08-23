@@ -14,7 +14,7 @@ public interface PhaseRepository extends JpaRepository<Phase, Long> {
     @NonNull
     List<Phase> findAll();
 
-    @Query("select distinct p from Phase p left join fetch p.tasks t where t.parent is null")
+    @Query("select distinct p from Phase p left join fetch p.tasks t where t.parent is null and p.id = ?1")
     @NonNull
     Optional<Phase> findById(@NonNull Long id);
 }
