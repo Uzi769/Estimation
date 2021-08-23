@@ -1,13 +1,13 @@
 package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
-import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
@@ -18,13 +18,15 @@ public class PhaseController {
     private final PhaseService phaseService;
 
     @PostMapping
-    public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
+    public PhaseResponse createPhase(@RequestBody
+                                     @Validated(PhaseRequest.New.class) PhaseRequest phaseRequest) {
         return phaseService.createPhase(phaseRequest);
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public PhaseResponse updatePhase(@PathVariable Long id,
-                                     @RequestBody PhaseRequest phaseRequest) {
+                                     @RequestBody
+                                     @Validated(PhaseRequest.Update.class) PhaseRequest phaseRequest) {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
@@ -40,6 +42,6 @@ public class PhaseController {
 
     @GetMapping("/estimation/{id}")
     public Set<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
-        return phaseService.getPhaseSetByEstimationId(id);
+        return phaseService.findPhasesByEstimationId(id);
     }
 }

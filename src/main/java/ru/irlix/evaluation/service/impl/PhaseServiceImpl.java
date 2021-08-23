@@ -24,6 +24,7 @@ public class PhaseServiceImpl implements PhaseService {
     private final PhaseMapper mapper;
 
     @Override
+    @Transactional
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
@@ -32,6 +33,7 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @Override
+    @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
         Phase phase = findPhaseById(id);
         checkAndUpdateFields(phase, phaseRequest);
@@ -85,23 +87,28 @@ public class PhaseServiceImpl implements PhaseService {
         if (phaseRequest.getBagsReserveOn() != null) {
             phase.setBagsReserveOn(phaseRequest.getBagsReserveOn());
         }
+        if (phaseRequest.getRiskReserveOn() != null) {
+            phase.setRiskReserveOn(phaseRequest.getRiskReserveOn());
+        }
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
         Phase phase = findPhaseById(id);
         return mapper.phaseToPhaseResponse(phase);
     }
 
     @Override
+    @Transactional
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
     }
 
     @Override
-    @Transactional
-    public Set<PhaseResponse> getPhaseSetByEstimationId(Long id) {
+    @Transactional(readOnly = true)
+    public Set<PhaseResponse> findPhasesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
 
