@@ -50,9 +50,10 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-        if(StringUtils.isNotEmpty(request.getCreator())) {
+        if (StringUtils.isNotEmpty(request.getCreator())) {
             filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
         }
+
         Fetch<Estimation, Phase> phases = root.fetch("phases", JoinType.LEFT);
         Join<Estimation, Phase> phasesJoin = (Join<Estimation, Phase>) phases;
 
