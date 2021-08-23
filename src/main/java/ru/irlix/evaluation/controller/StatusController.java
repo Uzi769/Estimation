@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/statuses")
 @RequiredArgsConstructor
+@CrossOrigin
 public class StatusController {
 
     private final StatusService statusService;

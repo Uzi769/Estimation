@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/roles")
 @RequiredArgsConstructor
+@CrossOrigin
 public class RoleController {
 
     private final RoleService roleService;
