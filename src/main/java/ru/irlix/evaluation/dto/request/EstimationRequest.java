@@ -2,6 +2,7 @@ package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
 
+import javax.validation.constraints.Positive;
 import java.time.Instant;
 
 @Getter
@@ -20,6 +21,7 @@ public class EstimationRequest {
 
     private Integer risk;
 
+    @Positive(message = "Status id cant be negative or zero")
     private Long status;
 
     private String creator;

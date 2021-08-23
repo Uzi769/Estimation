@@ -1,8 +1,14 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.irlix.evaluation.utils.marker.OnCreate;
+import ru.irlix.evaluation.utils.marker.OnUpdate;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
@@ -10,19 +16,15 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class PhaseRequest {
 
-    public interface New {
-    }
-
-    public interface Update {
-    }
-
-    @NotNull(groups = {New.class, Update.class})
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Name is required")
     private String name;
 
-    @NotNull(groups = {New.class, Update.class})
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Estimation id is required")
+    @Positive(message = "Estimation id cant be negative or zero")
     private Long estimationId;
 
-    @NotNull(groups = New.class)
+    @NotNull(groups = OnCreate.class, message = "Sort order is required")
+    @Positive(message = "Sort order cant be negative or zero")
     private Integer sortOrder;
 
     private Integer managementReserve;
