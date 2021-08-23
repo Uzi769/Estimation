@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.exception;
 
+import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +27,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
-                .map(constraint -> constraint.getMessage())
+                .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList()));
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
@@ -38,11 +40,12 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    @NonNull
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatus status,
+            @NonNull WebRequest request) {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
