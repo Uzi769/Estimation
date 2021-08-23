@@ -53,4 +53,7 @@ public class Phase {
 
     @Column(name = "management_reserve_on")
     private Boolean managementReserveOn;
+
+    @Column(name = "risk_reserve_on")
+    private Boolean riskReserveOn;
 }
