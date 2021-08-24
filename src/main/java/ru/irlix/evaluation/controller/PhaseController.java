@@ -13,7 +13,7 @@ import ru.irlix.evaluation.utils.marker.OnUpdate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/phases")
@@ -48,7 +48,7 @@ public class PhaseController {
     }
 
     @GetMapping("/estimation/{id}")
-    public Set<PhaseResponse> findPhasesByEstimationId(@PathVariable @Positive(message = ValidationMessage.ID) Long id) {
+    public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         return phaseService.findPhasesByEstimationId(id);
     }
 }

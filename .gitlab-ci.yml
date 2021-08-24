@@ -14,8 +14,6 @@ build:
     paths:
       - target/*.jar
     expire_in: 1 week
-  only:
-    - develop
 
 docker:
   stage: build image

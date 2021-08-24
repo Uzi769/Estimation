@@ -46,9 +46,9 @@ public class TaskRequest {
 
     private String comment;
 
-    private Boolean bagsReverseOn;
+    private Boolean bagsReserveOn;
 
-    private Boolean qaReverseOn;
+    private Boolean qaReserveOn;
 
-    private Boolean managementReverseOn;
+    private Boolean managementReserveOn;
 }

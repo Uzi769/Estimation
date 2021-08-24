@@ -17,7 +17,10 @@ import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.utils.EntityConstants;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class TaskMapper {
@@ -52,7 +55,7 @@ public abstract class TaskMapper {
     @Mapping(target = "roleId", ignore = true)
     @Mapping(target = "parentId", ignore = true)
     @Mapping(target = "tasks", ignore = true)
-    public abstract Set<TaskResponse> taskToResponse(Set<Task> tasks);
+    public abstract List<TaskResponse> taskToResponse(Set<Task> tasks);
 
     @AfterMapping
     protected void map(@MappingTarget Task task, TaskRequest request) {
@@ -93,6 +96,17 @@ public abstract class TaskMapper {
 
         if (task.getTasks() != null) {
             response.setTasks(taskToResponse(task.getTasks()));
+        }
+    }
+
+    @AfterMapping
+    protected void map(@MappingTarget List<TaskResponse> tasks) {
+        List<TaskResponse> sortedTasks = tasks.stream()
+                .sorted(Comparator.comparing(TaskResponse::getId))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < tasks.size(); i++) {
+            tasks.set(i, sortedTasks.get(i));
         }
     }
 }

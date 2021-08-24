@@ -59,13 +59,13 @@ public class Task {
     @OneToMany(mappedBy = "parent")
     private Set<Task> tasks;
 
-    @Column(name = "bags_reverse_on")
-    private Boolean bagsReverseOn;
+    @Column(name = "bags_reserve_on")
+    private Boolean bagsReserveOn;
 
-    @Column(name = "qa_reverse_on")
-    private Boolean qaReverseOn;
+    @Column(name = "qa_reserve_on")
+    private Boolean qaReserveOn;
 
-    @Column(name = "management_reverse_on")
-    private Boolean managementReverseOn;
+    @Column(name = "management_reserve_on")
+    private Boolean managementReserveOn;
 
 }

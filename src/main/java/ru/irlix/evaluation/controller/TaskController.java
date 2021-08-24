@@ -12,7 +12,7 @@ import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/tasks")
@@ -46,7 +46,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public Set<TaskResponse> findTasks(@RequestParam("phaseId") @Positive(message = ValidationMessage.ID) Long id) {
+    public List<TaskResponse> findTasks(@RequestParam("phaseId") Long id) {
         return taskService.findTasks(id);
     }
 }
