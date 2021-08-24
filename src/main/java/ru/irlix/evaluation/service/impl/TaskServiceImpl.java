@@ -99,16 +99,16 @@ public class TaskServiceImpl implements TaskService {
             task.setBagsReserve(request.getBagsReserve());
         }
 
-        if (request.getManagementReverseOn() != null) {
-            task.setManagementReverseOn(request.getManagementReverseOn());
+        if (request.getManagementReserveOn() != null) {
+            task.setManagementReserveOn(request.getManagementReserveOn());
         }
 
-        if (request.getQaReverseOn() != null) {
-            task.setQaReverseOn(request.getQaReverseOn());
+        if (request.getQaReserveOn() != null) {
+            task.setQaReserveOn(request.getQaReserveOn());
         }
 
-        if (request.getBagsReverseOn() != null) {
-            task.setBagsReverseOn(request.getBagsReverseOn());
+        if (request.getBagsReserveOn() != null) {
+            task.setBagsReserveOn(request.getBagsReserveOn());
         }
 
         if (request.getComment() != null) {
