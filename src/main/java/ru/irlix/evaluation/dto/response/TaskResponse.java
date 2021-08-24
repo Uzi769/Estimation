@@ -32,11 +32,11 @@ public class TaskResponse {
 
     private Integer managementReserve;
 
-    private boolean bagsReverseOn;
+    private boolean bagsReserveOn;
 
-    private boolean qaReverseOn;
+    private boolean qaReserveOn;
 
-    private boolean managementReverseOn;
+    private boolean managementReserveOn;
 
     private String comment;
 

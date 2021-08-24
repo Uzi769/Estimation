@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="create-reserve" author="ivan-kalachikov">
+        <addColumn tableName="task">
+            <column name="bags_reserve_on" type="BOOLEAN"/>
+            <column name="management_reserve_on" type="BOOLEAN"/>
+            <column name="qa_reserve_on" type="BOOLEAN"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="drop-reverse" author="ivan-kalachikov">
+        <dropColumn columnName="bags_reverse_on" tableName="task"/>
+
+        <dropColumn columnName="management_reverse_on" tableName="task"/>
+
+        <dropColumn columnName="qa_reverse_on" tableName="task"/>
+    </changeSet>
+
+</databaseChangeLog>
