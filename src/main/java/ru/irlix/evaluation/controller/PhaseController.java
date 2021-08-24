@@ -8,7 +8,7 @@ import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/phases")
@@ -42,7 +42,7 @@ public class PhaseController {
     }
 
     @GetMapping("/estimation/{id}")
-    public Set<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
+    public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         return phaseService.findPhasesByEstimationId(id);
     }
 }
