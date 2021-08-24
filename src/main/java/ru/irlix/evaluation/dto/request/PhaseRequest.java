@@ -16,7 +16,7 @@ public class PhaseRequest {
     public interface Update {
     }
 
-    @NotNull(groups = {New.class, Update.class})
+    @NotNull(groups = {New.class, Update.class}, message = "{name.notEmpty}")
     private String name;
 
     @NotNull(groups = {New.class, Update.class})

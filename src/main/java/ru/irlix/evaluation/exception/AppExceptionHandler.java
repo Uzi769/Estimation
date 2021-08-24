@@ -45,9 +45,9 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(x -> x.getField())
+                .map(x -> x.getDefaultMessage())
                 .collect(Collectors.toList());
-        ApiError apiError = new ApiError("Поля, не прошедшие валидацию: " + errors);
+        ApiError apiError = new ApiError("" + errors);
         return new ResponseEntity<>(apiError, status);
     }
 }
