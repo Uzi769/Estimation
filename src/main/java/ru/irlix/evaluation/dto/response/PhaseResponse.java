@@ -1,8 +1,11 @@
 package ru.irlix.evaluation.dto.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -34,7 +37,7 @@ public class PhaseResponse {
 
     private Boolean bagsReserveOn;
 
-    private Set<TaskResponse> tasks;
+    private List<TaskResponse> tasks;
     
     private Boolean riskReserveOn;
 }

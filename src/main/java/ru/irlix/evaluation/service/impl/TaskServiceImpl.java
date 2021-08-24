@@ -18,6 +18,7 @@ import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.EntityConstants;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -58,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public Set<TaskResponse> findTasks(Long phaseId) {
+    public List<TaskResponse> findTasks(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
         Set<Task> tasks = phase.getTasks();
 
