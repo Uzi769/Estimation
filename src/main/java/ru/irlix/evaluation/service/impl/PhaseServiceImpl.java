@@ -111,7 +111,7 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional(readOnly = true)
     public List<PhaseResponse> findPhasesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
-        Set<Phase> phases = estimation.getPhases();
+        List<Phase> phases = estimation.getPhases();
 
         return mapper.phaseToPhaseResponse(phases);
     }

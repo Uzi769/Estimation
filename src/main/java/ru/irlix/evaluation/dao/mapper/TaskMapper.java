@@ -55,7 +55,7 @@ public abstract class TaskMapper {
     @Mapping(target = "roleId", ignore = true)
     @Mapping(target = "parentId", ignore = true)
     @Mapping(target = "tasks", ignore = true)
-    public abstract List<TaskResponse> taskToResponse(Set<Task> tasks);
+    public abstract List<TaskResponse> taskToResponse(List<Task> tasks);
 
     @AfterMapping
     protected void map(@MappingTarget Task task, TaskRequest request) {

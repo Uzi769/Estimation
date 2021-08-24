@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="task")
@@ -20,7 +20,7 @@ public class Task {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type")
     private TaskTypeDictionary type;
 
@@ -45,11 +45,11 @@ public class Task {
     @Column(name = "hours_max")
     private Integer hoursMax;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "phase")
     private Phase phase;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estimation_role")
     private Role role;
 
@@ -57,7 +57,7 @@ public class Task {
     private Task parent;
 
     @OneToMany(mappedBy = "parent")
-    private Set<Task> tasks;
+    private List<Task> tasks;
 
     @Column(name = "bags_reserve_on")
     private Boolean bagsReserveOn;
@@ -67,5 +67,4 @@ public class Task {
 
     @Column(name = "management_reserve_on")
     private Boolean managementReserveOn;
-
 }

@@ -6,12 +6,23 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="estimation")
 @Getter
 @Setter
+@NamedEntityGraph(
+    name = "estimation.phases",
+    attributeNodes = @NamedAttributeNode(
+        value = "phases",
+        subgraph = "estimation.phases.tasks"
+    ),
+    subgraphs = @NamedSubgraph(
+        name = "estimation.phases.tasks",
+        attributeNodes = @NamedAttributeNode("tasks")
+    )
+)
 public class Estimation {
 
     @Id
@@ -32,7 +43,7 @@ public class Estimation {
     @Column(name = "risk")
     private Integer risk;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status")
     private Status status;
 
@@ -42,6 +53,7 @@ public class Estimation {
     @Column(name = "creator")
     private String creator;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "estimation")
-    private Set<Phase> phases;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
+    @OrderBy("id DESC")
+    private List<Phase> phases;
 }

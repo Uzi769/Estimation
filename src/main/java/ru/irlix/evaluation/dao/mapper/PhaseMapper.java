@@ -29,7 +29,7 @@ public abstract class PhaseMapper {
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
 
     @Mapping(target = "estimationId", ignore = true)
-    public abstract List<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
+    public abstract List<PhaseResponse> phaseToPhaseResponse(List<Phase> phase);
 
     @AfterMapping
     protected void map(@MappingTarget Phase phase, PhaseRequest request) {
