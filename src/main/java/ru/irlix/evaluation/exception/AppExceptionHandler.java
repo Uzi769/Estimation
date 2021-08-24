@@ -4,6 +4,7 @@ import lombok.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,8 +20,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(javax.validation.ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(javax.validation.ConstraintViolationException ex) {
-        ApiError apiError = new ApiError("Ошибка валидации: ");
-
+        ApiError apiError = new ApiError("Validation error: ");
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
@@ -45,9 +45,9 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(x -> x.getField())
+                .map(FieldError::getField)
                 .collect(Collectors.toList());
-        ApiError apiError = new ApiError("Поля, не прошедшие валидацию: " + errors);
+        ApiError apiError = new ApiError("Validation error: " + errors);
         return new ResponseEntity<>(apiError, status);
     }
 }
