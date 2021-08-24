@@ -1,10 +1,9 @@
 package ru.irlix.evaluation.service;
 
-import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
-import java.util.Set;
+import java.util.List;
 
 public interface PhaseService {
     PhaseResponse createPhase(PhaseRequest phaseRequest);
@@ -15,5 +14,5 @@ public interface PhaseService {
 
     void deletePhase(Long id);
 
-    Set<PhaseResponse> findPhasesByEstimationId(Long id);
+    List<PhaseResponse> findPhasesByEstimationId(Long id);
 }

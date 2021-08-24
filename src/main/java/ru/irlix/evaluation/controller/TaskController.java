@@ -7,7 +7,7 @@ import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
-import java.util.Set;
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/tasks")
@@ -38,7 +38,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public Set<TaskResponse> findTasks(@RequestParam("phaseId") Long id) {
+    public List<TaskResponse> findTasks(@RequestParam("phaseId") Long id) {
         return taskService.findTasks(id);
     }
 }
