@@ -18,6 +18,7 @@ import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.EntityConstants;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -58,7 +59,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public Set<TaskResponse> findTasks(Long phaseId) {
+    public List<TaskResponse> findTasks(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
         Set<Task> tasks = phase.getTasks();
 
@@ -99,16 +100,16 @@ public class TaskServiceImpl implements TaskService {
             task.setBagsReserve(request.getBagsReserve());
         }
 
-        if (request.getManagementReverseOn() != null) {
-            task.setManagementReverseOn(request.getManagementReverseOn());
+        if (request.getManagementReserveOn() != null) {
+            task.setManagementReserveOn(request.getManagementReserveOn());
         }
 
-        if (request.getQaReverseOn() != null) {
-            task.setQaReverseOn(request.getQaReverseOn());
+        if (request.getQaReserveOn() != null) {
+            task.setQaReserveOn(request.getQaReserveOn());
         }
 
-        if (request.getBagsReverseOn() != null) {
-            task.setBagsReverseOn(request.getBagsReverseOn());
+        if (request.getBagsReserveOn() != null) {
+            task.setBagsReserveOn(request.getBagsReserveOn());
         }
 
         if (request.getComment() != null) {
