@@ -1,6 +1,9 @@
 package ru.irlix.evaluation.dao.mapper;
 
-import org.mapstruct.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
@@ -8,7 +11,10 @@ import ru.irlix.evaluation.dao.mapper.helper.EstimationHelper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = TaskMapper.class)
 public abstract class PhaseMapper {
@@ -23,7 +29,7 @@ public abstract class PhaseMapper {
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
 
     @Mapping(target = "estimationId", ignore = true)
-    public abstract Set<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
+    public abstract List<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
 
     @AfterMapping
     protected void map(@MappingTarget Phase phase, PhaseRequest request) {
@@ -34,5 +40,16 @@ public abstract class PhaseMapper {
     @AfterMapping
     protected void map(@MappingTarget PhaseResponse response, Phase phase) {
         response.setEstimationId(phase.getEstimation().getId());
+    }
+
+    @AfterMapping
+    protected void map(@MappingTarget List<PhaseResponse> responses) {
+        List<PhaseResponse> sortedPhases = responses.stream()
+                .sorted(Comparator.comparing(PhaseResponse::getId))
+                .collect(Collectors.toList());
+
+        for (int i = 0; i < responses.size(); i++) {
+            responses.set(i, sortedPhases.get(i));
+        }
     }
 }
