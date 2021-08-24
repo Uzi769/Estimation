@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Status;
@@ -12,6 +13,7 @@ import ru.irlix.evaluation.service.StatusService;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class StatusServiceImpl implements StatusService {
@@ -23,6 +25,7 @@ public class StatusServiceImpl implements StatusService {
     public StatusResponse createStatus(StatusRequest statusRequest) {
         Status status = mapper.statusRequestToStatus(statusRequest);
         Status savedStatus = statusRepository.save(status);
+        log.info("Method createStatus: Status saved");
         return mapper.statusToStatusResponse(savedStatus);
     }
 
@@ -31,6 +34,7 @@ public class StatusServiceImpl implements StatusService {
         Status status = findStatusById(id);
         checkAndUpdateFields(status, statusRequest);
         Status savedStatus = statusRepository.save(status);
+        log.info("Method updateStatus: Status updated");
         return mapper.statusToStatusResponse(savedStatus);
     }
 
@@ -38,22 +42,28 @@ public class StatusServiceImpl implements StatusService {
     public void deleteStatus(Long id) {
         Status status = findStatusById(id);
         statusRepository.delete(status);
+        log.info("Method deleteStatus: Status deleted");
     }
 
     @Override
     public StatusResponse findStatusResponseById(Long id) {
         Status status = findStatusById(id);
+        log.info("Method findStatusResponseById: Found statusResponse by id");
         return mapper.statusToStatusResponse(status);
     }
 
     private Status findStatusById(Long id) {
         return statusRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    log.error("Method findStatusById: Status with id " + id + " not found");
+                    return new NotFoundException("Status with id " + id + " not found");
+                });
     }
 
     @Override
     public List<StatusResponse> findAllStatuses() {
         List<Status> statusList = statusRepository.findAll();
+        log.info("Method findAllStatuses: Found all statuses");
         return mapper.statusesToStatusResponseList(statusList);
     }
 

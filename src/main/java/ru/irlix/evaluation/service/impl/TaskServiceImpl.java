@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -20,6 +21,7 @@ import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.Set;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -35,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse createTask(TaskRequest request) {
         Task task = mapper.taskRequestToTask(request);
         Task savedTask = taskRepository.save(task);
-
+        log.info("Method createTask: Task saved");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -45,7 +47,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = findTaskById(id);
         checkAndUpdateFields(task, taskRequest);
         Task savedTask = taskRepository.save(task);
-
+        log.info("Method updateTask: Task updated");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -53,6 +55,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public TaskResponse findTaskResponseById(Long id) {
         Task task = findTaskById(id);
+        log.info("Method findTaskResponseById: Found taskResponse by id");
         return mapper.taskToResponse(task);
     }
 
@@ -61,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
     public Set<TaskResponse> findTasks(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
         Set<Task> tasks = phase.getTasks();
-
+        log.info("Method findTasks: Found tasks by phaseId");
         return mapper.taskToResponse(tasks);
     }
 
@@ -70,11 +73,15 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         Task task = findTaskById(id);
         taskRepository.delete(task);
+        log.info("Method deleteTask: Task deleted");
     }
 
     private Task findTaskById(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    log.error("Method findTaskById: Task with id " + id + " not found");
+                    return new NotFoundException("Task with id " + id + " not found");
+                });
     }
 
     private void checkAndUpdateFields(Task task, TaskRequest request) {

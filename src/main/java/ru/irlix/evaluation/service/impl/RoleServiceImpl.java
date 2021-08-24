@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Role;
@@ -12,6 +13,7 @@ import ru.irlix.evaluation.service.RoleService;
 
 import java.util.List;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -23,6 +25,7 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse createRole(RoleRequest roleRequest) {
         Role role = mapper.roleRequestToRole(roleRequest);
         Role savedRole = roleRepository.save(role);
+        log.info("Method createRole: Role saved");
         return mapper.roleToRoleResponse(savedRole);
     }
 
@@ -31,6 +34,7 @@ public class RoleServiceImpl implements RoleService {
         Role role = findRoleById(id);
         checkAndUpdateFields(role, roleRequest);
         Role savedRole = roleRepository.save(role);
+        log.info("Method updateRole: Role updated");
         return mapper.roleToRoleResponse(savedRole);
     }
 
@@ -38,22 +42,28 @@ public class RoleServiceImpl implements RoleService {
     public void deleteRole(Long id) {
         Role role = findRoleById(id);
         roleRepository.delete(role);
+        log.info("Method deleteRole: Role deleted");
     }
 
     @Override
     public RoleResponse findRoleResponseById(Long id) {
         Role role = findRoleById(id);
+        log.info("Method findRoleResponseById: Role deleted");
         return mapper.roleToRoleResponse(role);
     }
 
     private Role findRoleById(Long id) {
         return roleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    log.error("Method findRoleById: Role with id " + id + " not found");
+                    return new NotFoundException("Role with id " + id + " not found");
+                });
     }
 
     @Override
     public List<RoleResponse> findAllRoles() {
         List<Role> roleList = roleRepository.findAll();
+        log.info("Method findAllRoles: Found all roles");
         return mapper.rolesToRoleResponseList(roleList);
     }
 

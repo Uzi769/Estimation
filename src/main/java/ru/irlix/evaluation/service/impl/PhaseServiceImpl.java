@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -15,6 +16,7 @@ import ru.irlix.evaluation.service.PhaseService;
 
 import java.util.Set;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class PhaseServiceImpl implements PhaseService {
@@ -28,7 +30,7 @@ public class PhaseServiceImpl implements PhaseService {
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
-
+        log.info("Method createPhase: Phase saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -38,7 +40,7 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         checkAndUpdateFields(phase, phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
-
+        log.info("Method updatePhase: Phase updated");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -96,6 +98,7 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
         Phase phase = findPhaseById(id);
+        log.info("Method findPhaseResponseById: Found phaseResponse by Estimation id");
         return mapper.phaseToPhaseResponse(phase);
     }
 
@@ -104,6 +107,7 @@ public class PhaseServiceImpl implements PhaseService {
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
+        log.info("Method deletePhase: Phase deleted");
     }
 
     @Override
@@ -111,17 +115,23 @@ public class PhaseServiceImpl implements PhaseService {
     public Set<PhaseResponse> findPhasesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
-
+        log.info("Method findPhasesByEstimationId: Found phase by Estimation id");
         return mapper.phaseToPhaseResponse(phases);
     }
 
     private Phase findPhaseById(Long id) {
         return phaseRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    log.error("Method findPhaseById: Phase with id " + id + " not found");
+                    return new NotFoundException("Phase with id " + id + " not found");
+                });
     }
 
     private Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
+                .orElseThrow(() -> {
+                    log.error("Method findEstimationById: Estimation with id " + id + " not found");
+                    return new NotFoundException("Estimation with id " + id + " not found");
+                });
     }
 }
