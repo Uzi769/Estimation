@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.irlix.evaluation.config.UTF8Control;
+import ru.irlix.evaluation.utils.LocaleConstants;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class AppExceptionHandler {
 
-    private final Locale locale = new Locale("ru", "RU");
+    private final Locale locale = LocaleConstants.DEFAULT_LOCALE;
     private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", locale, new UTF8Control());
     private final String errorMessage = messageBundle.getString("validation.error");
 
