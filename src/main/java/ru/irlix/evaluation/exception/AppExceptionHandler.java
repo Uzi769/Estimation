@@ -10,17 +10,25 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.irlix.evaluation.config.UTF8Control;
 
 import javax.validation.ConstraintViolation;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private Locale locale = new Locale("ru", "RU");
+    private ResourceBundle messageBundle = ResourceBundle.getBundle("messages", locale, new UTF8Control());
+    private String text = messageBundle.getString("validation.error");
+
     @ExceptionHandler(javax.validation.ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(javax.validation.ConstraintViolationException ex) {
-        ApiError apiError = new ApiError("Validation error: ");
+
+        ApiError apiError = new ApiError(text);
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
@@ -47,7 +55,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
-        ApiError apiError = new ApiError("Validation error: " + errors);
+        ApiError apiError = new ApiError(text + errors);
         return new ResponseEntity<>(apiError, status);
     }
 }
