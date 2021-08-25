@@ -20,7 +20,7 @@ public class PhaseRequest {
     private String name;
 
     @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "{estimationId.notNull}")
-    @Positive(message = "{estimationId.positive}")
+    @Positive(message = "estimationId.positive")
     private Long estimationId;
 
     @NotNull(groups = OnCreate.class, message = "{sortOrder.notNull}")

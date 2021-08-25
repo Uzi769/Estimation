@@ -7,6 +7,7 @@ import ru.irlix.evaluation.dto.response.RoleResponse;
 import ru.irlix.evaluation.service.RoleService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -23,18 +24,18 @@ public class RoleController {
     }
 
     @PutMapping("/{id}")
-    public RoleResponse updateRole(@PathVariable("id") Long id,
+    public RoleResponse updateRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id,
                                    @RequestBody RoleRequest roleRequest) {
         return roleService.updateRole(id, roleRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRole(@PathVariable("id") Long id) {
+    public void deleteRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         roleService.deleteRole(id);
     }
 
     @GetMapping("/{id}")
-    public RoleResponse findRoleById(@PathVariable("id") Long id) {
+    public RoleResponse findRoleById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         return roleService.findRoleResponseById(id);
     }
 
