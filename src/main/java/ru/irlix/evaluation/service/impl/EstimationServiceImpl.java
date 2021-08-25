@@ -7,9 +7,11 @@ import org.webjars.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
+import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
@@ -22,15 +24,16 @@ public class EstimationServiceImpl implements EstimationService {
 
     private EstimationRepository estimationRepository;
     private StatusRepository statusRepository;
-    private EstimationMapper mapper;
+    private EstimationMapper estimationMapper;
+    private PhaseMapper phaseMapper;
 
     @Override
     @Transactional
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
-        Estimation estimation = mapper.estimationRequestToEstimation(estimationRequest);
+        Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
-        return mapper.estimationToEstimationResponse(savedEstimation);
+        return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
     @Override
@@ -40,7 +43,7 @@ public class EstimationServiceImpl implements EstimationService {
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
 
         Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
-        return mapper.estimationToEstimationResponse(savedEstimation);
+        return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
     @Override
@@ -54,14 +57,21 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
-        return mapper.estimationToEstimationResponse(estimationList);
+        return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
     @Override
     @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
-        return mapper.estimationToEstimationResponse(estimation);
+        return estimationMapper.estimationToEstimationResponse(estimation);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PhaseResponse> findPhaseResponsesByEstimationId(Long id) {
+        Estimation estimation = findEstimationById(id);
+        return phaseMapper.phaseToPhaseResponse(estimation.getPhases());
     }
 
     private Estimation findEstimationById(Long id) {
