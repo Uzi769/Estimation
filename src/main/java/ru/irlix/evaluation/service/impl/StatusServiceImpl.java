@@ -54,10 +54,7 @@ public class StatusServiceImpl implements StatusService {
 
     private Status findStatusById(Long id) {
         return statusRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findStatusById: Status with id " + id + " not found");
-                    return new NotFoundException("Status with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Status with id " + id + " not found"));
     }
 
     @Override

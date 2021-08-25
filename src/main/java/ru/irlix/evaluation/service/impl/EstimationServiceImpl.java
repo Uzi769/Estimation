@@ -71,10 +71,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     private Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findEstimationById: Estimation with id " + id + " not found");
-                    return new NotFoundException("Estimation with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
 
     private void checkAndUpdateFields(Estimation estimation, EstimationRequest request) {
@@ -96,10 +93,7 @@ public class EstimationServiceImpl implements EstimationService {
 
         if (request.getStatus() != null) {
             Status status = statusRepository.findById(request.getStatus())
-                    .orElseThrow(() -> {
-                        log.error("Method checkAndUpdateFields: Status with id" + request.getStatus() + " not found");
-                        return new NotFoundException("Status with id " + request.getStatus() + " not found");
-                    });
+                    .orElseThrow(() -> new NotFoundException("Status with id " + request.getStatus() + " not found"));
             estimation.setStatus(status);
         }
 

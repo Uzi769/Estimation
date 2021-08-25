@@ -122,17 +122,11 @@ public class PhaseServiceImpl implements PhaseService {
 
     private Phase findPhaseById(Long id) {
         return phaseRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findPhaseById: Phase with id " + id + " not found");
-                    return new NotFoundException("Phase with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
     }
 
     private Estimation findEstimationById(Long id) {
         return estimationRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findEstimationById: Estimation with id " + id + " not found");
-                    return new NotFoundException("Estimation with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
 }

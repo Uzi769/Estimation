@@ -19,9 +19,6 @@ public class TaskTypeHelper {
 
     public TaskTypeDictionary findTypeById(Long id) {
         return taskTypeRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findTypeById: Type with id " + id + " not found");
-                    return new NotFoundException("Type with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Type with id " + id + " not found"));
     }
 }

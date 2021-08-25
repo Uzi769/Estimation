@@ -54,10 +54,7 @@ public class RoleServiceImpl implements RoleService {
 
     private Role findRoleById(Long id) {
         return roleRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findRoleById: Role with id " + id + " not found");
-                    return new NotFoundException("Role with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
     }
 
     @Override

@@ -20,9 +20,6 @@ public class TaskHelper {
 
     public Task findTaskById(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findTaskById: Task with id " + id + " not found");
-                    return new NotFoundException("Task with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found"));
     }
 }

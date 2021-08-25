@@ -79,10 +79,7 @@ public class TaskServiceImpl implements TaskService {
 
     private Task findTaskById(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findTaskById: Task with id " + id + " not found");
-                    return new NotFoundException("Task with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found"));
     }
 
     private void checkAndUpdateFields(Task task, TaskRequest request) {

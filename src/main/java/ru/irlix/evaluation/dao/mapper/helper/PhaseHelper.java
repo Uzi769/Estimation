@@ -19,9 +19,6 @@ public class PhaseHelper {
 
     public Phase findPhaseById(Long id) {
         return phaseRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("Method findPhaseById: Phase with id " + id + " not found");
-                    return new NotFoundException("Phase with id " + id + " not found");
-                });
+                .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
     }
 }
