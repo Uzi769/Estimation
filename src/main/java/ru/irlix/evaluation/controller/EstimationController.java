@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
@@ -41,5 +42,10 @@ public class EstimationController {
     @GetMapping("/{id}")
     public EstimationResponse findEstimationById(@PathVariable Long id) {
         return estimationService.findEstimationResponseById(id);
+    }
+
+    @GetMapping("/{id}/phases")
+    public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
+        return estimationService.findPhaseResponsesByEstimationId(id);
     }
 }

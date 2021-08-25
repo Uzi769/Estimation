@@ -20,7 +20,6 @@ import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.List;
-import java.util.Set;
 
 @Log4j2
 @Service
@@ -63,8 +62,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskResponse> findTasks(Long phaseId) {
-        Phase phase = phaseHelper.findPhaseById(phaseId);
-        Set<Task> tasks = phase.getTasks();
+        List<Task> tasks = taskRepository.findByPhaseId(phaseId);
         log.info("Method findTasks: Found tasks by phaseId");
         return mapper.taskToResponse(tasks);
     }

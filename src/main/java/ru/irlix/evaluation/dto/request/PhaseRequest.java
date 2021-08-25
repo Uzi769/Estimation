@@ -16,13 +16,13 @@ public class PhaseRequest {
     public interface Update {
     }
 
-    @NotNull(groups = {New.class, Update.class})
+    @NotNull(groups = {New.class, Update.class}, message = "{name.notEmpty}")
     private String name;
 
-    @NotNull(groups = {New.class, Update.class})
+    @NotNull(groups = {New.class, Update.class}, message = "{estimationId.notEmpty}")
     private Long estimationId;
 
-    @NotNull(groups = New.class)
+    @NotNull(groups = New.class, message = "{sortOrder.notEmpty}")
     private Integer sortOrder;
 
     private Integer managementReserve;

@@ -8,8 +8,6 @@ import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/phases")
 @RequiredArgsConstructor
@@ -19,15 +17,13 @@ public class PhaseController {
     private final PhaseService phaseService;
 
     @PostMapping
-    public PhaseResponse createPhase(@RequestBody
-                                     @Validated(PhaseRequest.New.class) PhaseRequest phaseRequest) {
+    public PhaseResponse createPhase(@RequestBody @Validated(PhaseRequest.New.class) PhaseRequest phaseRequest) {
         return phaseService.createPhase(phaseRequest);
     }
 
     @PutMapping("/{id}")
     public PhaseResponse updatePhase(@PathVariable Long id,
-                                     @RequestBody
-                                     @Validated(PhaseRequest.Update.class) PhaseRequest phaseRequest) {
+                                     @RequestBody @Validated(PhaseRequest.Update.class) PhaseRequest phaseRequest) {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
@@ -39,10 +35,5 @@ public class PhaseController {
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") Long id) {
         phaseService.deletePhase(id);
-    }
-
-    @GetMapping("/estimation/{id}")
-    public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
-        return phaseService.findPhasesByEstimationId(id);
     }
 }
