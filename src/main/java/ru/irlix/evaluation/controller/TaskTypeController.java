@@ -27,12 +27,13 @@ public class TaskTypeController {
     }
 
     @PutMapping("/{id}")
-    public TaskTypeResponse updateTaskType(@PathVariable @Positive Long id, @Valid TaskTypeRequest request) {
+    public TaskTypeResponse updateTaskType(@PathVariable @Positive(message = "{id.positive}") Long id,
+                                           @Valid TaskTypeRequest request) {
         return taskTypeService.updateTaskType(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTaskType(@PathVariable @Positive Long id) {
+    public void deleteTaskType(@PathVariable @Positive(message = "{id.positive}") Long id) {
         taskTypeService.deleteTaskType(id);
     }
 
@@ -42,7 +43,7 @@ public class TaskTypeController {
     }
 
     @GetMapping("/{id}")
-    public TaskTypeResponse findTaskTypeById(@PathVariable Long id) {
+    public TaskTypeResponse findTaskTypeById(@PathVariable @Positive(message = "{id.positive}") Long id) {
         return taskTypeService.findTaskTypeResponseById(id);
     }
 }
