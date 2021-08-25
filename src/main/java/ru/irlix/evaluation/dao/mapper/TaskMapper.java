@@ -55,7 +55,7 @@ public abstract class TaskMapper {
     @Mapping(target = "roleId", ignore = true)
     @Mapping(target = "parentId", ignore = true)
     @Mapping(target = "tasks", ignore = true)
-    public abstract List<TaskResponse> taskToResponse(Set<Task> tasks);
+    public abstract List<TaskResponse> taskToResponse(List<Task> tasks);
 
     @AfterMapping
     protected void map(@MappingTarget Task task, TaskRequest request) {
@@ -96,17 +96,6 @@ public abstract class TaskMapper {
 
         if (task.getTasks() != null) {
             response.setTasks(taskToResponse(task.getTasks()));
-        }
-    }
-
-    @AfterMapping
-    protected void map(@MappingTarget List<TaskResponse> tasks) {
-        List<TaskResponse> sortedTasks = tasks.stream()
-                .sorted(Comparator.comparing(TaskResponse::getId))
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < tasks.size(); i++) {
-            tasks.set(i, sortedTasks.get(i));
         }
     }
 }

@@ -41,15 +41,4 @@ public abstract class EstimationMapper {
             response.setStatus(estimation.getStatus().getId());
         }
     }
-
-    @AfterMapping
-    protected void map(@MappingTarget List<EstimationResponse> estimationResponses) {
-        List<EstimationResponse> sortedResponse = estimationResponses.stream()
-                .sorted(Comparator.comparing(EstimationResponse::getCreateDate))
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < estimationResponses.size(); i++) {
-            estimationResponses.set(i, sortedResponse.get(i));
-        }
-    }
 }
