@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.repository.PhaseRepository;
 
