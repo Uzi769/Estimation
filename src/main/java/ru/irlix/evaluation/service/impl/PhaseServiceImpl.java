@@ -13,9 +13,6 @@ import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.PhaseService;
 
-import java.util.List;
-import java.util.Set;
-
 @Service
 @RequiredArgsConstructor
 public class PhaseServiceImpl implements PhaseService {
@@ -105,15 +102,6 @@ public class PhaseServiceImpl implements PhaseService {
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PhaseResponse> findPhasesByEstimationId(Long id) {
-        Estimation estimation = findEstimationById(id);
-        Set<Phase> phases = estimation.getPhases();
-
-        return mapper.phaseToPhaseResponse(phases);
     }
 
     private Phase findPhaseById(Long id) {

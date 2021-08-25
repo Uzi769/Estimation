@@ -29,7 +29,7 @@ public abstract class PhaseMapper {
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
 
     @Mapping(target = "estimationId", ignore = true)
-    public abstract List<PhaseResponse> phaseToPhaseResponse(Set<Phase> phase);
+    public abstract List<PhaseResponse> phaseToPhaseResponse(List<Phase> phase);
 
     @AfterMapping
     protected void map(@MappingTarget Phase phase, PhaseRequest request) {
@@ -40,16 +40,5 @@ public abstract class PhaseMapper {
     @AfterMapping
     protected void map(@MappingTarget PhaseResponse response, Phase phase) {
         response.setEstimationId(phase.getEstimation().getId());
-    }
-
-    @AfterMapping
-    protected void map(@MappingTarget List<PhaseResponse> responses) {
-        List<PhaseResponse> sortedPhases = responses.stream()
-                .sorted(Comparator.comparing(PhaseResponse::getId))
-                .collect(Collectors.toList());
-
-        for (int i = 0; i < responses.size(); i++) {
-            responses.set(i, sortedPhases.get(i));
-        }
     }
 }

@@ -2,14 +2,19 @@ package ru.irlix.evaluation.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
-@Table(name="phase")
+@Table(name = "phase")
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "phase.tasks",
+        attributeNodes = @NamedAttributeNode("tasks")
+)
 public class Phase {
 
     @Id
@@ -20,7 +25,7 @@ public class Phase {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 
@@ -39,8 +44,10 @@ public class Phase {
     @Column(name = "risk_reserve")
     private Integer riskReserve;
 
-    @OneToMany(mappedBy = "phase", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    private Set<Task> tasks;
+    @OneToMany(mappedBy = "phase", cascade = CascadeType.ALL)
+    @Where(clause = "parent_id IS NULL")
+    @OrderBy("id ASC")
+    private List<Task> tasks;
 
     @Column(name = "done")
     private Boolean done;

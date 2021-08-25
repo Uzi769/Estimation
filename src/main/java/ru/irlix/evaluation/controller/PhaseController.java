@@ -46,9 +46,4 @@ public class PhaseController {
     public void deletePhase(@PathVariable("id") @Positive(message = ValidationMessage.ID) Long id) {
         phaseService.deletePhase(id);
     }
-
-    @GetMapping("/estimation/{id}")
-    public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
-        return phaseService.findPhasesByEstimationId(id);
-    }
 }
