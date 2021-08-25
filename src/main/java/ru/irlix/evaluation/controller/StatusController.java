@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.StatusRequest;
 import ru.irlix.evaluation.dto.response.StatusResponse;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/statuses")
 @RequiredArgsConstructor
+@Validated
 @CrossOrigin
 public class StatusController {
 
