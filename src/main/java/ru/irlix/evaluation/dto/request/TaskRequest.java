@@ -18,20 +18,20 @@ public class TaskRequest {
 
     private String name;
 
-    @NotNull(groups = OnCreate.class, message = "Phase id is required")
-    @Positive(message = "Phase id cant be negative or zero")
+    @NotNull(groups = OnCreate.class, message = "{phaseId.notNull}")
+    @Positive(message = "{phaseId.positive}")
     private Long phaseId;
 
-    @Positive(message = "Feature id cant be negative or zero")
+    @Positive(message = "{featureId.positive}")
     private Long featureId;
 
-    @Positive(message = "Type id cant be negative or zero")
+    @Positive(message = "{type.positive}")
     private Long type = EntityConstants.TASK_ID;
 
-    @Positive(message = "Repeat count cant be negative or zero")
+    @Positive(message = "{repeatCount.positive}")
     private Integer repeatCount;
 
-    @Positive(message = "Role id cant be negative or zero")
+    @Positive(message = "{roleId.positive}")
     private Long roleId;
 
     private Integer hoursMax;

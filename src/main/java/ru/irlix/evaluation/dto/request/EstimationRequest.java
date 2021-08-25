@@ -1,10 +1,12 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import ru.irlix.evaluation.utils.EntityConstants;
 
 import javax.validation.constraints.Positive;
-import java.time.Instant;
-import ru.irlix.evaluation.utils.EntityConstants;
 
 @Getter
 @Setter
@@ -20,7 +22,7 @@ public class EstimationRequest {
 
     private Integer risk;
 
-    @Positive(message = "Status id cant be negative or zero")
+    @Positive(message = "{status.positive}")
     private Long status = EntityConstants.DEFAULT_STATUS_ID;
 
     private String creator;

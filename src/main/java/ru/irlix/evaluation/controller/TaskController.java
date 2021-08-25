@@ -7,7 +7,6 @@ import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.UrlConstants;
-import ru.irlix.evaluation.utils.ValidationMessage;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.Valid;
@@ -30,18 +29,18 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public TaskResponse updateTask(@PathVariable @Positive(message = ValidationMessage.ID) Long id,
+    public TaskResponse updateTask(@PathVariable @Positive(message = "{id.positive}") Long id,
                                    @RequestBody @Valid TaskRequest request) {
         return taskService.updateTask(id, request);
     }
 
     @GetMapping("/{id}")
-    public TaskResponse findTaskById(@PathVariable @Positive(message = ValidationMessage.ID) Long id) {
+    public TaskResponse findTaskById(@PathVariable @Positive(message = "{id.positive}") Long id) {
         return taskService.findTaskResponseById(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTask(@PathVariable @Positive(message = ValidationMessage.ID) Long id) {
+    public void deleteTask(@PathVariable @Positive(message = "{id.positive}") Long id) {
         taskService.deleteTask(id);
     }
 

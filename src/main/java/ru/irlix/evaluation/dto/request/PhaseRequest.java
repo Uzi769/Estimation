@@ -16,15 +16,15 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class PhaseRequest {
 
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Name is required")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "{name.notNull}")
     private String name;
 
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "Estimation id is required")
-    @Positive(message = "Estimation id cant be negative or zero")
+    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "{estimationId.notNull}")
+    @Positive(message = "{estimationId.positive}")
     private Long estimationId;
 
-    @NotNull(groups = OnCreate.class, message = "Sort order is required")
-    @Positive(message = "Sort order cant be negative or zero")
+    @NotNull(groups = OnCreate.class, message = "{sortOrder.notNull}")
+    @Positive(message = "{sortOrder.positive}")
     private Integer sortOrder;
 
     private Integer managementReserve;
