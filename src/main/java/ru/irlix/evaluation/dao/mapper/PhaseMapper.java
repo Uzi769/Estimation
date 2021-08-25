@@ -11,10 +11,7 @@ import ru.irlix.evaluation.dao.mapper.helper.EstimationHelper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = TaskMapper.class)
 public abstract class PhaseMapper {
