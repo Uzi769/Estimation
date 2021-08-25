@@ -2,11 +2,11 @@ package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.query.criteria.internal.OrderImpl;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -56,13 +56,16 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
         }
 
+        EntityGraph<?> graph = manager.getEntityGraph("estimation.phases");
+
         query.select(root)
                 .where(builder.and(filterPredicates.toArray(new Predicate[0])))
-                .orderBy(new OrderImpl(root.get("id")).reverse());
+                .orderBy(builder.asc(root.get("createDate")));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
         typedQuery.setMaxResults(request.getSize());
+        typedQuery.setHint("javax.persistence.fetchgraph", graph);
 
         return typedQuery.getResultList();
     }

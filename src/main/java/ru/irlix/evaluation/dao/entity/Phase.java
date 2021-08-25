@@ -8,13 +8,13 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="phase")
+@Table(name = "phase")
 @Getter
 @Setter
-@NamedEntityGraph(name = "phase.tasks",
-    attributeNodes = @NamedAttributeNode(value = "tasks")
+@NamedEntityGraph(
+        name = "phase.tasks",
+        attributeNodes = @NamedAttributeNode("tasks")
 )
-
 public class Phase {
 
     @Id
@@ -46,7 +46,7 @@ public class Phase {
 
     @OneToMany(mappedBy = "phase", cascade = CascadeType.ALL)
     @Where(clause = "parent_id IS NULL")
-    @OrderBy("id DESC")
+    @OrderBy("id ASC")
     private List<Task> tasks;
 
     @Column(name = "done")

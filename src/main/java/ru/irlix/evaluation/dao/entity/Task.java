@@ -10,6 +10,10 @@ import java.util.List;
 @Table(name="task")
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "task.tasks",
+        attributeNodes = @NamedAttributeNode("tasks")
+)
 public class Task {
 
     @Id
@@ -57,6 +61,7 @@ public class Task {
     private Task parent;
 
     @OneToMany(mappedBy = "parent")
+    @OrderBy("id ASC")
     private List<Task> tasks;
 
     @Column(name = "bags_reserve_on")

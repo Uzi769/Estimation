@@ -11,11 +11,7 @@ import java.util.Optional;
 
 public interface PhaseRepository extends JpaRepository<Phase, Long> {
 
-    @EntityGraph("phase.tasks")
-    @NonNull
-    List<Phase> findAll();
-
-    @EntityGraph("phase.tasks")
+    @EntityGraph(value = "phase.tasks")
     @NonNull
     Optional<Phase> findById(@NonNull Long id);
 

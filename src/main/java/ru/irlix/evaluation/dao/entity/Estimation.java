@@ -14,14 +14,7 @@ import java.util.List;
 @Setter
 @NamedEntityGraph(
     name = "estimation.phases",
-    attributeNodes = @NamedAttributeNode(
-        value = "phases",
-        subgraph = "estimation.phases.tasks"
-    ),
-    subgraphs = @NamedSubgraph(
-        name = "estimation.phases.tasks",
-        attributeNodes = @NamedAttributeNode("tasks")
-    )
+    attributeNodes = @NamedAttributeNode("phases")
 )
 public class Estimation {
 
