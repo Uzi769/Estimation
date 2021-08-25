@@ -1,8 +1,7 @@
 package ru.irlix.evaluation.repository.estimation;
 
-import org.springframework.data.jpa.repository.Query;
-import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 
 import java.util.List;
 
