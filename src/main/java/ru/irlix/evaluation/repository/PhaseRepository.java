@@ -14,7 +14,4 @@ public interface PhaseRepository extends JpaRepository<Phase, Long> {
     @EntityGraph(value = "phase.tasks")
     @NonNull
     Optional<Phase> findById(@NonNull Long id);
-
-    @EntityGraph("phase.tasks")
-    List<Phase> findByEstimationIdInOrderById(List<Long> ids);
 }
