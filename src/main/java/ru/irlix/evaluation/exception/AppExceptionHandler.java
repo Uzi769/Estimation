@@ -45,7 +45,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(FieldError::getField)
+                .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList());
         ApiError apiError = new ApiError("Validation error: " + errors);
         return new ResponseEntity<>(apiError, status);
