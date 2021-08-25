@@ -13,6 +13,7 @@ import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.PhaseService;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -108,7 +109,7 @@ public class PhaseServiceImpl implements PhaseService {
 
     @Override
     @Transactional(readOnly = true)
-    public Set<PhaseResponse> findPhasesByEstimationId(Long id) {
+    public List<PhaseResponse> findPhasesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
         Set<Phase> phases = estimation.getPhases();
 

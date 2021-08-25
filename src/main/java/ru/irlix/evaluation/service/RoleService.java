@@ -1,6 +1,5 @@
 package ru.irlix.evaluation.service;
 
-import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dto.request.RoleRequest;
 import ru.irlix.evaluation.dto.response.RoleResponse;
 
