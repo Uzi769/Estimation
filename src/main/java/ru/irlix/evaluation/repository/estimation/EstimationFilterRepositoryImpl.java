@@ -21,15 +21,31 @@ import java.util.List;
 public class EstimationFilterRepositoryImpl implements EstimationFilterRepository {
 
     private final EntityManager manager;
+    private CriteriaBuilder builder;
+    private Root<Estimation> root;
 
     @Override
     public List<Estimation> filter(EstimationFilterRequest request) {
-        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        builder = manager.getCriteriaBuilder();
         CriteriaQuery<Estimation> query = builder.createQuery(Estimation.class);
-        Root<Estimation> root = query.from(Estimation.class);
+        root = query.from(Estimation.class);
 
         int offset = request.getPage() * request.getSize();
+        EntityGraph<?> graph = manager.getEntityGraph("estimation.phases");
 
+        query.select(root)
+                .where(getFilterPredicate(request))
+                .orderBy(builder.asc(root.get("createDate")));
+
+        TypedQuery<Estimation> typedQuery = manager.createQuery(query);
+        typedQuery.setFirstResult(offset)
+                .setMaxResults(request.getSize())
+                .setHint("javax.persistence.fetchgraph", graph);
+
+        return typedQuery.getResultList();
+    }
+
+    private Predicate getFilterPredicate(EstimationFilterRequest request) {
         List<Predicate> filterPredicates = new ArrayList<>();
 
         if (StringUtils.isNotEmpty(request.getName())) {
@@ -38,6 +54,10 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
         if (StringUtils.isNotEmpty(request.getClient())) {
             filterPredicates.add(builder.like(root.get("client"), "%" + request.getClient() + "%"));
+        }
+
+        if (StringUtils.isNotEmpty(request.getCreator())) {
+            filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
         }
 
         if (request.getStatus() != null) {
@@ -52,21 +72,6 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-        if (StringUtils.isNotEmpty(request.getCreator())) {
-            filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
-        }
-
-        EntityGraph<?> graph = manager.getEntityGraph("estimation.phases");
-
-        query.select(root)
-                .where(builder.and(filterPredicates.toArray(new Predicate[0])))
-                .orderBy(builder.asc(root.get("createDate")));
-
-        TypedQuery<Estimation> typedQuery = manager.createQuery(query);
-        typedQuery.setFirstResult(offset);
-        typedQuery.setMaxResults(request.getSize());
-        typedQuery.setHint("javax.persistence.fetchgraph", graph);
-
-        return typedQuery.getResultList();
+        return builder.and(filterPredicates.toArray(new Predicate[0]));
     }
 }
