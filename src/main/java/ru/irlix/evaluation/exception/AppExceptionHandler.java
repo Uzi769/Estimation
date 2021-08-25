@@ -18,14 +18,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class AppExceptionHandler {
 
-    private Locale locale = new Locale("ru", "RU");
-    private ResourceBundle messageBundle = ResourceBundle.getBundle("messages", locale, new UTF8Control());
-    private String text = messageBundle.getString("validation.error");
+    private final Locale locale = new Locale("ru", "RU");
+    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", locale, new UTF8Control());
+    private final String errorMessage = messageBundle.getString("validation.error");
 
     @ExceptionHandler(ConstraintViolationException.class)
     protected ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex) {
 
-        ApiError apiError = new ApiError(text);
+        ApiError apiError = new ApiError(errorMessage);
         apiError.setErrors(ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
@@ -41,12 +41,12 @@ public class AppExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult()
+        ApiError apiError = new ApiError(errorMessage);
+        apiError.setErrors(ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(FieldError::getDefaultMessage)
-                .collect(Collectors.toList());
-        ApiError apiError = new ApiError(text + errors);
+                .collect(Collectors.toList()));
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 
     }
