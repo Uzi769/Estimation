@@ -44,6 +44,8 @@ public abstract class TaskMapper {
     @Mapping(target = "phase", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "hoursMax", ignore = true)
+    @Mapping(target = "hoursMin", ignore = true)
     public abstract List<Task> taskRequestToTask(List<TaskRequest> taskRequest);
 
     @Mapping(target = "type", ignore = true)
