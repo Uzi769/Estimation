@@ -44,10 +44,10 @@ public class Task {
     private String comment;
 
     @Column(name = "hours_min")
-    private Integer hoursMin = 0;
+    private Integer hoursMin;
 
     @Column(name = "hours_max")
-    private Integer hoursMax = 0;
+    private Integer hoursMax;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "phase")
@@ -72,4 +72,15 @@ public class Task {
 
     @Column(name = "management_reserve_on")
     private Boolean managementReserveOn;
+
+    @PrePersist
+    public void prePersist() {
+        if (hoursMax == null) {
+            hoursMax = 0;
+        }
+
+        if (hoursMin == null) {
+            hoursMin = 0;
+        }
+    }
 }
