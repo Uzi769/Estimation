@@ -72,4 +72,15 @@ public class Task {
 
     @Column(name = "management_reserve_on")
     private Boolean managementReserveOn;
+
+    @PrePersist
+    public void prePersist() {
+        if (hoursMax == null) {
+            hoursMax = 0;
+        }
+
+        if (hoursMin == null) {
+            hoursMin = 0;
+        }
+    }
 }
