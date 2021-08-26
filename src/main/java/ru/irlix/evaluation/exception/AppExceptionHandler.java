@@ -32,7 +32,7 @@ public class AppExceptionHandler {
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList()));
-        log.error("Validation error: " + apiError.getErrors());
+        log.error(apiError.getMessage() + " " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
@@ -51,7 +51,7 @@ public class AppExceptionHandler {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList()));
-        log.error(apiError.getMessage() + apiError.getErrors());
+        log.error(apiError.getMessage() + " " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }

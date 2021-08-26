@@ -34,7 +34,8 @@ public class EstimationServiceImpl implements EstimationService {
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
-        log.info(savedEstimation + " saved");
+
+        log.info("Estimation with id " + savedEstimation.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -44,7 +45,8 @@ public class EstimationServiceImpl implements EstimationService {
         Estimation estimationToUpdate = findEstimationById(id);
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
-        log.info(savedEstimation + " updated");
+
+        log.info("Estimation with id " + savedEstimation.getId() + " updated");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -53,14 +55,14 @@ public class EstimationServiceImpl implements EstimationService {
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
         estimationRepository.delete(estimationToDelete);
-        log.info(estimationToDelete + " deleted");
+        log.info("Estimation with id " + estimationToDelete.getId() + " deleted");
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
-        log.info("Found all estimations");
+        log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
@@ -68,7 +70,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
-        log.info("Method findEstimationResponseById: Found estimationResponse by id");
+        log.info("Estimation with id " + estimation.getId() + " found");
         return estimationMapper.estimationToEstimationResponse(estimation);
     }
 
@@ -76,6 +78,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public List<PhaseResponse> findPhaseResponsesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
+        log.info("Phases of estimation with id " + estimation.getId() + " found");
         return phaseMapper.phaseToPhaseResponse(estimation.getPhases());
     }
 

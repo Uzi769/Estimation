@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
@@ -18,6 +19,7 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 @Validated
 @CrossOrigin
+@Log4j2
 public class PhaseController {
 
     private final PhaseService phaseService;
@@ -25,6 +27,7 @@ public class PhaseController {
     @PostMapping
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
+        log.info(UrlConstants.RECEIVED_ENTITY);
         return phaseService.createPhase(phaseRequest);
     }
 
@@ -32,16 +35,19 @@ public class PhaseController {
     @Validated(OnUpdate.class)
     public PhaseResponse updatePhase(@PathVariable @Positive(message = "{id.positive}") Long id,
                                      @RequestBody @Valid PhaseRequest phaseRequest) {
+        log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return phaseService.updatePhase(id, phaseRequest);
     }
 
     @GetMapping("/{id}")
     public PhaseResponse findPhaseById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
         return phaseService.findPhaseResponseById(id);
     }
 
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
         phaseService.deletePhase(id);
     }
 }
