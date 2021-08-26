@@ -37,7 +37,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse createTask(TaskRequest request) {
         Task task = mapper.taskRequestToTask(request);
         Task savedTask = taskRepository.save(task);
-        log.info("Method createTask: Task saved");
+
+        log.info("Task with id " + savedTask.getId() + " saved");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -56,7 +57,8 @@ public class TaskServiceImpl implements TaskService {
         Task task = findTaskById(id);
         checkAndUpdateFields(task, taskRequest);
         Task savedTask = taskRepository.save(task);
-        log.info("Method updateTask: Task updated");
+
+        log.info("Task with id " + savedTask.getId() + " updated");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -64,7 +66,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public TaskResponse findTaskResponseById(Long id) {
         Task task = findTaskById(id);
-        log.info("Method findTaskResponseById: Found taskResponse by id");
+        log.info("Task with id " + task.getId() + " found");
         return mapper.taskToResponse(task);
     }
 
@@ -72,7 +74,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public List<TaskResponse> findTasks(Long phaseId) {
         List<Task> tasks = taskRepository.findByPhaseId(phaseId);
-        log.info("Method findTasks: Found tasks by phaseId");
+        log.info("Tasks on phase with id " + phaseId + " found");
         return mapper.taskToResponse(tasks);
     }
 
@@ -81,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         Task task = findTaskById(id);
         taskRepository.delete(task);
-        log.info("Method deleteTask: Task deleted");
+        log.info("Task with id " + task.getId() + " deleted");
     }
 
     private Task findTaskById(Long id) {

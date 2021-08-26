@@ -30,7 +30,8 @@ public class PhaseServiceImpl implements PhaseService {
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
-        log.info("Method createPhase: Phase saved");
+
+        log.info("Phase with id " + savedPhase.getId() + " saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -49,7 +50,8 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         checkAndUpdateFields(phase, phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
-        log.info("Method updatePhase: Phase updated");
+
+        log.info("Phase with id " + savedPhase.getId() + " updated");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -107,7 +109,7 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
         Phase phase = findPhaseById(id);
-        log.info("Method findPhaseResponseById: Found phaseResponse by Estimation id");
+        log.info("Phase with id " + phase.getId() + " found");
         return mapper.phaseToPhaseResponse(phase);
     }
 
@@ -116,7 +118,7 @@ public class PhaseServiceImpl implements PhaseService {
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
-        log.info("Method deletePhase: Phase deleted");
+        log.info("Phase with id " + phase.getId() + " deleted");
     }
 
     private Phase findPhaseById(Long id) {
