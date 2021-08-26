@@ -12,6 +12,7 @@ import ru.irlix.evaluation.utils.marker.OnUpdate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/phases")
@@ -26,6 +27,12 @@ public class PhaseController {
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
         return phaseService.createPhase(phaseRequest);
+    }
+
+    @PostMapping("/list")
+    @Validated(OnCreate.class)
+    public List<PhaseResponse> createPhases(@RequestBody @Valid List<PhaseRequest> phaseRequests) {
+        return phaseService.createPhases(phaseRequests);
     }
 
     @PutMapping("/{id}")

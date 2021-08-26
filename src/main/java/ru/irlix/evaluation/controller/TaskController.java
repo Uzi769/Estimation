@@ -28,6 +28,12 @@ public class TaskController {
         return taskService.createTask(request);
     }
 
+    @PostMapping("/list")
+    @Validated(OnCreate.class)
+    public List<TaskResponse> createTasks(@RequestBody @Valid List<TaskRequest> requests) {
+        return taskService.createTasks(requests);
+    }
+
     @PutMapping("/{id}")
     public TaskResponse updateTask(@PathVariable @Positive(message = "{id.positive}") Long id,
                                    @RequestBody @Valid TaskRequest request) {

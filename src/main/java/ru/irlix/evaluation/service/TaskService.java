@@ -8,6 +8,8 @@ import java.util.List;
 public interface TaskService {
     TaskResponse createTask(TaskRequest request);
 
+    List<TaskResponse> createTasks(List<TaskRequest> requests);
+
     TaskResponse updateTask(Long id, TaskRequest taskRequest);
 
     TaskResponse findTaskResponseById(Long id);
