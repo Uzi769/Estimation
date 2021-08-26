@@ -34,7 +34,7 @@ public class EstimationServiceImpl implements EstimationService {
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
-        log.info("Method createEstimation: Estimation saved");
+        log.info(savedEstimation + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -44,7 +44,7 @@ public class EstimationServiceImpl implements EstimationService {
         Estimation estimationToUpdate = findEstimationById(id);
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
-        log.info("Method updateEstimation: Estimation updated");
+        log.info(savedEstimation + " updated");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -53,14 +53,14 @@ public class EstimationServiceImpl implements EstimationService {
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
         estimationRepository.delete(estimationToDelete);
-        log.info("Method deleteEstimation: Estimation deleted");
+        log.info(estimationToDelete + " deleted");
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
-        log.info("Method findAllEstimations: Found all estimations");
+        log.info("Found all estimations");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 

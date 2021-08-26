@@ -32,14 +32,14 @@ public class AppExceptionHandler {
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList()));
-        log.error("Method handleConstraintViolation: Validation error: " + apiError.getErrors());
+        log.error("Validation error: " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundException.class})
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
         ApiError apiError = new ApiError(e.getMessage());
-        log.error("Method handleNotFoundException: " + e.getMessage());
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
@@ -51,7 +51,7 @@ public class AppExceptionHandler {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList()));
-        log.error("Method handleMethodArgumentNotValid: " + apiError.getMessage() + apiError.getErrors());
+        log.error(apiError.getMessage() + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }
