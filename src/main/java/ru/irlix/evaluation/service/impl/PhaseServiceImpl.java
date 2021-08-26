@@ -13,6 +13,8 @@ import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.PhaseService;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PhaseServiceImpl implements PhaseService {
@@ -28,6 +30,15 @@ public class PhaseServiceImpl implements PhaseService {
         Phase savedPhase = phaseRepository.save(phase);
 
         return mapper.phaseToPhaseResponse(savedPhase);
+    }
+
+    @Override
+    @Transactional
+    public List<PhaseResponse> createPhases(List<PhaseRequest> phaseRequests) {
+        List<Phase> phases = mapper.phaseRequestToPhase(phaseRequests);
+        List<Phase> savedPhases = phaseRepository.saveAll(phases);
+
+        return mapper.phaseToPhaseResponse(savedPhases);
     }
 
     @Override
