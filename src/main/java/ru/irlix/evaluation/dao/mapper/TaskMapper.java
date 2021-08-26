@@ -17,10 +17,7 @@ import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.utils.EntityConstants;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class TaskMapper {
@@ -42,6 +39,14 @@ public abstract class TaskMapper {
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "parent", ignore = true)
     public abstract Task taskRequestToTask(TaskRequest taskRequest);
+
+    @Mapping(target = "type", ignore = true)
+    @Mapping(target = "phase", ignore = true)
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "hoursMax", ignore = true)
+    @Mapping(target = "hoursMin", ignore = true)
+    public abstract List<Task> taskRequestToTask(List<TaskRequest> taskRequest);
 
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "phaseId", ignore = true)

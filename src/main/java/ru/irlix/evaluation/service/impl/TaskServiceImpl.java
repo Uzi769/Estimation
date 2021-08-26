@@ -43,6 +43,15 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
+    public List<TaskResponse> createTasks(List<TaskRequest> requests) {
+        List<Task> tasks = mapper.taskRequestToTask(requests);
+        List<Task> savedTasks = taskRepository.saveAll(tasks);
+
+        return mapper.taskToResponse(savedTasks);
+    }
+
+    @Override
+    @Transactional
     public TaskResponse updateTask(Long id, TaskRequest taskRequest) {
         Task task = findTaskById(id);
         checkAndUpdateFields(task, taskRequest);
