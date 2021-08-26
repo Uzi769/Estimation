@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -15,6 +16,7 @@ import ru.irlix.evaluation.service.PhaseService;
 
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class PhaseServiceImpl implements PhaseService {
@@ -29,6 +31,7 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
 
+        log.info("Phase with id " + savedPhase.getId() + " saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -48,6 +51,7 @@ public class PhaseServiceImpl implements PhaseService {
         checkAndUpdateFields(phase, phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
 
+        log.info("Phase with id " + savedPhase.getId() + " updated");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
@@ -105,6 +109,7 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
         Phase phase = findPhaseById(id);
+        log.info("Phase with id " + phase.getId() + " found");
         return mapper.phaseToPhaseResponse(phase);
     }
 
@@ -113,6 +118,7 @@ public class PhaseServiceImpl implements PhaseService {
     public void deletePhase(Long id) {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
+        log.info("Phase with id " + phase.getId() + " deleted");
     }
 
     private Phase findPhaseById(Long id) {

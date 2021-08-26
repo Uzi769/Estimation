@@ -1,11 +1,11 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
@@ -17,11 +17,9 @@ import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 @AllArgsConstructor
 public class EstimationServiceImpl implements EstimationService {
@@ -37,6 +35,7 @@ public class EstimationServiceImpl implements EstimationService {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
+        log.info("Estimation with id " + savedEstimation.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -45,8 +44,9 @@ public class EstimationServiceImpl implements EstimationService {
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
         Estimation estimationToUpdate = findEstimationById(id);
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
-
         Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
+
+        log.info("Estimation with id " + savedEstimation.getId() + " updated");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
@@ -55,12 +55,14 @@ public class EstimationServiceImpl implements EstimationService {
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
         estimationRepository.delete(estimationToDelete);
+        log.info("Estimation with id " + estimationToDelete.getId() + " deleted");
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         List<Estimation> estimationList = estimationRepository.filter(request);
+        log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
@@ -68,6 +70,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
+        log.info("Estimation with id " + estimation.getId() + " found");
         return estimationMapper.estimationToEstimationResponse(estimation);
     }
 
@@ -75,6 +78,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public List<PhaseResponse> findPhaseResponsesByEstimationId(Long id) {
         Estimation estimation = findEstimationById(id);
+        log.info("Phases of estimation with id " + estimation.getId() + " found");
         return phaseMapper.phaseToPhaseResponse(estimation.getPhases());
     }
 

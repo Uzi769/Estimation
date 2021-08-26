@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.exception;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,6 +16,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+@Log4j2
 @ControllerAdvice
 public class AppExceptionHandler {
 
@@ -30,12 +32,14 @@ public class AppExceptionHandler {
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList()));
+        log.error(apiError.getMessage() + " " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundException.class})
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException e) {
         ApiError apiError = new ApiError(e.getMessage());
+        log.error(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
@@ -47,7 +51,7 @@ public class AppExceptionHandler {
                 .stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.toList()));
+        log.error(apiError.getMessage() + " " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-
     }
 }

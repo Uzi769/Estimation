@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -20,6 +21,7 @@ import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -36,6 +38,7 @@ public class TaskServiceImpl implements TaskService {
         Task task = mapper.taskRequestToTask(request);
         Task savedTask = taskRepository.save(task);
 
+        log.info("Task with id " + savedTask.getId() + " saved");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -55,6 +58,7 @@ public class TaskServiceImpl implements TaskService {
         checkAndUpdateFields(task, taskRequest);
         Task savedTask = taskRepository.save(task);
 
+        log.info("Task with id " + savedTask.getId() + " updated");
         return mapper.taskToResponse(savedTask);
     }
 
@@ -62,6 +66,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public TaskResponse findTaskResponseById(Long id) {
         Task task = findTaskById(id);
+        log.info("Task with id " + task.getId() + " found");
         return mapper.taskToResponse(task);
     }
 
@@ -69,6 +74,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public List<TaskResponse> findTasks(Long phaseId) {
         List<Task> tasks = taskRepository.findByPhaseId(phaseId);
+        log.info("Tasks on phase with id " + phaseId + " found");
         return mapper.taskToResponse(tasks);
     }
 
@@ -77,6 +83,7 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long id) {
         Task task = findTaskById(id);
         taskRepository.delete(task);
+        log.info("Task with id " + task.getId() + " deleted");
     }
 
     private Task findTaskById(Long id) {
