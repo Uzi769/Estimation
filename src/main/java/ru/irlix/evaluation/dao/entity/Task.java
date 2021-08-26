@@ -44,10 +44,10 @@ public class Task {
     private String comment;
 
     @Column(name = "hours_min")
-    private Integer hoursMin;
+    private Integer hoursMin = 0;
 
     @Column(name = "hours_max")
-    private Integer hoursMax;
+    private Integer hoursMax = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "phase")
