@@ -12,6 +12,7 @@ import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -60,5 +61,10 @@ public class TaskController {
     public List<TaskResponse> findTasks(@RequestParam("phaseId") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return taskService.findTasks(id);
+    }
+
+    @GetMapping("/unloading")
+    public void unloadingTasks() throws IOException {
+        taskService.unloadingTasks();
     }
 }

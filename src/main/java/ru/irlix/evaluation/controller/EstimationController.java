@@ -12,6 +12,7 @@ import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.UrlConstants;
 
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -59,5 +60,10 @@ public class EstimationController {
     public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return estimationService.findPhaseResponsesByEstimationId(id);
+    }
+
+    @GetMapping("/unloading")
+    public void unloadingEstimations() throws IOException {
+        estimationService.unloadingEstimations();
     }
 }

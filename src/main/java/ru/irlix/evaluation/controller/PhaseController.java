@@ -13,6 +13,7 @@ import ru.irlix.evaluation.utils.marker.OnUpdate;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -57,4 +58,10 @@ public class PhaseController {
         log.info(UrlConstants.RECEIVED_ID + id);
         phaseService.deletePhase(id);
     }
+
+    @GetMapping("/unloading")
+    public void unloadingPhases() throws IOException {
+        phaseService.unloadingPhases();
+    }
+
 }

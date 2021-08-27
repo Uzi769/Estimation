@@ -5,6 +5,7 @@ import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface EstimationService {
@@ -20,4 +21,6 @@ public interface EstimationService {
     EstimationResponse findEstimationResponseById(Long id);
 
     List<PhaseResponse> findPhaseResponsesByEstimationId(Long id);
+
+    void unloadingEstimations() throws IOException;
 }

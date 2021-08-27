@@ -3,6 +3,7 @@ package ru.irlix.evaluation.service;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TaskService {
@@ -17,4 +18,6 @@ public interface TaskService {
     List<TaskResponse> findTasks(Long phaseId);
 
     void deleteTask(Long id);
+
+    void unloadingTasks() throws IOException;
 }
