@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.service;
 
+import org.springframework.core.io.Resource;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -22,5 +23,5 @@ public interface EstimationService {
 
     List<PhaseResponse> findPhaseResponsesByEstimationId(Long id);
 
-    void unloadingEstimations() throws IOException;
+    Resource getEstimationsReport() throws IOException;
 }

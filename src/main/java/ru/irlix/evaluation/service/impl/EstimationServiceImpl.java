@@ -2,13 +2,9 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
@@ -17,12 +13,12 @@ import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
+import ru.irlix.evaluation.service.helper.ExcelHelper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -35,6 +31,7 @@ public class EstimationServiceImpl implements EstimationService {
     private StatusRepository statusRepository;
     private EstimationMapper estimationMapper;
     private PhaseMapper phaseMapper;
+    private ExcelHelper excelHelper;
 
     @Override
     @Transactional
@@ -123,47 +120,12 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     @Override
-    public void unloadingEstimations() throws IOException {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Phases sheet");
-
+    @Transactional(readOnly = true)
+    public Resource getEstimationsReport() throws IOException {
         List<Estimation> estimations = estimationRepository.findAll();
-        int rowNum = 0;
+        Resource estimationReport = excelHelper.getEstimationReportResource(estimations);
 
-        //Header
-        Row row = sheet.createRow(rowNum);
-        setCell(row, "Id", 0);
-        setCell(row, "Name", 1);
-        setCell(row, "CreateDate", 2);
-        setCell(row, "Risk", 3);
-        setCell(row, "Status", 4);
-        setCell(row, "Client", 5);
-        setCell(row, "Creator", 6);
-
-        //Data
-        for (Estimation estimation : estimations) {
-            rowNum++;
-            row = sheet.createRow(rowNum);
-
-            setCell(row, estimation.getId().toString(), 0);
-            setCell(row, estimation.getName(), 1);
-            setCell(row, estimation.getCreateDate().toString(), 2);
-            setCell(row, estimation.getRisk().toString(), 3);
-            setCell(row, estimation.getStatus().getDisplayValue(), 4);
-            setCell(row, estimation.getClient(), 5);
-            setCell(row, estimation.getCreator(), 6);
-        }
-
-        File file = new File("C:/output/estimations.xls");
-        file.getParentFile().mkdirs();
-
-        FileOutputStream outFile = new FileOutputStream(file);
-        workbook.write(outFile);
-        log.info("unloading estimations into " + file.getAbsolutePath());
-    }
-
-    private void setCell(Row row, String name, Integer column) {
-        Cell cell = row.createCell(column, CellType.STRING);
-        cell.setCellValue(name);
+        log.info("Estimation report generated");
+        return estimationReport;
     }
 }

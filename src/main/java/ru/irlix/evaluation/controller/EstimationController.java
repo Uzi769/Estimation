@@ -2,6 +2,10 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -62,8 +66,13 @@ public class EstimationController {
         return estimationService.findPhaseResponsesByEstimationId(id);
     }
 
-    @GetMapping("/unloading")
-    public void unloadingEstimations() throws IOException {
-        estimationService.unloadingEstimations();
+    @GetMapping("/report")
+    public ResponseEntity<Resource> unloadingEstimations() throws IOException {
+        Resource resource = estimationService.getEstimationsReport();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .contentLength(resource.contentLength())
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(resource);
     }
 }
