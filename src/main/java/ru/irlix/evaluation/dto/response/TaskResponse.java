@@ -21,9 +21,9 @@ public class TaskResponse {
 
     private Integer repeatCount;
 
-    private Integer hoursMin;
+    private Double hoursMin;
 
-    private Integer hoursMax;
+    private Double hoursMax;
 
     private Long roleId;
 
