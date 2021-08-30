@@ -5,15 +5,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.helper.StatusHelper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = PhaseMapper.class)
 public abstract class EstimationMapper {
@@ -27,7 +27,12 @@ public abstract class EstimationMapper {
     @Mapping(target = "status", ignore = true)
     public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
-    public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimationList);
+    public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimation);
+
+    public Page<EstimationResponse> estimationToEstimationResponse(Page<Estimation> estimations) {
+        List<EstimationResponse> responses = estimationToEstimationResponse(estimations.getContent());
+        return new PageImpl<>(responses, estimations.getPageable(), estimations.getTotalElements());
+    }
 
     @AfterMapping
     protected void map(@MappingTarget Estimation estimation, EstimationRequest req) {

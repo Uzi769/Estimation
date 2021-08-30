@@ -2,6 +2,7 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -60,8 +61,8 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
-        List<Estimation> estimationList = estimationRepository.filter(request);
+    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+        Page<Estimation> estimationList = estimationRepository.filter(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
