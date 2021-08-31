@@ -2,14 +2,8 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
@@ -20,13 +14,11 @@ import ru.irlix.evaluation.dao.mapper.helper.RoleHelper;
 import ru.irlix.evaluation.dao.mapper.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 @Log4j2
@@ -165,69 +157,5 @@ public class TaskServiceImpl implements TaskService {
                 task.setParent(parent);
             }
         }
-    }
-
-    @Override
-    public void unloadingTasks() throws IOException {
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        HSSFSheet sheet = workbook.createSheet("Tasks sheet");
-
-        List<Task> tasks = taskRepository.findAll();
-        int rowNum = 0;
-
-        Row row = sheet.createRow(rowNum);
-
-        //Header
-        setCell(row, "Id", 0);
-        setCell(row, "Name", 1);
-        setCell(row, "Type", 2);
-        setCell(row, "RepeatCount", 3);
-        setCell(row, "BagsReserve", 4);
-
-        setCell(row, "QaReserve", 5);
-        setCell(row, "ManagementReserve", 6);
-        setCell(row, "Comment", 7);
-        setCell(row, "HoursMin", 8);
-        setCell(row, "HoursMax", 9);
-        setCell(row, "Phase", 10);
-        setCell(row, "EstimationRole", 11);
-        setCell(row, "ParentId", 12);
-        setCell(row, "BagsReserveOn", 13);
-        setCell(row, "ManagementReserveOn", 14);
-        setCell(row, "QaReserveOn", 15);
-
-        //Data
-        for (Task task : tasks) {
-            rowNum++;
-            row = sheet.createRow(rowNum);
-            setCell(row, task.getId().toString(), 0);
-            setCell(row, task.getName(), 1);
-            setCell(row, task.getType().getValue(), 2);
-            setCell(row, task.getRepeatCount().toString(), 3);
-            setCell(row, task.getBagsReserve().toString(), 4);
-            setCell(row, task.getQaReserve().toString(), 5);
-            setCell(row, task.getManagementReserve().toString(), 6);
-            setCell(row, task.getComment(), 7);
-            setCell(row, task.getHoursMin().toString(), 8);
-            setCell(row, task.getHoursMax().toString(), 9);
-            setCell(row, task.getPhase().getId().toString(), 10);
-            setCell(row, task.getRole().getDisplayValue(), 11);
-            setCell(row, task.getParent().getId().toString(), 12);
-            setCell(row, task.getBagsReserveOn().toString(), 13);
-            setCell(row, task.getManagementReserveOn().toString(), 14);
-            setCell(row, task.getQaReserveOn().toString(), 15);
-        }
-
-        File file = new File("C:/output/tasks.xls");
-        file.getParentFile().mkdirs();
-
-        FileOutputStream outFile = new FileOutputStream(file);
-        workbook.write(outFile);
-        log.info("unloading tasks into " + file.getAbsolutePath());
-    }
-
-    private void setCell(Row row, String name, Integer column) {
-        Cell cell = row.createCell(column, CellType.STRING);
-        cell.setCellValue(name);
     }
 }
