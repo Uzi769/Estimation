@@ -25,6 +25,7 @@ public class ExcelWorkbook {
     private CellStyle phaseCellStyle;
     private CellStyle phaseDigitCellStyle;
     private CellStyle boldCellStyle;
+    private CellStyle totalCellStyle;
 
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
@@ -71,7 +72,15 @@ public class ExcelWorkbook {
         cell.setCellStyle(getBoldCellStyle());
     }
 
-    private Font getHeaderFont() {
+
+    public void setTotalCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getTotalCellStyle());
+    }
+
+    public Font getHeaderFont() {
+
         if (headerFont == null) {
             headerFont = workbook.createFont();
             headerFont.setFontHeightInPoints((short) 12);
@@ -176,6 +185,7 @@ public class ExcelWorkbook {
         return boldCellStyle;
     }
 
+
     public Resource save(String path) throws IOException {
         File file = new File(path);
 
@@ -185,4 +195,17 @@ public class ExcelWorkbook {
 
         return new FileSystemResource(path);
     }
+
+    public CellStyle getTotalCellStyle() {
+        if (totalCellStyle == null) {
+            totalCellStyle = workbook.createCellStyle();
+            totalCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+            totalCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            totalCellStyle.setFont(getDefaultFont());
+            totalCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+        }
+
+        return totalCellStyle;
+    }
+
 }

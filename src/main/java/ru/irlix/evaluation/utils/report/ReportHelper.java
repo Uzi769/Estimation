@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithDetailsSheet;
+import ru.irlix.evaluation.utils.report.sheet.EstimationWithoutDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.Sheet;
 
 import java.io.IOException;
@@ -23,6 +24,8 @@ public class ReportHelper {
 
         List<Sheet> sheets = new ArrayList<>();
         sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
+        sheets.add(new EstimationWithoutDetailsSheet(excelWorkbook));
+
         sheets.forEach(s -> s.getSheet(estimation, request));
 
         return excelWorkbook.save(path);
