@@ -4,15 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Date;
 
-@Component
 @Getter
 @Setter
-public class ExcelHelper {
+public class ExcelWorkbook {
 
     private XSSFWorkbook workbook;
     private CreationHelper createHelper;
@@ -23,7 +21,7 @@ public class ExcelHelper {
     private CellStyle digitCellStyle;
     private CellStyle dateCellStyle;
 
-    public ExcelHelper() {
+    public ExcelWorkbook() {
         workbook = new XSSFWorkbook();
         createHelper = workbook.getCreationHelper();
     }

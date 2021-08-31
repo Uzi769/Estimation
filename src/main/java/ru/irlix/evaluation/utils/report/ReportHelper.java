@@ -12,27 +12,27 @@ import ru.irlix.evaluation.utils.report.sheet.Sheet;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class ReportHelper {
 
-    private final ExcelHelper excelHelper;
-
     public Resource getEstimationReportResource(Estimation estimation) throws IOException {
-        List<Sheet> sheets = List.of(
-          new EstimationWithDetailsSheet(excelHelper)
-        );
+        List<Sheet> sheets = new ArrayList<>();
+        ExcelWorkbook excelWorkbook = new ExcelWorkbook();
+
+        sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
 
         sheets.forEach(s -> s.getSheet(estimation));
 
         File file = new File("C:/output/estimations.xlsx");
 
         FileOutputStream outFile = new FileOutputStream(file);
-        excelHelper.getWorkbook().write(outFile);
-        excelHelper.getWorkbook().close();
-        excelHelper.setWorkbook(new XSSFWorkbook());
+        excelWorkbook.getWorkbook().write(outFile);
+        excelWorkbook.getWorkbook().close();
+        excelWorkbook.setWorkbook(new XSSFWorkbook());
 
         return new FileSystemResource("C:/output/estimations.xlsx");
     }

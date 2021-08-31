@@ -5,12 +5,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.utils.report.ExcelHelper;
+import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
 @RequiredArgsConstructor
 public class EstimationWithDetailsSheet implements Sheet {
 
-    private final ExcelHelper helper;
+    private final ExcelWorkbook helper;
 
     @Override
     public XSSFSheet getSheet(Estimation estimation) {
