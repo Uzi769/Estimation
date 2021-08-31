@@ -20,5 +20,6 @@
     <include file="add-data-to-status-dictionary-changelog.xml" relativeToChangelogFile="true"/>
     <include file="add-data-to-role-dictionary-changelog.xml" relativeToChangelogFile="true"/>
     <include file="reserve-fix-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="hours-to-double-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

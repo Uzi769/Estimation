@@ -44,10 +44,10 @@ public class Task {
     private String comment;
 
     @Column(name = "hours_min")
-    private Integer hoursMin;
+    private Double hoursMin;
 
     @Column(name = "hours_max")
-    private Integer hoursMax;
+    private Double hoursMax;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "phase")
@@ -76,11 +76,11 @@ public class Task {
     @PrePersist
     public void prePersist() {
         if (hoursMax == null) {
-            hoursMax = 0;
+            hoursMax = 0.0;
         }
 
         if (hoursMin == null) {
-            hoursMin = 0;
+            hoursMin = 0.0;
         }
     }
 }

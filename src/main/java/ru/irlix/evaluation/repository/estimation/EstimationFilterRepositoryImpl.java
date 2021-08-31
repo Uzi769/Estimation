@@ -2,6 +2,9 @@ package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -25,7 +28,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     private Root<Estimation> root;
 
     @Override
-    public List<Estimation> filter(EstimationFilterRequest request) {
+    public Page<Estimation> filter(EstimationFilterRequest request) {
         builder = manager.getCriteriaBuilder();
         CriteriaQuery<Estimation> query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
@@ -33,8 +36,10 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         int offset = request.getPage() * request.getSize();
         EntityGraph<?> graph = manager.getEntityGraph("estimation.phases");
 
+        Predicate filterPredicates = getFilterPredicate(request);
+
         query.select(root)
-                .where(getFilterPredicate(request))
+                .where(filterPredicates)
                 .orderBy(builder.asc(root.get("createDate")));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
@@ -42,7 +47,11 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                 .setMaxResults(request.getSize())
                 .setHint("javax.persistence.fetchgraph", graph);
 
-        return typedQuery.getResultList();
+        return new PageImpl<>(
+                typedQuery.getResultList(),
+                PageRequest.of(request.getPage(), request.getSize()),
+                getTotalCount(filterPredicates)
+        );
     }
 
     private Predicate getFilterPredicate(EstimationFilterRequest request) {
@@ -73,5 +82,13 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
 
         return builder.and(filterPredicates.toArray(new Predicate[0]));
+    }
+
+    private Long getTotalCount(Predicate filterPredicate) {
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        countQuery.select(builder.count(countQuery.from(Estimation.class)));
+        countQuery.where(filterPredicate);
+
+        return manager.createQuery(countQuery).getSingleResult();
     }
 }

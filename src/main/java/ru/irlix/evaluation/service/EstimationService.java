@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.service;
 
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -17,7 +18,7 @@ public interface EstimationService {
 
     void deleteEstimation(Long id);
 
-    List<EstimationResponse> findAllEstimations(EstimationFilterRequest request);
+    Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request);
 
     EstimationResponse findEstimationResponseById(Long id);
 

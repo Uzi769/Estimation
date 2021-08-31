@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.irlix.evaluation.utils.EntityConstants;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
 
 @Getter
 @Setter
@@ -34,9 +34,9 @@ public class TaskRequest {
     @Positive(message = "{roleId.positive}")
     private Long roleId;
 
-    private Integer hoursMax;
+    private Double hoursMax;
 
-    private Integer hoursMin;
+    private Double hoursMin;
 
     private Integer bagsReserve;
 

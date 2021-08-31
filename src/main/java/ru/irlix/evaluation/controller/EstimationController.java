@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -15,6 +16,7 @@ import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
@@ -49,7 +51,7 @@ public class EstimationController {
     }
 
     @GetMapping
-    public List<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+    public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request) {
         log.info(UrlConstants.RECEIVED_FILTER + request);
         return estimationService.findAllEstimations(request);
     }
