@@ -6,6 +6,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.Sheet;
 
@@ -19,21 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReportHelper {
 
-    public Resource getEstimationReportResource(Estimation estimation) throws IOException {
-        List<Sheet> sheets = new ArrayList<>();
+    public Resource getEstimationReportResource(Estimation estimation, ReportRequest request) throws IOException {
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
+        List<Sheet> sheets = new ArrayList<>();
         sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
+        sheets.forEach(s -> s.getSheet(estimation, request));
 
-        sheets.forEach(s -> s.getSheet(estimation));
-
-        File file = new File("C:/output/estimations.xlsx");
-
-        FileOutputStream outFile = new FileOutputStream(file);
-        excelWorkbook.getWorkbook().write(outFile);
-        excelWorkbook.getWorkbook().close();
-        excelWorkbook.setWorkbook(new XSSFWorkbook());
-
-        return new FileSystemResource("C:/output/estimations.xlsx");
+        return excelWorkbook.save("C:/output/estimations.xlsx");
     }
 }

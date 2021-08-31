@@ -4,6 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 @Getter
 @Setter
@@ -65,7 +71,7 @@ public class ExcelWorkbook {
         cell.setCellStyle(getBoldCellStyle());
     }
 
-    public Font getHeaderFont() {
+    private Font getHeaderFont() {
         if (headerFont == null) {
             headerFont = workbook.createFont();
             headerFont.setFontHeightInPoints((short) 12);
@@ -78,7 +84,7 @@ public class ExcelWorkbook {
         return headerFont;
     }
 
-    public Font getDefaultFont() {
+    private Font getDefaultFont() {
         if (defaultFont == null) {
             defaultFont = workbook.createFont();
             defaultFont.setFontHeightInPoints((short) 11);
@@ -91,7 +97,7 @@ public class ExcelWorkbook {
         return defaultFont;
     }
 
-    public Font getBoldFont() {
+    private Font getBoldFont() {
         if (boldFont == null) {
             boldFont = workbook.createFont();
             boldFont.setFontHeightInPoints((short) 11);
@@ -104,7 +110,7 @@ public class ExcelWorkbook {
         return boldFont;
     }
 
-    public CellStyle getHeaderCellStyle() {
+    private CellStyle getHeaderCellStyle() {
         if (headerCellStyle == null) {
             headerCellStyle = workbook.createCellStyle();
             headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -118,7 +124,7 @@ public class ExcelWorkbook {
         return headerCellStyle;
     }
 
-    public CellStyle getPhaseCellStyle() {
+    private CellStyle getPhaseCellStyle() {
         if (phaseCellStyle == null) {
             phaseCellStyle = workbook.createCellStyle();
             phaseCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
@@ -130,7 +136,7 @@ public class ExcelWorkbook {
         return phaseCellStyle;
     }
 
-    public CellStyle getPhaseDigitCellStyle() {
+    private CellStyle getPhaseDigitCellStyle() {
         if (phaseDigitCellStyle == null) {
             phaseDigitCellStyle = workbook.createCellStyle();
             phaseDigitCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
@@ -142,7 +148,7 @@ public class ExcelWorkbook {
         return phaseDigitCellStyle;
     }
 
-    public CellStyle getDigitCellStyle() {
+    private CellStyle getDigitCellStyle() {
         if (digitCellStyle == null) {
             digitCellStyle = workbook.createCellStyle();
             digitCellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -152,7 +158,7 @@ public class ExcelWorkbook {
         return digitCellStyle;
     }
 
-    public CellStyle getStringCellStyle() {
+    private CellStyle getStringCellStyle() {
         if (stringCellStyle == null) {
             stringCellStyle = workbook.createCellStyle();
             stringCellStyle.setFont(getDefaultFont());
@@ -161,12 +167,22 @@ public class ExcelWorkbook {
         return stringCellStyle;
     }
 
-    public CellStyle getBoldCellStyle() {
+    private CellStyle getBoldCellStyle() {
         if (boldCellStyle == null) {
             boldCellStyle = workbook.createCellStyle();
             boldCellStyle.setFont(getBoldFont());
         }
 
         return boldCellStyle;
+    }
+
+    public Resource save(String path) throws IOException {
+        File file = new File(path);
+
+        FileOutputStream outFile = new FileOutputStream(file);
+        workbook.write(outFile);
+        workbook.close();
+
+        return new FileSystemResource(path);
     }
 }

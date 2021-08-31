@@ -12,6 +12,7 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -122,9 +123,9 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Resource getEstimationsReport() throws IOException {
-        Estimation estimation = findEstimationById(1L);
-        Resource estimationReport = reportHelper.getEstimationReportResource(estimation);
+    public Resource getEstimationsReport(Long id, ReportRequest request) throws IOException {
+        Estimation estimation = findEstimationById(id);
+        Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
 
         log.info("Estimation report generated");
         return estimationReport;

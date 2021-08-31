@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
@@ -68,9 +69,9 @@ public class EstimationController {
         return estimationService.findPhaseResponsesByEstimationId(id);
     }
 
-    @GetMapping("/report")
-    public ResponseEntity<Resource> unloadingEstimations() throws IOException {
-        Resource resource = estimationService.getEstimationsReport();
+    @GetMapping("/{id}/report")
+    public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, ReportRequest request) throws IOException {
+        Resource resource = estimationService.getEstimationsReport(id, request);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .contentLength(resource.contentLength())
