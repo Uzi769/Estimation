@@ -22,7 +22,7 @@ import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
-import ru.irlix.evaluation.utils.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntityConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;

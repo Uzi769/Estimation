@@ -17,7 +17,7 @@ import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
-import ru.irlix.evaluation.service.helper.ExcelHelper;
+import ru.irlix.evaluation.utils.report.ReportHelper;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +31,7 @@ public class EstimationServiceImpl implements EstimationService {
     private StatusRepository statusRepository;
     private EstimationMapper estimationMapper;
     private PhaseMapper phaseMapper;
-    private ExcelHelper excelHelper;
+    private ReportHelper reportHelper;
 
     @Override
     @Transactional
@@ -122,8 +122,8 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     @Transactional(readOnly = true)
     public Resource getEstimationsReport() throws IOException {
-        List<Estimation> estimations = estimationRepository.findAll();
-        Resource estimationReport = excelHelper.getEstimationReportResource(estimations);
+        Estimation estimation = findEstimationById(1L);
+        Resource estimationReport = reportHelper.getEstimationReportResource(estimation);
 
         log.info("Estimation report generated");
         return estimationReport;

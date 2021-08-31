@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.utils;
+package ru.irlix.evaluation.utils.constant;
 
 public class EntityConstants {
     public static final Long DEFAULT_STATUS_ID = 1L;

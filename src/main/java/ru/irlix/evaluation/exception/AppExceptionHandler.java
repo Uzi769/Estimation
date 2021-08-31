@@ -8,7 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.irlix.evaluation.config.UTF8Control;
-import ru.irlix.evaluation.utils.LocaleConstants;
+import ru.irlix.evaluation.utils.constant.LocaleConstants;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

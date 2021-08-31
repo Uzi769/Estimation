@@ -8,7 +8,7 @@ import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import ru.irlix.evaluation.utils.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntityConstants;
 
 @Getter
 @Setter

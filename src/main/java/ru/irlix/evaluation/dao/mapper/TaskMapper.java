@@ -15,7 +15,7 @@ import ru.irlix.evaluation.dao.mapper.helper.TaskHelper;
 import ru.irlix.evaluation.dao.mapper.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
-import ru.irlix.evaluation.utils.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntityConstants;
 
 import java.util.List;
 

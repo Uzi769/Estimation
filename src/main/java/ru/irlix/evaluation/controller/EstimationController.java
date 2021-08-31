@@ -13,7 +13,7 @@ import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
-import ru.irlix.evaluation.utils.UrlConstants;
+import ru.irlix.evaluation.utils.constant.UrlConstants;
 
 import javax.validation.constraints.Positive;
 import java.io.IOException;

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
-import ru.irlix.evaluation.utils.UrlConstants;
+import ru.irlix.evaluation.utils.constant.UrlConstants;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 import ru.irlix.evaluation.utils.marker.OnUpdate;
 
