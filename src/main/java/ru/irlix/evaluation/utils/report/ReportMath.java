@@ -130,7 +130,9 @@ public class ReportMath {
     }
 
     public static double calcFeatureMinCost(Task feature, ReportRequest request) {
-        return calcFeatureMinHours(feature, request) * getRoleCost(feature, request);
+        return feature.getTasks().stream()
+                .mapToDouble(t -> calcTaskMinCost(t, request))
+                .sum();
     }
 
     public static double calcFeatureMaxHours(Task feature, ReportRequest request) {
@@ -140,7 +142,9 @@ public class ReportMath {
     }
 
     public static double calcFeatureMaxCost(Task feature, ReportRequest request) {
-        return calcFeatureMaxHours(feature, request) * getRoleCost(feature, request);
+        return feature.getTasks().stream()
+                .mapToDouble(t -> calcTaskMaxCost(t, request))
+                .sum();
     }
 
     private static double getRoleCost(Task task, ReportRequest request) {
