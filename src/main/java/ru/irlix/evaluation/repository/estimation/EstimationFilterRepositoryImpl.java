@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -34,7 +33,6 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         root = query.from(Estimation.class);
 
         int offset = request.getPage() * request.getSize();
-        EntityGraph<?> graph = manager.getEntityGraph("estimation.phases");
 
         Predicate filterPredicates = getFilterPredicate(request);
 
@@ -43,9 +41,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                 .orderBy(builder.asc(root.get("createDate")));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
-        typedQuery.setFirstResult(offset)
-                .setMaxResults(request.getSize())
-                .setHint("javax.persistence.fetchgraph", graph);
+        typedQuery.setFirstResult(offset);
+        typedQuery.setMaxResults(request.getSize());
 
         return new PageImpl<>(
                 typedQuery.getResultList(),
@@ -58,15 +55,15 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         List<Predicate> filterPredicates = new ArrayList<>();
 
         if (StringUtils.isNotEmpty(request.getName())) {
-            filterPredicates.add(builder.like(root.get("name"), "%" + request.getName() + "%"));
+            filterPredicates.add(builder.like(builder.lower(root.get("name")), "%" + request.getName().toLowerCase() + "%"));
         }
 
         if (StringUtils.isNotEmpty(request.getClient())) {
-            filterPredicates.add(builder.like(root.get("client"), "%" + request.getClient() + "%"));
+            filterPredicates.add(builder.like(builder.lower(root.get("client")), "%" + request.getClient().toLowerCase() + "%"));
         }
 
         if (StringUtils.isNotEmpty(request.getCreator())) {
-            filterPredicates.add(builder.like(root.get("creator"), "%" + request.getCreator() + "%"));
+            filterPredicates.add(builder.like(builder.lower(root.get("creator")), "%" + request.getCreator().toLowerCase() + "%"));
         }
 
         if (request.getStatus() != null) {
