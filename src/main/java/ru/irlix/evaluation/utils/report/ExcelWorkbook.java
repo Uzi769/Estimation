@@ -84,7 +84,6 @@ public class ExcelWorkbook {
     }
 
     public Font getHeaderFont() {
-
         if (headerFont == null) {
             headerFont = workbook.createFont();
             headerFont.setFontHeightInPoints((short) 12);
@@ -211,5 +210,4 @@ public class ExcelWorkbook {
 
         return totalCellStyle;
     }
-
 }

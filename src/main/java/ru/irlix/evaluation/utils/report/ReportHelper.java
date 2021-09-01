@@ -9,7 +9,7 @@ import ru.irlix.evaluation.utils.report.sheet.EstimationWithDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithoutDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.PhaseEstimationSheet;
 import ru.irlix.evaluation.utils.report.sheet.Sheet;
-import ru.irlix.evaluation.utils.report.sheet.TasksByRolesSheet;
+import ru.irlix.evaluation.utils.report.sheet.FeatureSheet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class ReportHelper {
         List<Sheet> sheets = new ArrayList<>();
         sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
         sheets.add(new EstimationWithoutDetailsSheet(excelWorkbook));
-        sheets.add(new TasksByRolesSheet(excelWorkbook));
+        sheets.add(new FeatureSheet(excelWorkbook));
         sheets.add(new PhaseEstimationSheet(excelWorkbook));
 
         sheets.forEach(s -> s.getSheet(estimation, request));

@@ -81,7 +81,7 @@ public abstract class TaskMapper {
             }
 
             if (request.getRoleId() == null) {
-                request.setType(EntityConstants.DEFAULT_ROLE_ID);
+                request.setRoleId(EntityConstants.DEFAULT_ROLE_ID);
             }
 
             Role role = roleHelper.findRoleById(request.getRoleId());

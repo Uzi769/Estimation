@@ -12,6 +12,7 @@ import ru.irlix.evaluation.utils.constant.EntityConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.ReportMath;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class EstimationWithDetailsSheet implements Sheet {
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Estimations");
+        sheet = helper.getWorkbook().createSheet("Оценка с детализацией");
         configureColumns();
 
         fillHeader();
@@ -44,12 +45,17 @@ public class EstimationWithDetailsSheet implements Sheet {
                     .filter(t -> t.getParent() == null)
                     .collect(Collectors.toList());
 
+            List<Task> otherTasks = new ArrayList<>();
             for (Task task : tasks) {
                 if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
                     fillFeatureRowWithNestedTasks(task, request);
                 } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
-                    fillTaskRow(task, request, 1);
+                    otherTasks.add(task);
                 }
+            }
+
+            if (!otherTasks.isEmpty()) {
+                fillOtherTasksRow(otherTasks, request);
             }
         }
 
@@ -96,13 +102,25 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setMarkedCell(row, null, 8);
     }
 
-    private void fillTaskRow(Task task, ReportRequest request, int column) {
+    private void fillOtherTasksRow(List<Task> otherTasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        if (column == 1) {
-            mergeCells(1, 2);
-        }
+        mergeCells(1, 2);
 
-        helper.setCell(row, task.getName(), column);
+        helper.setBoldCell(row, "Прочие задачи", 1);
+        helper.setCell(row, ReportMath.calcListSummaryMinHours(otherTasks, request), 4);
+        helper.setCell(row, ReportMath.calcListSummaryMinCost(otherTasks, request), 5);
+        helper.setCell(row, ReportMath.calcListSummaryMaxHours(otherTasks, request), 6);
+        helper.setCell(row, ReportMath.calcListSummaryMaxCost(otherTasks, request), 7);
+
+        for (Task task : otherTasks) {
+            fillTaskRow(task, request);
+        }
+    }
+
+    private void fillTaskRow(Task task, ReportRequest request) {
+        Row row = createRow(ROW_HEIGHT);
+
+        helper.setCell(row, task.getName(), 2);
         helper.setCell(row, task.getRole() != null ? task.getRole().getDisplayValue() : null, 3);
         helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 4);
         helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 5);
@@ -123,7 +141,7 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setCell(row, feature.getComment(), 8);
 
         for (Task nestedTask : feature.getTasks()) {
-            fillTaskRow(nestedTask, request, 2);
+            fillTaskRow(nestedTask, request);
         }
     }
 
@@ -131,7 +149,7 @@ public class EstimationWithDetailsSheet implements Sheet {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
 
-        helper.setMarkedCell(row, "Итого по проекту:", 0);
+        helper.setTotalCell(row, "Итого по проекту:", 0);
         helper.setMarkedCell(row, hoursMinSummary, 4);
         helper.setMarkedCell(row, costMinSummary, 5);
         helper.setMarkedCell(row, hoursMaxSummary, 6);

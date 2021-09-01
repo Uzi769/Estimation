@@ -161,7 +161,11 @@ public class ReportMath {
     }
 
     private static double getRoleCost(Task task, ReportRequest request) {
-        switch (task.getRole().getValue()) {
+        String roleValue = task.getRole() != null
+                ? task.getRole().getValue()
+                : "analyst";
+
+        switch (roleValue) {
             case "analyst":
                 return request.getAnalystCost();
             case "developer":
