@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
@@ -14,12 +13,15 @@ import ru.irlix.evaluation.dao.mapper.helper.PhaseHelper;
 import ru.irlix.evaluation.dao.mapper.helper.RoleHelper;
 import ru.irlix.evaluation.dao.mapper.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
+import ru.irlix.evaluation.dto.request.TaskUpdateRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.EntityConstants;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -60,6 +62,23 @@ public class TaskServiceImpl implements TaskService {
 
         log.info("Task with id " + savedTask.getId() + " updated");
         return mapper.taskToResponse(savedTask);
+    }
+
+    @Override
+    @Transactional
+    public List<TaskResponse> updateTasks(List<TaskUpdateRequest> tasksRequest) {
+        List<Task> updatedTasks = tasksRequest.stream()
+                .map(t -> {
+                    Task taskToUpdate = findTaskById(t.getId());
+                    checkAndUpdateFields(taskToUpdate, t);
+                    return taskToUpdate;
+                })
+                .collect(Collectors.toList());
+
+        List<Task> savedTasks = taskRepository.saveAll(updatedTasks);
+
+        log.info("Task list updated");
+        return mapper.taskToResponse(savedTasks);
     }
 
     @Override
