@@ -32,14 +32,13 @@ public class ExcelWorkbook {
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
     private CellStyle dateCellStyle;
-    private  DecimalFormat formatter;
+    private DecimalFormat formatter;
 
 
     public ExcelWorkbook() {
         workbook = new XSSFWorkbook();
         createHelper = workbook.getCreationHelper();
         formatter = new DecimalFormat("#.#");
-        formatter.setRoundingMode(RoundingMode.HALF_UP);
     }
 
     public void setCell(Row row, String name, Integer column) {

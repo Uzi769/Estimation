@@ -67,19 +67,25 @@ public abstract class TaskMapper {
         Phase phase = phaseHelper.findPhaseById(request.getPhaseId());
         task.setPhase(phase);
 
+        if (request.getType() == null) {
+            request.setType(EntityConstants.TASK_ID);
+        }
+
         TaskTypeDictionary type = taskTypeHelper.findTypeById(request.getType());
         task.setType(type);
 
         if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
-            if (request.getRoleId() != null) {
-                Role role = roleHelper.findRoleById(request.getRoleId());
-                task.setRole(role);
-            }
-
             if (request.getFeatureId() != null) {
                 Task feature = taskHelper.findTaskById(request.getFeatureId());
                 task.setParent(feature);
             }
+
+            if (request.getRoleId() == null) {
+                request.setType(EntityConstants.DEFAULT_ROLE_ID);
+            }
+
+            Role role = roleHelper.findRoleById(request.getRoleId());
+            task.setRole(role);
         }
     }
 

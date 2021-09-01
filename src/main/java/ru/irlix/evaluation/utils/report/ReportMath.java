@@ -7,6 +7,7 @@ import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.exception.NotFoundException;
+import ru.irlix.evaluation.utils.constant.EntityConstants;
 
 @RequiredArgsConstructor
 @Component
@@ -36,19 +37,19 @@ public class ReportMath {
     }
 
     private static double calcTaskMinHoursRange(Task task) {
-        return task.getHoursMin() * getRepeatCount(task) * getPercentAddition(task);
+        return round(task.getHoursMin() * getRepeatCount(task) * getPercentAddition(task));
     }
 
     private static double calcTaskMaxHoursRange(Task task) {
-        return task.getHoursMax() * getRepeatCount(task) * getPercentAddition(task);
+        return round(task.getHoursMax() * getRepeatCount(task) * getPercentAddition(task));
     }
 
     private static double calcTaskMinCostRange(Task task, ReportRequest request) {
-        return calcTaskMinHoursRange(task) * getRoleCost(task, request) * getPercentAddition(task);
+        return round(calcTaskMinHoursRange(task) * getRoleCost(task, request));
     }
 
     private static double calcTaskMaxCostRange(Task task, ReportRequest request) {
-        return calcTaskMaxHoursRange(task) * getRoleCost(task, request) * getPercentAddition(task);
+        return round(calcTaskMaxHoursRange(task) * getRoleCost(task, request));
     }
 
     private static double calcTaskMinHoursPertWithoutRepeatCount(Task task) {
@@ -60,19 +61,19 @@ public class ReportMath {
     }
 
     private static double calcTaskMinHoursPert(Task task) {
-        return calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task);
+        return round(calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task));
     }
 
     private static double calcTaskMaxHoursPert(Task task) {
-        return calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task);
+        return round(calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task));
     }
 
     private static double calcTaskMinCostPert(Task task, ReportRequest request) {
-        return calcTaskMinHoursPert(task) * getRoleCost(task, request) * getPercentAddition(task);
+        return round(calcTaskMinHoursPert(task) * getRoleCost(task, request));
     }
 
     private static double calcTaskMaxCostPert(Task task, ReportRequest request) {
-        return calcTaskMaxHoursPert(task) * getRoleCost(task, request) * getPercentAddition(task);
+        return round(calcTaskMaxHoursPert(task) * getRoleCost(task, request));
     }
 
     private static double getRepeatCount(Task task) {
@@ -83,7 +84,7 @@ public class ReportMath {
 
     public static double calcPhaseSummaryMinHours(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
-                .mapToDouble(t -> !t.getTasks().isEmpty()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? t.getTasks().stream()
                         .mapToDouble(nt -> calcTaskMinHours(nt, request))
                         .sum()
@@ -94,7 +95,7 @@ public class ReportMath {
 
     public static double calcPhaseSummaryMinCost(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
-                .mapToDouble(t -> !t.getTasks().isEmpty()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? t.getTasks().stream()
                         .mapToDouble(nt -> calcTaskMinCost(nt, request))
                         .sum()
@@ -105,7 +106,7 @@ public class ReportMath {
 
     public static double calcPhaseSummaryMaxHours(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
-                .mapToDouble(t -> !t.getTasks().isEmpty()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? t.getTasks().stream()
                         .mapToDouble(nt -> calcTaskMaxHours(nt, request))
                         .sum()
@@ -116,7 +117,7 @@ public class ReportMath {
 
     public static double calcPhaseSummaryMaxCost(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
-                .mapToDouble(t -> !t.getTasks().isEmpty()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? t.getTasks().stream()
                         .mapToDouble(nt -> calcTaskMaxCost(nt, request))
                         .sum()
@@ -185,5 +186,9 @@ public class ReportMath {
 
     private static double getPercent(double digit) {
         return 1 + (digit / 100);
+    }
+
+    private static double round(double digit) {
+        return Math.round(digit * 10) / 10.0;
     }
 }
