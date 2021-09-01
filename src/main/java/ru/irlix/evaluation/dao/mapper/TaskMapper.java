@@ -38,8 +38,6 @@ public abstract class TaskMapper {
     @Mapping(target = "phase", ignore = true)
     @Mapping(target = "role", ignore = true)
     @Mapping(target = "parent", ignore = true)
-    @Mapping(target = "hoursMax", ignore = true)
-    @Mapping(target = "hoursMin", ignore = true)
     public abstract Task taskRequestToTask(TaskRequest taskRequest);
 
     @Mapping(target = "type", ignore = true)
@@ -71,14 +69,6 @@ public abstract class TaskMapper {
 
         TaskTypeDictionary type = taskTypeHelper.findTypeById(request.getType());
         task.setType(type);
-
-        if (request.getHoursMax() != null) {
-            task.setHoursMax(request.getHoursMax());
-        }
-
-        if (request.getHoursMin() != null) {
-            task.setHoursMin(request.getHoursMin());
-        }
 
         if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
             if (request.getRoleId() != null) {
