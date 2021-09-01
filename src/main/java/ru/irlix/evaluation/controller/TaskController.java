@@ -45,7 +45,7 @@ public class TaskController {
         return taskService.updateTask(id, request);
     }
 
-    @PutMapping()
+    @PutMapping("/list")
     public List<TaskResponse> updateTask(@RequestBody @Valid List<TaskUpdateRequest> request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return taskService.updateTasks(request);

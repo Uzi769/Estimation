@@ -66,8 +66,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public List<TaskResponse> updateTasks(List<TaskUpdateRequest> taskRequest) {
-        List<Task> updatedTasks = taskRequest.stream()
+    public List<TaskResponse> updateTasks(List<TaskUpdateRequest> tasksRequest) {
+        List<Task> updatedTasks = tasksRequest.stream()
                 .map(t -> {
                     Task taskToUpdate = findTaskById(t.getId());
                     checkAndUpdateFields(taskToUpdate, t);
