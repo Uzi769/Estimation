@@ -82,5 +82,33 @@ public class Task {
         if (hoursMin == null) {
             hoursMin = 0.0;
         }
+
+        if (repeatCount == null) {
+            repeatCount = 1;
+        }
+
+        if (bagsReserveOn == null) {
+            bagsReserveOn = false;
+        }
+
+        if (qaReserveOn == null) {
+            qaReserveOn= false;
+        }
+
+        if (managementReserveOn == null) {
+            managementReserveOn = false;
+        }
+
+        if (bagsReserve == null) {
+            bagsReserve = 0;
+        }
+
+        if (qaReserve == null) {
+            qaReserve = 0;
+        }
+
+        if (managementReserve == null) {
+            managementReserve = 0;
+        }
     }
 }
