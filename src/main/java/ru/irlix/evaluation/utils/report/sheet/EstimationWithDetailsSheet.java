@@ -74,26 +74,26 @@ public class EstimationWithDetailsSheet implements Sheet {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
-        helper.setPhaseCell(row, phase.getName(), 0);
-        helper.setPhaseCell(row, null, 3);
+        helper.setMarkedCell(row, phase.getName(), 0);
+        helper.setMarkedCell(row, null, 3);
 
         double sumHoursMin = ReportMath.calcPhaseSummaryMinHours(phase, request);
         hoursMinSummary += sumHoursMin;
-        helper.setPhaseCell(row, sumHoursMin, 4);
+        helper.setMarkedCell(row, sumHoursMin, 4);
 
         double sumCostMin = ReportMath.calcPhaseSummaryMinCost(phase, request);
         costMinSummary += sumCostMin;
-        helper.setPhaseCell(row, sumCostMin, 5);
+        helper.setMarkedCell(row, sumCostMin, 5);
 
         double sumHoursMax = ReportMath.calcPhaseSummaryMaxHours(phase, request);
         hoursMaxSummary += sumHoursMax;
-        helper.setPhaseCell(row, sumHoursMax, 6);
+        helper.setMarkedCell(row, sumHoursMax, 6);
 
         double sumCostMax = ReportMath.calcPhaseSummaryMaxCost(phase, request);
         costMaxSummary += sumCostMax;
-        helper.setPhaseCell(row, sumCostMax, 7);
+        helper.setMarkedCell(row, sumCostMax, 7);
 
-        helper.setPhaseCell(row, null, 8);
+        helper.setMarkedCell(row, null, 8);
     }
 
     private void fillTaskRow(Task task, ReportRequest request, int column) {
@@ -131,12 +131,12 @@ public class EstimationWithDetailsSheet implements Sheet {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
 
-        helper.setPhaseCell(row, "Итого по проекту:", 0);
-        helper.setPhaseCell(row, hoursMinSummary, 4);
-        helper.setPhaseCell(row, costMinSummary, 5);
-        helper.setPhaseCell(row, hoursMaxSummary, 6);
-        helper.setPhaseCell(row, costMaxSummary, 7);
-        helper.setPhaseCell(row, null, 8);
+        helper.setMarkedCell(row, "Итого по проекту:", 0);
+        helper.setMarkedCell(row, hoursMinSummary, 4);
+        helper.setMarkedCell(row, costMinSummary, 5);
+        helper.setMarkedCell(row, hoursMaxSummary, 6);
+        helper.setMarkedCell(row, costMaxSummary, 7);
+        helper.setMarkedCell(row, null, 8);
     }
 
     private void configureColumns() {

@@ -10,7 +10,6 @@ import org.springframework.core.io.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 @Getter
@@ -24,8 +23,8 @@ public class ExcelWorkbook {
     private Font boldFont;
 
     private CellStyle headerCellStyle;
-    private CellStyle phaseCellStyle;
-    private CellStyle phaseDigitCellStyle;
+    private CellStyle markedCellStyle;
+    private CellStyle markedDigitCellStyle;
     private CellStyle boldCellStyle;
 
     private CellStyle stringCellStyle;
@@ -58,16 +57,16 @@ public class ExcelWorkbook {
         cell.setCellStyle(getHeaderCellStyle());
     }
 
-    public void setPhaseCell(Row row, String name, Integer column) {
+    public void setMarkedCell(Row row, String name, Integer column) {
         Cell cell = row.createCell(column, CellType.STRING);
         cell.setCellValue(name);
-        cell.setCellStyle(getPhaseCellStyle());
+        cell.setCellStyle(getMarkedCellStyle());
     }
 
-    public void setPhaseCell(Row row, double digit, Integer column) {
+    public void setMarkedCell(Row row, double digit, Integer column) {
         Cell cell = row.createCell(column);
         cell.setCellValue(formatter.format(digit));
-        cell.setCellStyle(getPhaseDigitCellStyle());
+        cell.setCellStyle(getMarkedDigitCellStyle());
     }
 
     public void setBoldCell(Row row, String name, Integer column) {
@@ -129,28 +128,28 @@ public class ExcelWorkbook {
         return headerCellStyle;
     }
 
-    private CellStyle getPhaseCellStyle() {
-        if (phaseCellStyle == null) {
-            phaseCellStyle = workbook.createCellStyle();
-            phaseCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
-            phaseCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            phaseCellStyle.setFont(getDefaultFont());
-            phaseCellStyle.setAlignment(HorizontalAlignment.LEFT);
+    private CellStyle getMarkedCellStyle() {
+        if (markedCellStyle == null) {
+            markedCellStyle = workbook.createCellStyle();
+            markedCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+            markedCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            markedCellStyle.setFont(getDefaultFont());
+            markedCellStyle.setAlignment(HorizontalAlignment.LEFT);
         }
 
-        return phaseCellStyle;
+        return markedCellStyle;
     }
 
-    private CellStyle getPhaseDigitCellStyle() {
-        if (phaseDigitCellStyle == null) {
-            phaseDigitCellStyle = workbook.createCellStyle();
-            phaseDigitCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
-            phaseDigitCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            phaseDigitCellStyle.setFont(getDefaultFont());
-            phaseDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
+    private CellStyle getMarkedDigitCellStyle() {
+        if (markedDigitCellStyle == null) {
+            markedDigitCellStyle = workbook.createCellStyle();
+            markedDigitCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+            markedDigitCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            markedDigitCellStyle.setFont(getDefaultFont());
+            markedDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
         }
 
-        return phaseDigitCellStyle;
+        return markedDigitCellStyle;
     }
 
     private CellStyle getDigitCellStyle() {
