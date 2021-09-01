@@ -2,6 +2,7 @@ package ru.irlix.evaluation.utils.report;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
@@ -35,19 +36,19 @@ public class ReportMath {
     }
 
     private static double calcTaskMinHoursRange(Task task) {
-        return task.getHoursMin() * getRepeatCount(task);
+        return task.getHoursMin() * getRepeatCount(task) * getPercentAddition(task);
     }
 
     private static double calcTaskMaxHoursRange(Task task) {
-        return task.getHoursMax() * getRepeatCount(task);
+        return task.getHoursMax() * getRepeatCount(task) * getPercentAddition(task);
     }
 
     private static double calcTaskMinCostRange(Task task, ReportRequest request) {
-        return calcTaskMinHoursRange(task) * getRoleCost(task, request);
+        return calcTaskMinHoursRange(task) * getRoleCost(task, request) * getPercentAddition(task);
     }
 
     private static double calcTaskMaxCostRange(Task task, ReportRequest request) {
-        return calcTaskMaxHoursRange(task) * getRoleCost(task, request);
+        return calcTaskMaxHoursRange(task) * getRoleCost(task, request) * getPercentAddition(task);
     }
 
     private static double calcTaskMinHoursPertWithoutRepeatCount(Task task) {
@@ -59,19 +60,19 @@ public class ReportMath {
     }
 
     private static double calcTaskMinHoursPert(Task task) {
-        return calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
+        return calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task);
     }
 
     private static double calcTaskMaxHoursPert(Task task) {
-        return calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
+        return calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task) * getPercentAddition(task);
     }
 
     private static double calcTaskMinCostPert(Task task, ReportRequest request) {
-        return calcTaskMinHoursPert(task) * getRoleCost(task, request);
+        return calcTaskMinHoursPert(task) * getRoleCost(task, request) * getPercentAddition(task);
     }
 
     private static double calcTaskMaxCostPert(Task task, ReportRequest request) {
-        return calcTaskMaxHoursPert(task) * getRoleCost(task, request);
+        return calcTaskMaxHoursPert(task) * getRoleCost(task, request) * getPercentAddition(task);
     }
 
     private static double getRepeatCount(Task task) {
@@ -160,5 +161,29 @@ public class ReportMath {
             default:
                 throw new NotFoundException("Role with value " + task.getRole().getValue() + " not found");
         }
+    }
+
+    private static double getPercentAddition(Task task) {
+        double percent = 1;
+
+        if (task.getBagsReserveOn() != null && task.getBagsReserveOn() && task.getBagsReserve() != null) {
+            percent *= getPercent(task.getBagsReserve());
+        }
+
+        Phase phase = task.getPhase();
+        if (phase.getRiskReserveOn() != null && phase.getRiskReserveOn() && phase.getRiskReserve() != null) {
+            percent *= getPercent(phase.getRiskReserve());
+        }
+
+        Estimation estimation = phase.getEstimation();
+        if (estimation.getRisk() != null) {
+            percent *= getPercent(estimation.getRisk());
+        }
+
+        return percent;
+    }
+
+    private static double getPercent(double digit) {
+        return 1 + (digit / 100);
     }
 }
