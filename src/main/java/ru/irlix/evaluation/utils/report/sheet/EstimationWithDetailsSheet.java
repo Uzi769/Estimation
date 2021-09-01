@@ -77,7 +77,7 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setPhaseCell(row, phase.getName(), 0);
         helper.setPhaseCell(row, null, 3);
 
-        double sumHoursMin = ReportMath.calcPhaseSummaryMinMinutes(phase);
+        double sumHoursMin = ReportMath.calcPhaseSummaryMinHours(phase, request);
         hoursMinSummary += sumHoursMin;
         helper.setPhaseCell(row, sumHoursMin, 4);
 
@@ -85,7 +85,7 @@ public class EstimationWithDetailsSheet implements Sheet {
         costMinSummary += sumCostMin;
         helper.setPhaseCell(row, sumCostMin, 5);
 
-        double sumHoursMax = ReportMath.calcPhaseSummaryMaxMinutes(phase);
+        double sumHoursMax = ReportMath.calcPhaseSummaryMaxHours(phase, request);
         hoursMaxSummary += sumHoursMax;
         helper.setPhaseCell(row, sumHoursMax, 6);
 
@@ -104,9 +104,9 @@ public class EstimationWithDetailsSheet implements Sheet {
 
         helper.setCell(row, task.getName(), column);
         helper.setCell(row, task.getRole() != null ? task.getRole().getDisplayValue() : null, 3);
-        helper.setCell(row, ReportMath.calcTaskMinMinutes(task), 4);
+        helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 4);
         helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 5);
-        helper.setCell(row, ReportMath.calcTaskMaxMinutes(task), 6);
+        helper.setCell(row, ReportMath.calcTaskMaxHours(task, request), 6);
         helper.setCell(row, ReportMath.calcTaskMaxCost(task, request), 7);
         helper.setCell(row, task.getComment(), 8);
     }
@@ -116,9 +116,9 @@ public class EstimationWithDetailsSheet implements Sheet {
         mergeCells(1, 2);
 
         helper.setBoldCell(row, feature.getName(), 1);
-        helper.setCell(row, ReportMath.calcFeatureMinMinutes(feature), 4);
+        helper.setCell(row, ReportMath.calcFeatureMinHours(feature, request), 4);
         helper.setCell(row, ReportMath.calcFeatureMinCost(feature, request), 5);
-        helper.setCell(row, ReportMath.calcFeatureMaxMinutes(feature), 6);
+        helper.setCell(row, ReportMath.calcFeatureMaxHours(feature, request), 6);
         helper.setCell(row, ReportMath.calcFeatureMaxCost(feature, request), 7);
         helper.setCell(row, feature.getComment(), 8);
 

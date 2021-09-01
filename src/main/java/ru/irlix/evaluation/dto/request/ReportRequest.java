@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ReportRequest {
 
+    private boolean pert;
+
     private double qaCost;
 
     private double analystCost;
