@@ -9,6 +9,8 @@ import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Component
 public class ReportMath {
@@ -83,46 +85,19 @@ public class ReportMath {
     }
 
     public static double calcPhaseSummaryMinHours(Phase phase, ReportRequest request) {
-        return phase.getTasks().stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
-                        ? t.getTasks().stream()
-                        .mapToDouble(nt -> calcTaskMinHours(nt, request))
-                        .sum()
-                        : calcTaskMinHours(t, request)
-                )
-                .sum();
+        return calcListSummaryMinHours(phase.getTasks(), request);
     }
 
     public static double calcPhaseSummaryMinCost(Phase phase, ReportRequest request) {
-        return phase.getTasks().stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
-                        ? t.getTasks().stream()
-                        .mapToDouble(nt -> calcTaskMinCost(nt, request))
-                        .sum()
-                        : calcTaskMinCost(t, request)
-                )
-                .sum();
+        return calcListSummaryMinCost(phase.getTasks(), request);
     }
 
     public static double calcPhaseSummaryMaxHours(Phase phase, ReportRequest request) {
-        return phase.getTasks().stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
-                        ? t.getTasks().stream()
-                        .mapToDouble(nt -> calcTaskMaxHours(nt, request))
-                        .sum()
-                        : calcTaskMaxHours(t, request)
-                )
-                .sum();
+        return calcListSummaryMaxHours(phase.getTasks(), request);
     }
 
     public static double calcPhaseSummaryMaxCost(Phase phase, ReportRequest request) {
-        return phase.getTasks().stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
-                        ? t.getTasks().stream()
-                        .mapToDouble(nt -> calcTaskMaxCost(nt, request))
-                        .sum()
-                        : calcTaskMaxCost(t, request))
-                .sum();
+        return calcListSummaryMaxCost(phase.getTasks(), request);
     }
 
     public static double calcFeatureMinHours(Task feature, ReportRequest request) {
@@ -146,6 +121,42 @@ public class ReportMath {
     public static double calcFeatureMaxCost(Task feature, ReportRequest request) {
         return feature.getTasks().stream()
                 .mapToDouble(t -> calcTaskMaxCost(t, request))
+                .sum();
+    }
+
+    public static double calcListSummaryMinHours(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                        ? calcFeatureMinHours(t, request)
+                        : calcTaskMinHours(t, request)
+                )
+                .sum();
+    }
+
+    public static double calcListSummaryMaxHours(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                        ? calcFeatureMaxHours(t, request)
+                        : calcTaskMaxHours(t, request)
+                )
+                .sum();
+    }
+
+    public static double calcListSummaryMinCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                        ? calcFeatureMinCost(t, request)
+                        : calcTaskMinCost(t, request)
+                )
+                .sum();
+    }
+
+    public static double calcListSummaryMaxCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                        ? calcFeatureMaxCost(t, request)
+                        : calcTaskMaxCost(t, request)
+                )
                 .sum();
     }
 
