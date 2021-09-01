@@ -10,6 +10,7 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
+import ru.irlix.evaluation.utils.report.ReportMath;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,10 +24,97 @@ public class EstimationWithoutDetailsSheet implements Sheet {
     private double costMinSummary;
     private double costMaxSummary;
 
+    private XSSFSheet sheet;
+    private int rowNum = 0;
+    private final short ROW_HEIGHT = 380;
+
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        XSSFSheet sheet = helper.getWorkbook().createSheet("Оценка без детализации");
+        sheet = helper.getWorkbook().createSheet("Оценка без детализации");
+        configure();
+        fillHeader();
 
+        for (Phase phase : estimation.getPhases()) {
+            fillPhaseRow(request, phase);
+
+            List<Task> tasks = phase.getTasks().stream()
+                    .filter(t -> t.getParent() == null)
+                    .collect(Collectors.toList());
+
+            for (Task task : tasks) {
+                if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
+                    fillFeatureRowWithNestedTasks(request, task);
+                } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
+                    fillTaskRow(request, task, 1);
+                }
+            }
+        }
+        fillSummary();
+    }
+
+    private void fillSummary() {
+        Row row = createRow(ROW_HEIGHT);
+        mergeCells(0, 2);
+        helper.setTotalCell(row, "Итого по проекту:", 0);
+        helper.setPhaseCell(row, hoursMinSummary, 3);
+        helper.setPhaseCell(row, costMinSummary, 4);
+        helper.setPhaseCell(row, hoursMaxSummary, 5);
+        helper.setPhaseCell(row, costMaxSummary, 6);
+        helper.setPhaseCell(row, null, 7);
+    }
+
+    private void fillFeatureRowWithNestedTasks(ReportRequest request, Task feature) {
+        Row row = createRow(ROW_HEIGHT);
+        mergeCells(1, 2);
+        helper.setBoldCell(row, feature.getName(), 1);
+        helper.setCell(row, ReportMath.calcFeatureMinHours(feature, request), 3);
+        helper.setCell(row, ReportMath.calcFeatureMinCost(feature, request), 4);
+        helper.setCell(row, ReportMath.calcFeatureMaxHours(feature, request), 5);
+        helper.setCell(row, ReportMath.calcFeatureMaxCost(feature, request), 6);
+        helper.setCell(row, feature.getComment(), 7);
+
+        for (Task nestedTask : feature.getTasks()) {
+            fillTaskRow(request, nestedTask, 2);
+        }
+    }
+
+    private void fillPhaseRow(ReportRequest request, Phase phase) {
+        Row row = createRow(ROW_HEIGHT);
+        mergeCells(0, 2);
+        helper.setPhaseCell(row, phase.getName(), 0);
+
+        double sumHoursMin = ReportMath.calcPhaseSummaryMinHours(phase, request);
+        hoursMinSummary += sumHoursMin;
+        helper.setPhaseCell(row, sumHoursMin, 3);
+
+        double sumCostMin = ReportMath.calcPhaseSummaryMinCost(phase, request);
+        costMinSummary += sumCostMin;
+        helper.setPhaseCell(row, sumCostMin, 4);
+
+        double sumHoursMax = ReportMath.calcPhaseSummaryMaxHours(phase, request);
+        hoursMaxSummary += sumHoursMax;
+        helper.setPhaseCell(row, sumHoursMax, 5);
+
+        double sumCostMax = ReportMath.calcPhaseSummaryMaxCost(phase, request);
+        costMaxSummary += sumCostMax;
+        helper.setPhaseCell(row, sumCostMax, 6);
+
+        helper.setPhaseCell(row, null, 7);
+    }
+
+    private void fillHeader() {
+        final short HEADER_ROW_HEIGHT = 1050;
+        Row row = createRow(HEADER_ROW_HEIGHT);
+        mergeCells(0, 2);
+        helper.setHeaderCell(row, "Задачи", 0);
+        helper.setHeaderCell(row, "Часы (мин)", 3);
+        helper.setHeaderCell(row, "Стоимость, RUB", 4);
+        helper.setHeaderCell(row, "Часы (мин, наиболее вероятные)", 5);
+        helper.setHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
+        helper.setHeaderCell(row, "Комментарии", 7);
+    }
+
+    private void configure() {
         sheet.setColumnWidth(0, 1000);
         sheet.setColumnWidth(1, 1000);
         sheet.setColumnWidth(2, 12000);
@@ -35,131 +123,30 @@ public class EstimationWithoutDetailsSheet implements Sheet {
         sheet.setColumnWidth(5, 5000);
         sheet.setColumnWidth(6, 5000);
         sheet.setColumnWidth(7, 10000);
-
-        sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 2));
-
-        int rowNum = 0;
-
-        Row row = sheet.createRow(rowNum);
-        row.setHeight((short) 1050);
-        helper.setHeaderCell(row, "Задачи", 0);
-        helper.setHeaderCell(row, "Часы (мин)", 3);
-        helper.setHeaderCell(row, "Стоимость, RUB", 4);
-        helper.setHeaderCell(row, "Часы (мин, наиболее вероятные)", 5);
-        helper.setHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-        helper.setHeaderCell(row, "Комментарии", 7);
-
-        //Фазы:
-        for (Phase phase : estimation.getPhases()) {
-            rowNum++;
-            row = sheet.createRow(rowNum);
-            sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 2));
-            helper.setPhaseCell(row, phase.getName(), 0);
-
-            //sumHoursMin:
-            double sumHoursMin = phase.getTasks().stream()
-                    .mapToDouble(t -> !t.getTasks().isEmpty()
-                            ? t.getTasks().stream().mapToDouble(nt -> nt.getHoursMin() * 60).sum() //задачи
-                            : t.getHoursMin() * 60) //фичи
-                    .sum();
-            hoursMinSummary += sumHoursMin;
-            helper.setPhaseCell(row, sumHoursMin, 3);
-
-            //minCost: - ставка из модели входных данных
-            helper.setPhaseCell(row, 0, 4);
-
-            //sumHoursMax:
-            double sumHoursMax = phase.getTasks().stream()
-                    .mapToDouble(t -> !t.getTasks().isEmpty()
-                            ? t.getTasks().stream().mapToDouble(nt -> nt.getHoursMax() * 60).sum()
-                            : t.getHoursMax() * 60)
-                    .sum();
-
-            hoursMaxSummary += sumHoursMax;
-            helper.setPhaseCell(row, sumHoursMax, 5);
-
-            //maxCost: - ставка из модели входных данных
-            helper.setPhaseCell(row, 0, 6);
-
-            helper.setPhaseCell(row, null, 7);
-
-            List<Task> tasks = phase.getTasks().stream()
-                    .filter(t -> t.getParent() == null)//фичи
-                    .collect(Collectors.toList());
-
-            //Фичи:
-            for (Task task : tasks) {
-                rowNum++;
-                row = sheet.createRow(rowNum);
-                row.setHeight((short) 370);
-
-                if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
-                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 1, 2));
-
-                    helper.setBoldCell(row, task.getName(), 1);
-
-                    //Количество часов (min)
-                    helper.setCell(row, task.getTasks().stream()
-                            .mapToDouble(t -> t.getHoursMin() * 60)
-                            .sum(), 3);
-
-                    //cost min:
-                    helper.setCell(row, 0, 4);
-
-                    //Количество часов (max)
-                    helper.setCell(row, task.getTasks().stream()
-                            .mapToDouble(t -> t.getHoursMax() * 60)
-                            .sum(), 5);
-
-
-                    //cost max:
-                    helper.setCell(row, 0, 6);
-
-                    helper.setCell(row, task.getComment(), 7);
-
-                    //Задачи:
-                    for (Task nestedTask : task.getTasks()) {
-                        rowNum++;
-                        row = sheet.createRow(rowNum);
-                        row.setHeight((short) 370);
-
-                        helper.setCell(row, nestedTask.getName(), 2);
-                        fillTaskRow(row, nestedTask);
-                    }
-                }
-                //Задачи без фич:
-                else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
-                    sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 1, 2));
-                    helper.setCell(row, task.getName(), 1);
-                    fillTaskRow(row, task);
-                }
-
-            }
-        }
-
-        rowNum++;
-        row = sheet.createRow(rowNum);
-        row.setHeight((short) 380);
-
-        sheet.addMergedRegion(new CellRangeAddress(rowNum, rowNum, 0, 2));
-        helper.setTotalCell(row, "Итого по проекту:", 0);
-        helper.setPhaseCell(row, hoursMinSummary, 3);
-        helper.setPhaseCell(row, costMinSummary, 4);
-        helper.setPhaseCell(row, hoursMaxSummary, 5);
-        helper.setPhaseCell(row, costMaxSummary, 6);
-        helper.setPhaseCell(row, null, 7);
-
     }
 
-    private void fillTaskRow(Row row, Task task) {
-        helper.setCell(row, task.getHoursMin() * 60, 3);
+    private void mergeCells(int startColumn, int endColumn) {
+        int currentRow = rowNum - 1;
+        sheet.addMergedRegion(new CellRangeAddress(currentRow, currentRow, startColumn, endColumn));
+    }
 
-        helper.setCell(row, 0, 4);
+    private Row createRow(short height) {
+        Row row = sheet.createRow(rowNum);
+        row.setHeight(height);
+        rowNum++;
+        return row;
+    }
 
-        helper.setCell(row, task.getHoursMax() * 60, 5);
-
-        helper.setCell(row, 0, 6);
-
+    private void fillTaskRow(ReportRequest request, Task task, int column) {
+        Row row = createRow(ROW_HEIGHT);
+        if (column == 1) {
+            mergeCells(1, 2);
+        }
+        helper.setCell(row, task.getName(), column);
+        helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 3);
+        helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 4);
+        helper.setCell(row, ReportMath.calcTaskMaxHours(task, request), 5);
+        helper.setCell(row, ReportMath.calcTaskMaxCost(task, request), 6);
         helper.setCell(row, task.getComment(), 7);
     }
 }
