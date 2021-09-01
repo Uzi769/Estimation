@@ -10,35 +10,83 @@ import ru.irlix.evaluation.exception.NotFoundException;
 @RequiredArgsConstructor
 @Component
 public class ReportMath {
-    private static final int TO_MINUTES = 60;
-
-    public static double calcTaskMaxMinutes(Task task) {
-        return task.getHoursMin() * TO_MINUTES * (task.getRepeatCount() != null
-                ? task.getRepeatCount()
-                : 1);
-    }
-
-    public static double calcTaskMinMinutes(Task task) {
-        return task.getHoursMin() * TO_MINUTES * (task.getRepeatCount() != null
-                ? task.getRepeatCount()
-                : 1);
+    public static double calcTaskMinHours(Task task, ReportRequest request) {
+        return request.isPert()
+                ? calcTaskMinHoursPert(task)
+                : calcTaskMinHoursRange(task);
     }
 
     public static double calcTaskMinCost(Task task, ReportRequest request) {
-        return task.getHoursMin() * getRoleCost(task, request);
+        return request.isPert()
+                ? calcTaskMinCostPert(task, request)
+                : calcTaskMinCostRange(task, request);
+    }
+
+    public static double calcTaskMaxHours(Task task, ReportRequest request) {
+        return request.isPert()
+                ? calcTaskMaxHoursPert(task)
+                : calcTaskMaxHoursRange(task);
     }
 
     public static double calcTaskMaxCost(Task task, ReportRequest request) {
-        return task.getHoursMax() * getRoleCost(task, request);
+        return request.isPert()
+                ? calcTaskMaxCostPert(task, request)
+                : calcTaskMaxCostRange(task, request);
     }
 
-    public static double calcPhaseSummaryMinMinutes(Phase phase) {
+    private static double calcTaskMinHoursRange(Task task) {
+        return task.getHoursMin() * getRepeatCount(task);
+    }
+
+    private static double calcTaskMaxHoursRange(Task task) {
+        return task.getHoursMax() * getRepeatCount(task);
+    }
+
+    private static double calcTaskMinCostRange(Task task, ReportRequest request) {
+        return calcTaskMinHoursRange(task) * getRoleCost(task, request);
+    }
+
+    private static double calcTaskMaxCostRange(Task task, ReportRequest request) {
+        return calcTaskMaxHoursRange(task) * getRoleCost(task, request);
+    }
+
+    private static double calcTaskMinHoursPertWithoutRepeatCount(Task task) {
+        return calcTaskMaxHoursPertWithoutRepeatCount(task) - (task.getHoursMax() - task.getHoursMin()) / 6;
+    }
+
+    private static double calcTaskMaxHoursPertWithoutRepeatCount(Task task) {
+        return (task.getHoursMin() + task.getHoursMax() + 2 * (task.getHoursMin() + task.getHoursMax())) / 6;
+    }
+
+    private static double calcTaskMinHoursPert(Task task) {
+        return calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
+    }
+
+    private static double calcTaskMaxHoursPert(Task task) {
+        return calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
+    }
+
+    private static double calcTaskMinCostPert(Task task, ReportRequest request) {
+        return calcTaskMinHoursPert(task) * getRoleCost(task, request);
+    }
+
+    private static double calcTaskMaxCostPert(Task task, ReportRequest request) {
+        return calcTaskMaxHoursPert(task) * getRoleCost(task, request);
+    }
+
+    private static double getRepeatCount(Task task) {
+        return task.getRepeatCount() != null
+                ? task.getRepeatCount()
+                : 1;
+    }
+
+    public static double calcPhaseSummaryMinHours(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
                 .mapToDouble(t -> !t.getTasks().isEmpty()
                         ? t.getTasks().stream()
-                        .mapToDouble(ReportMath::calcTaskMinMinutes)
+                        .mapToDouble(nt -> calcTaskMinHours(nt, request))
                         .sum()
-                        : calcTaskMinMinutes(t)
+                        : calcTaskMinHours(t, request)
                 )
                 .sum();
     }
@@ -54,13 +102,13 @@ public class ReportMath {
                 .sum();
     }
 
-    public static double calcPhaseSummaryMaxMinutes(Phase phase) {
+    public static double calcPhaseSummaryMaxHours(Phase phase, ReportRequest request) {
         return phase.getTasks().stream()
                 .mapToDouble(t -> !t.getTasks().isEmpty()
                         ? t.getTasks().stream()
-                        .mapToDouble(ReportMath::calcTaskMaxMinutes)
+                        .mapToDouble(nt -> calcTaskMaxHours(nt, request))
                         .sum()
-                        : calcTaskMaxMinutes(t)
+                        : calcTaskMaxHours(t, request)
                 )
                 .sum();
     }
@@ -75,28 +123,24 @@ public class ReportMath {
                 .sum();
     }
 
-    public static double calcFeatureMinMinutes(Task feature) {
+    public static double calcFeatureMinHours(Task feature, ReportRequest request) {
         return feature.getTasks().stream()
-                .mapToDouble(ReportMath::calcTaskMinMinutes)
+                .mapToDouble(t -> calcTaskMinHours(t, request))
                 .sum();
     }
 
     public static double calcFeatureMinCost(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
-                .mapToDouble(t -> calcTaskMinCost(t, request))
-                .sum();
+        return calcFeatureMinHours(feature, request) * getRoleCost(feature, request);
     }
 
-    public static double calcFeatureMaxMinutes(Task feature) {
+    public static double calcFeatureMaxHours(Task feature, ReportRequest request) {
         return feature.getTasks().stream()
-                .mapToDouble(ReportMath::calcTaskMaxMinutes)
+                .mapToDouble(t -> calcTaskMaxHours(t, request))
                 .sum();
     }
 
     public static double calcFeatureMaxCost(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
-                .mapToDouble(t -> calcTaskMaxCost(t, request))
-                .sum();
+        return calcFeatureMaxHours(feature, request) * getRoleCost(feature, request);
     }
 
     private static double getRoleCost(Task task, ReportRequest request) {

@@ -10,6 +10,8 @@ import org.springframework.core.io.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 @Getter
 @Setter
@@ -30,10 +32,14 @@ public class ExcelWorkbook {
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
     private CellStyle dateCellStyle;
+    private  DecimalFormat formatter;
+
 
     public ExcelWorkbook() {
         workbook = new XSSFWorkbook();
         createHelper = workbook.getCreationHelper();
+        formatter = new DecimalFormat("#.#");
+        formatter.setRoundingMode(RoundingMode.HALF_UP);
     }
 
     public void setCell(Row row, String name, Integer column) {
@@ -44,7 +50,7 @@ public class ExcelWorkbook {
 
     public void setCell(Row row, double digit, Integer column) {
         Cell cell = row.createCell(column);
-        cell.setCellValue(digit);
+        cell.setCellValue(formatter.format(digit));
         cell.setCellStyle(getDigitCellStyle());
     }
 
@@ -62,7 +68,7 @@ public class ExcelWorkbook {
 
     public void setPhaseCell(Row row, double digit, Integer column) {
         Cell cell = row.createCell(column);
-        cell.setCellValue(digit);
+        cell.setCellValue(formatter.format(digit));
         cell.setCellStyle(getPhaseDigitCellStyle());
     }
 
