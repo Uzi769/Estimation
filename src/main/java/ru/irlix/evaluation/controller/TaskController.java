@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.TaskRequest;
+import ru.irlix.evaluation.dto.request.TaskUpdateRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.service.TaskService;
 import ru.irlix.evaluation.utils.UrlConstants;
@@ -42,6 +43,12 @@ public class TaskController {
                                    @RequestBody @Valid TaskRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return taskService.updateTask(id, request);
+    }
+
+    @PutMapping()
+    public List<TaskResponse> updateTask(@RequestBody @Valid List<TaskUpdateRequest> request) {
+        log.info(UrlConstants.RECEIVED_ENTITY);
+        return taskService.updateTasks(request);
     }
 
     @GetMapping("/{id}")
