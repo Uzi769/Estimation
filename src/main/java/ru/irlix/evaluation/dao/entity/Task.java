@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name="task")
+@Table(name = "task")
 @Getter
 @Setter
 @NamedEntityGraph(
@@ -92,7 +92,7 @@ public class Task {
         }
 
         if (qaReserveOn == null) {
-            qaReserveOn= false;
+            qaReserveOn = false;
         }
 
         if (managementReserveOn == null) {
