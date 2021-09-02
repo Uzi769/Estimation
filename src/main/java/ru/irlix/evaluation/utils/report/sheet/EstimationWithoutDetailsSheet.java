@@ -48,7 +48,7 @@ public class EstimationWithoutDetailsSheet implements Sheet {
             List<Task> otherTasks = new ArrayList<>();
             for (Task task : tasks) {
                 if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
-                    fillFeatureRowWithNestedTasks(task);
+                    fillFeatureRowWithNestedTasks(task, request);
                 } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
                     otherTasks.add(task);
                 }
@@ -118,11 +118,16 @@ public class EstimationWithoutDetailsSheet implements Sheet {
         fillQaAndPmRows(otherTasks);
     }
 
-    private void fillFeatureRowWithNestedTasks(Task feature) {
+    private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCellsToSecondColumnInclude(1);
 
         helper.setBoldCell(row, feature.getName(), 1);
+        helper.setBoldCell(row, ReportMath.calcFeatureMinHours(feature, request), 3);
+        helper.setBoldCell(row, ReportMath.calcFeatureMinCost(feature, request), 4);
+        helper.setBoldCell(row, ReportMath.calcFeatureMaxHours(feature, request), 5);
+        helper.setBoldCell(row, ReportMath.calcFeatureMaxCost(feature, request), 6);
+        helper.setBoldCell(row, feature.getComment(), 7);
 
         for (Task nestedTask : feature.getTasks()) {
             fillTaskRow(nestedTask);

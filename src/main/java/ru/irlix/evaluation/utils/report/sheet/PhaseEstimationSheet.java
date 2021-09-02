@@ -73,8 +73,8 @@ public class PhaseEstimationSheet implements Sheet {
     private void configureColumns() {
         sheet.setColumnWidth(0, 10000);
         sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 3000);
-        sheet.setColumnWidth(3, 3000);
+        sheet.setColumnWidth(2, 4000);
+        sheet.setColumnWidth(3, 4000);
     }
 
     private Row createRow(short height) {

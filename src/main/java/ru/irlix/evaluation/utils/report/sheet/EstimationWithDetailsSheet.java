@@ -119,10 +119,10 @@ public class EstimationWithDetailsSheet implements Sheet {
         mergeCells(1, 2);
 
         helper.setBoldCell(row, "Прочие задачи", 1);
-        helper.setCell(row, ReportMath.calcListSummaryMinHours(otherTasks, request), 4);
-        helper.setCell(row, ReportMath.calcListSummaryMinCost(otherTasks, request), 5);
-        helper.setCell(row, ReportMath.calcListSummaryMaxHours(otherTasks, request), 6);
-        helper.setCell(row, ReportMath.calcListSummaryMaxCost(otherTasks, request), 7);
+        helper.setBoldCell(row, ReportMath.calcListSummaryMinHours(otherTasks, request), 4);
+        helper.setBoldCell(row, ReportMath.calcListSummaryMinCost(otherTasks, request), 5);
+        helper.setBoldCell(row, ReportMath.calcListSummaryMaxHours(otherTasks, request), 6);
+        helper.setBoldCell(row, ReportMath.calcListSummaryMaxCost(otherTasks, request), 7);
 
         for (Task task : otherTasks) {
             fillTaskRow(task, request);
@@ -136,11 +136,11 @@ public class EstimationWithDetailsSheet implements Sheet {
         mergeCells(1, 2);
 
         helper.setBoldCell(row, feature.getName(), 1);
-        helper.setCell(row, ReportMath.calcFeatureMinHours(feature, request), 4);
-        helper.setCell(row, ReportMath.calcFeatureMinCost(feature, request), 5);
-        helper.setCell(row, ReportMath.calcFeatureMaxHours(feature, request), 6);
-        helper.setCell(row, ReportMath.calcFeatureMaxCost(feature, request), 7);
-        helper.setCell(row, feature.getComment(), 8);
+        helper.setBoldCell(row, ReportMath.calcFeatureMinHours(feature, request), 4);
+        helper.setBoldCell(row, ReportMath.calcFeatureMinCost(feature, request), 5);
+        helper.setBoldCell(row, ReportMath.calcFeatureMaxHours(feature, request), 6);
+        helper.setBoldCell(row, ReportMath.calcFeatureMaxCost(feature, request), 7);
+        helper.setBoldCell(row, feature.getComment(), 8);
 
         for (Task nestedTask : feature.getTasks()) {
             fillTaskRow(nestedTask, request);

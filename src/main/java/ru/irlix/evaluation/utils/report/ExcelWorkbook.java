@@ -26,11 +26,11 @@ public class ExcelWorkbook {
     private CellStyle markedCellStyle;
     private CellStyle markedDigitCellStyle;
     private CellStyle boldCellStyle;
+    private CellStyle boldDigitCellStyle;
     private CellStyle totalCellStyle;
 
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
-    private CellStyle dateCellStyle;
     private DecimalFormat formatter;
 
 
@@ -76,6 +76,11 @@ public class ExcelWorkbook {
         cell.setCellStyle(getBoldCellStyle());
     }
 
+    public void setBoldCell(Row row, double digit, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(digit);
+        cell.setCellStyle(getBoldDigitCellStyle());
+    }
 
     public void setTotalCell(Row row, String name, Integer column) {
         Cell cell = row.createCell(column, CellType.STRING);
@@ -153,7 +158,7 @@ public class ExcelWorkbook {
             markedDigitCellStyle = workbook.createCellStyle();
             markedDigitCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
             markedDigitCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            markedDigitCellStyle.setFont(getDefaultFont());
+            markedDigitCellStyle.setFont(getBoldFont());
             markedDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
         }
 
@@ -186,6 +191,16 @@ public class ExcelWorkbook {
         }
 
         return boldCellStyle;
+    }
+
+    private CellStyle getBoldDigitCellStyle() {
+        if (boldDigitCellStyle == null) {
+            boldDigitCellStyle = workbook.createCellStyle();
+            boldDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            boldDigitCellStyle.setFont(getBoldFont());
+        }
+
+        return boldDigitCellStyle;
     }
 
 
