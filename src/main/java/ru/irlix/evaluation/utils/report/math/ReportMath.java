@@ -99,7 +99,8 @@ public class ReportMath {
                 )
                 .sum();
 
-        return tasksMinHours + calcQaSummaryMinHours(tasks, request) + calcPmSummaryMinHours(tasks, request);
+        return tasksMinHours + calcQaSummaryMinHours(tasks, request)
+                + calcPmSummaryMinHours(tasks, request);
     }
 
     public static double calcListSummaryMaxHours(List<Task> tasks, ReportRequest request) {
@@ -110,7 +111,8 @@ public class ReportMath {
                 )
                 .sum();
 
-        return tasksMaxHours + calcQaSummaryMaxHours(tasks, request) + calcPmSummaryMaxHours(tasks, request);
+        return tasksMaxHours + calcQaSummaryMaxHours(tasks, request)
+                + calcPmSummaryMaxHours(tasks, request);
     }
 
     public static double calcListSummaryMinCost(List<Task> tasks, ReportRequest request) {
@@ -121,7 +123,8 @@ public class ReportMath {
                 )
                 .sum();
 
-        return tasksMinCost + calcQaSummaryMinCost(tasks, request) + calcPmSummaryMinCost(tasks, request);
+        return tasksMinCost + calcQaSummaryMinCost(tasks, request)
+                + calcPmSummaryMinCost(tasks, request);
     }
 
     public static double calcListSummaryMaxCost(List<Task> tasks, ReportRequest request) {
@@ -132,7 +135,8 @@ public class ReportMath {
                 )
                 .sum();
 
-        return tasksMaxCost + calcQaSummaryMaxCost(tasks, request) + calcPmSummaryMaxCost(tasks, request);
+        return tasksMaxCost + calcQaSummaryMaxCost(tasks, request)
+                + calcPmSummaryMaxCost(tasks, request);
     }
 
     private static double calcQaMinHours(Task task, ReportRequest request) {
