@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
+import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.UrlConstants;
@@ -44,6 +45,13 @@ public class PhaseController {
                                      @RequestBody @Valid PhaseRequest phaseRequest) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return phaseService.updatePhase(id, phaseRequest);
+    }
+
+    @PutMapping("/list")
+    @Validated(OnUpdate.class)
+    public List<PhaseResponse> updatePhases(@RequestBody @Valid List<PhaseUpdateRequest> phaseRequests) {
+        log.info(UrlConstants.RECEIVED_ENTITY);
+        return phaseService.updatePhases(phaseRequests);
     }
 
     @GetMapping("/{id}")

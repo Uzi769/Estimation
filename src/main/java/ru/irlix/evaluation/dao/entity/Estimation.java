@@ -47,6 +47,6 @@ public class Estimation {
     private String creator;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
-    @OrderBy("id ASC")
+    @OrderBy("sortOrder ASC")
     private List<Phase> phases;
 }
