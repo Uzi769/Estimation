@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.irlix.evaluation.utils.EntityConstants;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.constraints.NotNull;
@@ -26,7 +25,7 @@ public class TaskRequest {
     private Long featureId;
 
     @Positive(message = "{type.positive}")
-    private Long type = EntityConstants.TASK_ID;
+    private Long type;
 
     @Positive(message = "{repeatCount.positive}")
     private Integer repeatCount;
