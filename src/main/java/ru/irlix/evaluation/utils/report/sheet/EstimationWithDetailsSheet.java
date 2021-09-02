@@ -10,7 +10,7 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.ReportMath;
+import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,11 +150,11 @@ public class EstimationWithDetailsSheet implements Sheet {
     }
 
     private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
-        if (ReportMath.calcQaSummaryMaxHours(tasks) > 0) {
+        if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             fillQaRow(tasks, request);
         }
 
-        if (ReportMath.calcPmSummaryMaxHours(tasks) > 0) {
+        if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
             fillPmRow(tasks, request);
         }
     }
@@ -164,9 +164,9 @@ public class EstimationWithDetailsSheet implements Sheet {
 
         helper.setCell(row, "Тестирование", 2);
         helper.setCell(row, "Специалист по тестированию", 3);
-        helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks), 4);
+        helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 4);
         helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 5);
-        helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks), 6);
+        helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks, request), 6);
         helper.setCell(row, ReportMath.calcQaSummaryMaxCost(tasks, request), 7);
     }
 
@@ -175,9 +175,9 @@ public class EstimationWithDetailsSheet implements Sheet {
 
         helper.setCell(row, "Управление", 2);
         helper.setCell(row, "Руководитель проекта", 3);
-        helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks), 4);
+        helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 4);
         helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 5);
-        helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks), 6);
+        helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks, request), 6);
         helper.setCell(row, ReportMath.calcPmSummaryMaxCost(tasks, request), 7);
     }
 

@@ -8,7 +8,7 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.ReportMath;
+import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 @RequiredArgsConstructor
 public class PhaseEstimationSheet implements Sheet {

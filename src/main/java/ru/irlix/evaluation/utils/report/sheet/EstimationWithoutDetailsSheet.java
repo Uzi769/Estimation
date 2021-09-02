@@ -10,7 +10,7 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.ReportMath;
+import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public class EstimationWithoutDetailsSheet implements Sheet {
             }
 
             if (!otherTasks.isEmpty()) {
-                fillOtherTasksRow(otherTasks);
+                fillOtherTasksRow(otherTasks, request);
             }
         }
 
@@ -105,7 +105,7 @@ public class EstimationWithoutDetailsSheet implements Sheet {
         helper.setCell(row, task.getName(), 2);
     }
 
-    private void fillOtherTasksRow(List<Task> otherTasks) {
+    private void fillOtherTasksRow(List<Task> otherTasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCellsToSecondColumnInclude(1);
 
@@ -115,7 +115,7 @@ public class EstimationWithoutDetailsSheet implements Sheet {
             fillTaskRow(task);
         }
 
-        fillQaAndPmRows(otherTasks);
+        fillQaAndPmRows(otherTasks, request);
     }
 
     private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
@@ -133,15 +133,15 @@ public class EstimationWithoutDetailsSheet implements Sheet {
             fillTaskRow(nestedTask);
         }
 
-        fillQaAndPmRows(feature.getTasks());
+        fillQaAndPmRows(feature.getTasks(), request);
     }
 
-    private void fillQaAndPmRows(List<Task> tasks) {
-        if (ReportMath.calcQaSummaryMaxHours(tasks) > 0) {
+    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
+        if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             fillQaRow();
         }
 
-        if (ReportMath.calcPmSummaryMaxHours(tasks) > 0) {
+        if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
             fillPmRow();
         }
     }

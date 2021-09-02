@@ -10,7 +10,7 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntityConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.ReportMath;
+import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.ArrayList;
 import java.util.List;
