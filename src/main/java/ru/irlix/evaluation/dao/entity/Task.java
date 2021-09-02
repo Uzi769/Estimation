@@ -60,7 +60,7 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     private Task parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
     private List<Task> tasks;
 
