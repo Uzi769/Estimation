@@ -102,6 +102,18 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setMarkedCell(row, null, 8);
     }
 
+    private void fillTaskRow(Task task, ReportRequest request) {
+        Row row = createRow(ROW_HEIGHT);
+
+        helper.setCell(row, task.getName(), 2);
+        helper.setCell(row, task.getRole() != null ? task.getRole().getDisplayValue() : null, 3);
+        helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 4);
+        helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 5);
+        helper.setCell(row, ReportMath.calcTaskMaxHours(task, request), 6);
+        helper.setCell(row, ReportMath.calcTaskMaxCost(task, request), 7);
+        helper.setCell(row, task.getComment(), 8);
+    }
+
     private void fillOtherTasksRow(List<Task> otherTasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
@@ -115,18 +127,8 @@ public class EstimationWithDetailsSheet implements Sheet {
         for (Task task : otherTasks) {
             fillTaskRow(task, request);
         }
-    }
 
-    private void fillTaskRow(Task task, ReportRequest request) {
-        Row row = createRow(ROW_HEIGHT);
-
-        helper.setCell(row, task.getName(), 2);
-        helper.setCell(row, task.getRole() != null ? task.getRole().getDisplayValue() : null, 3);
-        helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 4);
-        helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 5);
-        helper.setCell(row, ReportMath.calcTaskMaxHours(task, request), 6);
-        helper.setCell(row, ReportMath.calcTaskMaxCost(task, request), 7);
-        helper.setCell(row, task.getComment(), 8);
+        fillQaAndPmRows(otherTasks, request);
     }
 
     private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
@@ -143,6 +145,40 @@ public class EstimationWithDetailsSheet implements Sheet {
         for (Task nestedTask : feature.getTasks()) {
             fillTaskRow(nestedTask, request);
         }
+
+        fillQaAndPmRows(feature.getTasks(), request);
+    }
+
+    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
+        if (ReportMath.calcQaSummaryMaxHours(tasks) > 0) {
+            fillQaRow(tasks, request);
+        }
+
+        if (ReportMath.calcPmSummaryMaxHours(tasks) > 0) {
+            fillPmRow(tasks, request);
+        }
+    }
+
+    private void fillQaRow(List<Task> tasks, ReportRequest request) {
+        Row row = createRow(ROW_HEIGHT);
+
+        helper.setCell(row, "Тестирование", 2);
+        helper.setCell(row, "Специалист по тестированию", 3);
+        helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks), 4);
+        helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 5);
+        helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks), 6);
+        helper.setCell(row, ReportMath.calcQaSummaryMaxCost(tasks, request), 7);
+    }
+
+    private void fillPmRow(List<Task> tasks, ReportRequest request) {
+        Row row = createRow(ROW_HEIGHT);
+
+        helper.setCell(row, "Управление", 2);
+        helper.setCell(row, "Руководитель проекта", 3);
+        helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks), 4);
+        helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 5);
+        helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks), 6);
+        helper.setCell(row, ReportMath.calcPmSummaryMaxCost(tasks, request), 7);
     }
 
     private void fillSummary() {
@@ -160,8 +196,8 @@ public class EstimationWithDetailsSheet implements Sheet {
     private void configureColumns() {
         sheet.setColumnWidth(0, 1000);
         sheet.setColumnWidth(1, 1000);
-        sheet.setColumnWidth(2, 16000);
-        sheet.setColumnWidth(3, 6000);
+        sheet.setColumnWidth(2, 12000);
+        sheet.setColumnWidth(3, 8000);
         sheet.setColumnWidth(4, 4000);
         sheet.setColumnWidth(5, 4000);
         sheet.setColumnWidth(6, 4000);

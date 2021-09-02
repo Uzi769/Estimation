@@ -101,62 +101,202 @@ public class ReportMath {
     }
 
     public static double calcFeatureMinHours(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
+        double featureMinHours = feature.getTasks().stream()
                 .mapToDouble(t -> calcTaskMinHours(t, request))
                 .sum();
+
+        return featureMinHours + calcQaSummaryMinHours(feature.getTasks())
+                + calcPmSummaryMinHours(feature.getTasks());
     }
 
     public static double calcFeatureMinCost(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
+        double featureMinCost = feature.getTasks().stream()
                 .mapToDouble(t -> calcTaskMinCost(t, request))
                 .sum();
+
+        return featureMinCost + calcQaSummaryMinCost(feature.getTasks(), request)
+                + calcPmSummaryMinCost(feature.getTasks(), request);
     }
 
     public static double calcFeatureMaxHours(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
+        double featureMaxHours = feature.getTasks().stream()
                 .mapToDouble(t -> calcTaskMaxHours(t, request))
                 .sum();
+
+        return featureMaxHours + calcQaSummaryMaxHours(feature.getTasks())
+                + calcPmSummaryMaxHours(feature.getTasks());
     }
 
     public static double calcFeatureMaxCost(Task feature, ReportRequest request) {
-        return feature.getTasks().stream()
+        double featureMaxCost = feature.getTasks().stream()
                 .mapToDouble(t -> calcTaskMaxCost(t, request))
                 .sum();
+
+        return featureMaxCost + calcQaSummaryMaxCost(feature.getTasks(), request)
+                + calcPmSummaryMaxCost(feature.getTasks(), request);
     }
 
     public static double calcListSummaryMinHours(List<Task> tasks, ReportRequest request) {
-        return tasks.stream()
+        double tasksMinHours = tasks.stream()
                 .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMinHours(t, request)
                         : calcTaskMinHours(t, request)
                 )
                 .sum();
+
+        return tasksMinHours + calcQaSummaryMinHours(tasks) + calcPmSummaryMinHours(tasks);
     }
 
     public static double calcListSummaryMaxHours(List<Task> tasks, ReportRequest request) {
-        return tasks.stream()
+        double tasksMaxHours = tasks.stream()
                 .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMaxHours(t, request)
                         : calcTaskMaxHours(t, request)
                 )
                 .sum();
+
+        return tasksMaxHours + calcQaSummaryMaxHours(tasks) + calcPmSummaryMaxHours(tasks);
     }
 
     public static double calcListSummaryMinCost(List<Task> tasks, ReportRequest request) {
-        return tasks.stream()
+        double tasksMinCost = tasks.stream()
                 .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMinCost(t, request)
                         : calcTaskMinCost(t, request)
                 )
                 .sum();
+
+        return tasksMinCost + calcQaSummaryMinCost(tasks, request) + calcPmSummaryMinCost(tasks, request);
     }
 
     public static double calcListSummaryMaxCost(List<Task> tasks, ReportRequest request) {
-        return tasks.stream()
+        double tasksMaxCost = tasks.stream()
                 .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMaxCost(t, request)
                         : calcTaskMaxCost(t, request)
                 )
+                .sum();
+
+        return tasksMaxCost + calcQaSummaryMaxCost(tasks, request) + calcPmSummaryMaxCost(tasks, request);
+    }
+
+    private static double calcQaMinHours(Task task) {
+        double qaHours = 0;
+        if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
+            qaHours = round(task.getHoursMin() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
+        }
+
+        return qaHours;
+    }
+
+    private static double calcQaMinCost(Task task, ReportRequest request) {
+        double qaCost = 0;
+        if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
+            qaCost = calcQaMinHours(task) * request.getQaCost();
+        }
+
+        return qaCost;
+    }
+
+    private static double calcQaMaxHours(Task task) {
+        double qaHours = 0;
+        if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
+            qaHours = round(task.getHoursMax() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
+        }
+
+        return qaHours;
+    }
+
+    private static double calcQaMaxCost(Task task, ReportRequest request) {
+        double qaCost = 0;
+        if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
+            qaCost = calcQaMaxHours(task) * request.getQaCost();
+        }
+
+        return qaCost;
+    }
+
+    private static double calcPmMinHours(Task task) {
+        double pmHours = 0;
+        if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
+            pmHours = round(task.getHoursMin() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task));
+        }
+
+        return pmHours;
+    }
+
+    private static double calcPmMinCost(Task task, ReportRequest request) {
+        double qaCost = 0;
+        if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
+            qaCost = calcPmMinHours(task) * request.getQaCost();
+        }
+
+        return qaCost;
+    }
+
+    private static double calcPmMaxHours(Task task) {
+        double pmHours = 0;
+        if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
+            pmHours = round(task.getHoursMax() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task));
+        }
+
+        return pmHours;
+    }
+
+    private static double calcPmMaxCost(Task task, ReportRequest request) {
+        double pmCost = 0;
+        if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
+            pmCost = calcPmMaxHours(task) * request.getPmCost();
+        }
+
+        return pmCost;
+    }
+
+    public static double calcQaSummaryMinHours(List<Task> tasks) {
+        return tasks.stream()
+                .mapToDouble(ReportMath::calcQaMinHours)
+                .sum();
+    }
+
+    public static double calcQaSummaryMinCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> calcQaMinCost(t, request))
+                .sum();
+    }
+
+    public static double calcQaSummaryMaxHours(List<Task> tasks) {
+        return tasks.stream()
+                .mapToDouble(ReportMath::calcQaMaxHours)
+                .sum();
+    }
+
+    public static double calcQaSummaryMaxCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> calcQaMaxCost(t, request))
+                .sum();
+    }
+
+    public static double calcPmSummaryMinHours(List<Task> tasks) {
+        return tasks.stream()
+                .mapToDouble(ReportMath::calcPmMinHours)
+                .sum();
+    }
+
+    public static double calcPmSummaryMinCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> calcPmMinCost(t, request))
+                .sum();
+    }
+
+    public static double calcPmSummaryMaxHours(List<Task> tasks) {
+        return tasks.stream()
+                .mapToDouble(ReportMath::calcPmMaxHours)
+                .sum();
+    }
+
+    public static double calcPmSummaryMaxCost(List<Task> tasks, ReportRequest request) {
+        return tasks.stream()
+                .mapToDouble(t -> calcPmMaxCost(t, request))
                 .sum();
     }
 
@@ -186,17 +326,43 @@ public class ReportMath {
             percent *= getPercent(task.getBagsReserve());
         }
 
+        percent *= getRiskPercent(task);
+
+        return percent;
+    }
+
+    private static double getRiskPercent(Task task) {
+        double riskPercent = 1;
+
         Phase phase = task.getPhase();
         if (phase.getRiskReserveOn() != null && phase.getRiskReserveOn() && phase.getRiskReserve() != null) {
-            percent *= getPercent(phase.getRiskReserve());
+            riskPercent *= getPercent(phase.getRiskReserve());
         }
 
         Estimation estimation = phase.getEstimation();
         if (estimation.getRisk() != null) {
-            percent *= getPercent(estimation.getRisk());
+            riskPercent *= getPercent(estimation.getRisk());
         }
 
-        return percent;
+        return riskPercent;
+    }
+
+    private static double getQaPercent(Task task) {
+        double qaPercent = 0;
+        if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
+            qaPercent = round(task.getQaReserve() / 100.0);
+        }
+
+        return qaPercent;
+    }
+
+    private static double getPmPercent(Task task) {
+        double pmPercent = 0;
+        if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
+            pmPercent = round(task.getManagementReserve() / 100.0);
+        }
+
+        return pmPercent;
     }
 
     private static double getPercent(double digit) {

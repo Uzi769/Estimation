@@ -48,7 +48,7 @@ public class FeatureSheet implements Sheet {
             List<Task> otherTasks = new ArrayList<>();
             for (Task task : tasks) {
                 if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
-                    fillFeatureRow(task, request);
+                    fillFeatureRowWithNestedTasks(task, request);
                 } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
                     otherTasks.add(task);
                 }
@@ -65,7 +65,7 @@ public class FeatureSheet implements Sheet {
     private void fillHeader() {
         final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
-        mergeCellsToSecondColumn(0);
+        mergeCellsToSecondColumnInclude(0);
 
         helper.setHeaderCell(row, "Задачи", 0);
         helper.setHeaderCell(row, "Часы (мин)", 3);
@@ -77,7 +77,7 @@ public class FeatureSheet implements Sheet {
 
     private void fillPhaseRow(Phase phase, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        mergeCellsToSecondColumn(0);
+        mergeCellsToSecondColumnInclude(0);
 
         helper.setMarkedCell(row, phase.getName(), 0);
 
@@ -102,7 +102,7 @@ public class FeatureSheet implements Sheet {
 
     private void fillOtherTasksRow(List<Task> otherTasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        mergeCellsToSecondColumn(1);
+        mergeCellsToSecondColumnInclude(1);
 
         helper.setBoldCell(row, "Прочие задачи", 1);
         helper.setCell(row, ReportMath.calcListSummaryMinHours(otherTasks, request), 3);
@@ -111,21 +111,21 @@ public class FeatureSheet implements Sheet {
         helper.setCell(row, ReportMath.calcListSummaryMaxCost(otherTasks, request), 6);
     }
 
-    private void fillFeatureRow(Task feature, ReportRequest request) {
+    private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        mergeCellsToSecondColumn(1);
+        mergeCellsToSecondColumnInclude(1);
 
         helper.setBoldCell(row, feature.getName(), 1);
         helper.setCell(row, ReportMath.calcFeatureMinHours(feature, request), 3);
         helper.setCell(row, ReportMath.calcFeatureMinCost(feature, request), 4);
         helper.setCell(row, ReportMath.calcFeatureMaxHours(feature, request), 5);
         helper.setCell(row, ReportMath.calcFeatureMaxCost(feature, request), 6);
-        helper.setCell(row, feature.getComment(), 7);
+        helper.setCell(row, feature.getComment(), 8);
     }
 
     private void fillSummary() {
         Row row = createRow(ROW_HEIGHT);
-        mergeCellsToSecondColumn(0);
+        mergeCellsToSecondColumnInclude(0);
 
         helper.setTotalCell(row, "Итого по проекту:", 0);
         helper.setMarkedCell(row, hoursMinSummary, 3);
@@ -138,7 +138,7 @@ public class FeatureSheet implements Sheet {
     private void configureColumns() {
         sheet.setColumnWidth(0, 1000);
         sheet.setColumnWidth(1, 1000);
-        sheet.setColumnWidth(2, 16000);
+        sheet.setColumnWidth(2, 12000);
         sheet.setColumnWidth(3, 4000);
         sheet.setColumnWidth(4, 4000);
         sheet.setColumnWidth(5, 4000);
@@ -154,7 +154,7 @@ public class FeatureSheet implements Sheet {
         return row;
     }
 
-    private void mergeCellsToSecondColumn(int startColumn) {
+    private void mergeCellsToSecondColumnInclude(int startColumn) {
         int currentRow = rowNum - 1;
         sheet.addMergedRegion(new CellRangeAddress(currentRow, currentRow, startColumn, 2));
     }
