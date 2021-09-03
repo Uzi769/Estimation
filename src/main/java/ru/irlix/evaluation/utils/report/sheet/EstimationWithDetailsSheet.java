@@ -1,9 +1,6 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
-import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
@@ -14,22 +11,12 @@ import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
-public class EstimationWithDetailsSheet implements Sheet {
+public class EstimationWithDetailsSheet extends Sheet {
 
-    private final ExcelWorkbook helper;
-    private XSSFSheet sheet;
-
-    private double hoursMinSummary;
-    private double hoursMaxSummary;
-    private double costMinSummary;
-    private double costMaxSummary;
-
-    private final short ROW_HEIGHT = 380;
-
-    private int rowNum = 0;
+    public EstimationWithDetailsSheet(ExcelWorkbook excelWorkbook) {
+        helper = excelWorkbook;
+    }
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
@@ -41,22 +28,17 @@ public class EstimationWithDetailsSheet implements Sheet {
         for (Phase phase : estimation.getPhases()) {
             fillPhaseRow(phase, request);
 
-            List<Task> tasks = phase.getTasks().stream()
-                    .filter(t -> t.getParent() == null)
-                    .collect(Collectors.toList());
-
-            List<Task> otherTasks = new ArrayList<>();
-            for (Task task : tasks) {
+            List<Task> notNestedTask = new ArrayList<>();
+            for (Task task : phase.getTasks()) {
                 if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
                     fillFeatureRowWithNestedTasks(task, request);
                 } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
-                    otherTasks.add(task);
+                    fillTaskRow(task, request, 1);
+                    notNestedTask.add(task);
                 }
             }
 
-            if (!otherTasks.isEmpty()) {
-                fillOtherTasksRow(otherTasks, request);
-            }
+            fillQaAndPmRows(notNestedTask, request, 1);
         }
 
         fillSummary();
@@ -83,52 +65,38 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setMarkedCell(row, phase.getName(), 0);
         helper.setMarkedCell(row, null, 3);
 
-        double sumHoursMin = ReportMath.calcPhaseSummaryMinHours(phase, request);
+        double sumHoursMin = ReportMath.calcListSummaryMinHours(phase.getTasks(), request);
         hoursMinSummary += sumHoursMin;
         helper.setMarkedCell(row, sumHoursMin, 4);
 
-        double sumCostMin = ReportMath.calcPhaseSummaryMinCost(phase, request);
+        double sumCostMin = ReportMath.calcListSummaryMinCost(phase.getTasks(), request);
         costMinSummary += sumCostMin;
         helper.setMarkedCell(row, sumCostMin, 5);
 
-        double sumHoursMax = ReportMath.calcPhaseSummaryMaxHours(phase, request);
+        double sumHoursMax = ReportMath.calcListSummaryMaxHours(phase.getTasks(), request);
         hoursMaxSummary += sumHoursMax;
         helper.setMarkedCell(row, sumHoursMax, 6);
 
-        double sumCostMax = ReportMath.calcPhaseSummaryMaxCost(phase, request);
+        double sumCostMax = ReportMath.calcListSummaryMaxCost(phase.getTasks(), request);
         costMaxSummary += sumCostMax;
         helper.setMarkedCell(row, sumCostMax, 7);
 
         helper.setMarkedCell(row, null, 8);
     }
 
-    private void fillTaskRow(Task task, ReportRequest request) {
+    private void fillTaskRow(Task task, ReportRequest request, int column) {
         Row row = createRow(ROW_HEIGHT);
+        if (column == 1) {
+            mergeCells(column, 2);
+        }
 
-        helper.setCell(row, task.getName(), 2);
+        helper.setCell(row, task.getName(), column);
         helper.setCell(row, task.getRole() != null ? task.getRole().getDisplayValue() : null, 3);
         helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 4);
         helper.setCell(row, ReportMath.calcTaskMinCost(task, request), 5);
         helper.setCell(row, ReportMath.calcTaskMaxHours(task, request), 6);
         helper.setCell(row, ReportMath.calcTaskMaxCost(task, request), 7);
         helper.setCell(row, task.getComment(), 8);
-    }
-
-    private void fillOtherTasksRow(List<Task> otherTasks, ReportRequest request) {
-        Row row = createRow(ROW_HEIGHT);
-        mergeCells(1, 2);
-
-        helper.setBoldCell(row, "Прочие задачи", 1);
-        helper.setBoldCell(row, ReportMath.calcListSummaryMinHours(otherTasks, request), 4);
-        helper.setBoldCell(row, ReportMath.calcListSummaryMinCost(otherTasks, request), 5);
-        helper.setBoldCell(row, ReportMath.calcListSummaryMaxHours(otherTasks, request), 6);
-        helper.setBoldCell(row, ReportMath.calcListSummaryMaxCost(otherTasks, request), 7);
-
-        for (Task task : otherTasks) {
-            fillTaskRow(task, request);
-        }
-
-        fillQaAndPmRows(otherTasks, request);
     }
 
     private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
@@ -143,26 +111,29 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setBoldCell(row, feature.getComment(), 8);
 
         for (Task nestedTask : feature.getTasks()) {
-            fillTaskRow(nestedTask, request);
+            fillTaskRow(nestedTask, request, 2);
         }
 
-        fillQaAndPmRows(feature.getTasks(), request);
+        fillQaAndPmRows(feature.getTasks(), request, 2);
     }
 
-    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
+    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request, int column) {
         if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
-            fillQaRow(tasks, request);
+            fillQaRow(tasks, request, column);
         }
 
         if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
-            fillPmRow(tasks, request);
+            fillPmRow(tasks, request, column);
         }
     }
 
-    private void fillQaRow(List<Task> tasks, ReportRequest request) {
+    private void fillQaRow(List<Task> tasks, ReportRequest request, int column) {
         Row row = createRow(ROW_HEIGHT);
+        if (column == 1) {
+            mergeCells(column, 2);
+        }
 
-        helper.setCell(row, "Тестирование", 2);
+        helper.setCell(row, "Тестирование", column);
         helper.setCell(row, "Специалист по тестированию", 3);
         helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 4);
         helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 5);
@@ -170,10 +141,13 @@ public class EstimationWithDetailsSheet implements Sheet {
         helper.setCell(row, ReportMath.calcQaSummaryMaxCost(tasks, request), 7);
     }
 
-    private void fillPmRow(List<Task> tasks, ReportRequest request) {
+    private void fillPmRow(List<Task> tasks, ReportRequest request, int column) {
         Row row = createRow(ROW_HEIGHT);
+        if (column == 1) {
+            mergeCells(column, 2);
+        }
 
-        helper.setCell(row, "Управление", 2);
+        helper.setCell(row, "Управление", column);
         helper.setCell(row, "Руководитель проекта", 3);
         helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 4);
         helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 5);
@@ -203,18 +177,5 @@ public class EstimationWithDetailsSheet implements Sheet {
         sheet.setColumnWidth(6, 4000);
         sheet.setColumnWidth(7, 4000);
         sheet.setColumnWidth(8, 12000);
-    }
-
-    private Row createRow(short height) {
-        Row row = sheet.createRow(rowNum);
-        row.setHeight(height);
-        rowNum++;
-
-        return row;
-    }
-
-    private void mergeCells(int startColumn, int endColumn) {
-        int currentRow = rowNum - 1;
-        sheet.addMergedRegion(new CellRangeAddress(currentRow, currentRow, startColumn, endColumn));
     }
 }
