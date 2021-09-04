@@ -1,8 +1,8 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
@@ -13,7 +13,7 @@ public abstract class Sheet {
     public abstract void getSheet(Estimation estimation, ReportRequest request);
 
     protected ExcelWorkbook helper;
-    protected XSSFSheet sheet;
+    protected HSSFSheet sheet;
 
     protected double hoursMinSummary;
     protected double hoursMaxSummary;

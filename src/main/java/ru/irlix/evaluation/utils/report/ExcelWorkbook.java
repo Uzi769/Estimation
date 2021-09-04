@@ -2,8 +2,9 @@ package ru.irlix.evaluation.utils.report;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.poi.hssf.usermodel.HSSFPalette;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
@@ -16,18 +17,23 @@ import java.text.DecimalFormat;
 @Setter
 public class ExcelWorkbook {
 
-    private XSSFWorkbook workbook;
+    private HSSFWorkbook workbook;
     private CreationHelper createHelper;
     private Font headerFont;
     private Font defaultFont;
     private Font boldFont;
+    private Font lightFont;
 
     private CellStyle headerCellStyle;
     private CellStyle markedCellStyle;
     private CellStyle markedDigitCellStyle;
     private CellStyle boldCellStyle;
     private CellStyle boldDigitCellStyle;
+    private CellStyle lightCellStyle;
+    private CellStyle lightDigitCellStyle;
     private CellStyle totalCellStyle;
+    private CellStyle lightTotalCellStyle;
+    private CellStyle lightHeaderCellStyle;
 
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
@@ -35,7 +41,7 @@ public class ExcelWorkbook {
 
 
     public ExcelWorkbook() {
-        workbook = new XSSFWorkbook();
+        workbook = new HSSFWorkbook();
         createHelper = workbook.getCreationHelper();
         formatter = new DecimalFormat("#.#");
     }
@@ -70,6 +76,18 @@ public class ExcelWorkbook {
         cell.setCellStyle(getMarkedDigitCellStyle());
     }
 
+    public void setLightCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getLightCellStyle());
+    }
+
+    public void setLightCell(Row row, double digit, Integer column) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(formatter.format(digit));
+        cell.setCellStyle(getLightDigitCellStyle());
+    }
+
     public void setBoldCell(Row row, String name, Integer column) {
         Cell cell = row.createCell(column, CellType.STRING);
         cell.setCellValue(name);
@@ -86,6 +104,18 @@ public class ExcelWorkbook {
         Cell cell = row.createCell(column, CellType.STRING);
         cell.setCellValue(name);
         cell.setCellStyle(getTotalCellStyle());
+    }
+
+    public void setLightTotalCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getLightTotalCellStyle());
+    }
+
+    public void setLightHeaderCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getLightHeaderCellStyle());
     }
 
     public Font getHeaderFont() {
@@ -106,7 +136,7 @@ public class ExcelWorkbook {
             defaultFont = workbook.createFont();
             defaultFont.setFontHeightInPoints((short) 11);
             defaultFont.setFontName("Trebuchet MS");
-            defaultFont.setColor(IndexedColors.BLACK.getIndex());
+            defaultFont.setColor(IndexedColors.GREY_80_PERCENT.index);
             defaultFont.setBold(false);
             defaultFont.setItalic(false);
         }
@@ -117,9 +147,9 @@ public class ExcelWorkbook {
     private Font getBoldFont() {
         if (boldFont == null) {
             boldFont = workbook.createFont();
-            boldFont.setFontHeightInPoints((short) 11);
+            boldFont.setFontHeightInPoints((short) 12);
             boldFont.setFontName("Trebuchet MS");
-            boldFont.setColor(IndexedColors.BLACK.getIndex());
+            boldFont.setColor(IndexedColors.GREY_80_PERCENT.index);
             boldFont.setBold(true);
             boldFont.setItalic(false);
         }
@@ -136,6 +166,7 @@ public class ExcelWorkbook {
             headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             headerCellStyle.setFont(getHeaderFont());
             headerCellStyle.setWrapText(true);
+            setBorders(headerCellStyle);
         }
 
         return headerCellStyle;
@@ -144,10 +175,11 @@ public class ExcelWorkbook {
     private CellStyle getMarkedCellStyle() {
         if (markedCellStyle == null) {
             markedCellStyle = workbook.createCellStyle();
-            markedCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+            markedCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
             markedCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            markedCellStyle.setFont(getDefaultFont());
+            markedCellStyle.setFont(getHeaderFont());
             markedCellStyle.setAlignment(HorizontalAlignment.LEFT);
+            setBorders(markedCellStyle);
         }
 
         return markedCellStyle;
@@ -156,10 +188,11 @@ public class ExcelWorkbook {
     private CellStyle getMarkedDigitCellStyle() {
         if (markedDigitCellStyle == null) {
             markedDigitCellStyle = workbook.createCellStyle();
-            markedDigitCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
+            markedDigitCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
             markedDigitCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            markedDigitCellStyle.setFont(getBoldFont());
+            markedDigitCellStyle.setFont(getHeaderFont());
             markedDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            setBorders(markedDigitCellStyle);
         }
 
         return markedDigitCellStyle;
@@ -170,6 +203,7 @@ public class ExcelWorkbook {
             digitCellStyle = workbook.createCellStyle();
             digitCellStyle.setAlignment(HorizontalAlignment.CENTER);
             digitCellStyle.setFont(getDefaultFont());
+            setBorders(digitCellStyle);
         }
 
         return digitCellStyle;
@@ -179,6 +213,7 @@ public class ExcelWorkbook {
         if (stringCellStyle == null) {
             stringCellStyle = workbook.createCellStyle();
             stringCellStyle.setFont(getDefaultFont());
+            setBorders(stringCellStyle);
         }
 
         return stringCellStyle;
@@ -188,6 +223,7 @@ public class ExcelWorkbook {
         if (boldCellStyle == null) {
             boldCellStyle = workbook.createCellStyle();
             boldCellStyle.setFont(getBoldFont());
+            setBorders(boldCellStyle);
         }
 
         return boldCellStyle;
@@ -198,31 +234,100 @@ public class ExcelWorkbook {
             boldDigitCellStyle = workbook.createCellStyle();
             boldDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
             boldDigitCellStyle.setFont(getBoldFont());
+            setBorders(boldDigitCellStyle);
         }
 
         return boldDigitCellStyle;
     }
 
+    public CellStyle getTotalCellStyle() {
+        if (totalCellStyle == null) {
+            totalCellStyle = workbook.createCellStyle();
+            totalCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+            totalCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            totalCellStyle.setFont(getHeaderFont());
+            totalCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+            setBorders(totalCellStyle);
+        }
+
+        return totalCellStyle;
+    }
+
+    private CellStyle getLightCellStyle() {
+        if (lightCellStyle == null) {
+            lightCellStyle = workbook.createCellStyle();
+            lightCellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            lightCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            lightCellStyle.setFont(getBoldFont());
+            lightCellStyle.setAlignment(HorizontalAlignment.LEFT);
+            setBorders(lightCellStyle);
+        }
+
+        return lightCellStyle;
+    }
+
+    private CellStyle getLightHeaderCellStyle() {
+        if (lightHeaderCellStyle == null) {
+            lightHeaderCellStyle = workbook.createCellStyle();
+            lightHeaderCellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            lightHeaderCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            lightHeaderCellStyle.setFont(getBoldFont());
+            lightHeaderCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            lightHeaderCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+            lightHeaderCellStyle.setWrapText(true);
+            setBorders(lightHeaderCellStyle);
+        }
+
+        return lightHeaderCellStyle;
+    }
+
+    private CellStyle getLightTotalCellStyle() {
+        if (lightTotalCellStyle == null) {
+            lightTotalCellStyle = workbook.createCellStyle();
+            lightTotalCellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            lightTotalCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            lightTotalCellStyle.setFont(getBoldFont());
+            lightTotalCellStyle.setAlignment(HorizontalAlignment.RIGHT);
+            setBorders(lightTotalCellStyle);
+        }
+
+        return lightTotalCellStyle;
+    }
+
+    private CellStyle getLightDigitCellStyle() {
+        if (lightDigitCellStyle == null) {
+            lightDigitCellStyle = workbook.createCellStyle();
+            lightDigitCellStyle.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            lightDigitCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            lightDigitCellStyle.setFont(getBoldFont());
+            lightDigitCellStyle.setAlignment(HorizontalAlignment.CENTER);
+            setBorders(lightDigitCellStyle);
+        }
+
+        return lightDigitCellStyle;
+    }
+
+    private void setBorders(CellStyle cellStyle) {
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setBorderTop(BorderStyle.THIN);
+        cellStyle.setBorderLeft(BorderStyle.THIN);
+        cellStyle.setBorderRight(BorderStyle.THIN);
+    }
 
     public Resource save(String path) throws IOException {
         File file = new File(path);
-
         FileOutputStream outFile = new FileOutputStream(file);
+
+        changeColors();
         workbook.write(outFile);
         workbook.close();
 
         return new FileSystemResource(path);
     }
 
-    public CellStyle getTotalCellStyle() {
-        if (totalCellStyle == null) {
-            totalCellStyle = workbook.createCellStyle();
-            totalCellStyle.setFillForegroundColor(IndexedColors.LIGHT_TURQUOISE.getIndex());
-            totalCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            totalCellStyle.setFont(getDefaultFont());
-            totalCellStyle.setAlignment(HorizontalAlignment.RIGHT);
-        }
-
-        return totalCellStyle;
+    private void changeColors() {
+        HSSFPalette palette = workbook.getCustomPalette();
+        palette.setColorAtIndex(IndexedColors.AQUA.getIndex(), (byte) 0, (byte) 142, (byte) 140);
+        palette.setColorAtIndex(IndexedColors.GREY_40_PERCENT.getIndex(), (byte) 232, (byte) 232, (byte) 232);
     }
 }

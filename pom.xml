@@ -23,7 +23,6 @@
 		<lombok.version>1.18.20</lombok.version>
 		<springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
 		<apache_poi.version>5.0.0</apache_poi.version>
-		<bouncycastle.version>1.69</bouncycastle.version>
 	</properties>
 
 	<dependencies>
@@ -94,12 +93,6 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${apache_poi.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.bouncycastle</groupId>
-			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>${bouncycastle.version}</version>
 		</dependency>
 
 	</dependencies>

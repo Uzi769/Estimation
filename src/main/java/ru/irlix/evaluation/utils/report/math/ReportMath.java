@@ -234,4 +234,28 @@ public class ReportMath {
                 .mapToDouble(t -> calcPmMaxCost(t, request))
                 .sum();
     }
+
+    public static double calcTaskMinHoursWithQaAndPm(Task task, ReportRequest request) {
+        return calcTaskMinHours(task, request)
+                + calcQaMinHours(task, request)
+                + calcPmMinHours(task, request);
+    }
+
+    public static double calcTaskMinCostWithQaAndPm(Task task, ReportRequest request) {
+        return calcTaskMinCost(task, request)
+                + calcQaMinCost(task, request)
+                + calcPmMinCost(task, request);
+    }
+
+    public static double calcTaskMaxHoursWithQaAndPm(Task task, ReportRequest request) {
+        return calcTaskMaxHours(task, request)
+                + calcQaMaxHours(task, request)
+                + calcPmMaxHours(task, request);
+    }
+
+    public static double calcTaskMaxCostWithQaAndPm(Task task, ReportRequest request) {
+        return calcTaskMaxCost(task, request)
+                + calcQaMaxCost(task, request)
+                + calcPmMaxCost(task, request);
+    }
 }
