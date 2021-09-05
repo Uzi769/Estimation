@@ -18,7 +18,9 @@ public class PhaseEstimationSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка по фазам");
         configureColumns();
 
-        fillHeader();
+        fillReportHeader(estimation, request);
+
+        fillTableHeader();
 
         for (Phase phase : estimation.getPhases()) {
             fillPhaseRow(phase, request);
@@ -27,40 +29,76 @@ public class PhaseEstimationSheet extends Sheet {
         fillSummary();
     }
 
-    private void fillHeader() {
+    private void fillTableHeader() {
         final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
+        mergeCells(0, 3);
+        mergeCells(4, 6);
+        mergeCells(7, 8);
 
         helper.setHeaderCell(row, "Фаза", 0);
-        helper.setHeaderCell(row, "Часы", 1);
-        helper.setHeaderCell(row, "Стоимость, RUB", 2);
+        helper.setHeaderCell(row, "Часы", 4);
+        helper.setHeaderCell(row, "Стоимость, RUB", 7);
+
+        helper.setHeaderCell(row, null, 1);
+        helper.setHeaderCell(row, null, 2);
+        helper.setHeaderCell(row, null, 3);
+        helper.setHeaderCell(row, null, 5);
+        helper.setHeaderCell(row, null, 6);
+        helper.setHeaderCell(row, null, 8);
     }
 
     private void fillPhaseRow(Phase phase, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
+        mergeCells(0, 3);
+        mergeCells(4, 6);
+        mergeCells(7, 8);
 
         helper.setCell(row, phase.getName(), 0);
 
         double sumHoursMax = ReportMath.calcListSummaryMaxHours(phase.getTasks(), request);
         hoursMaxSummary += sumHoursMax;
-        helper.setCell(row, sumHoursMax, 1);
+        helper.setCell(row, sumHoursMax, 4);
 
         double sumCostMax = ReportMath.calcListSummaryMaxCost(phase.getTasks(), request);
         costMaxSummary += sumCostMax;
-        helper.setCell(row, sumCostMax, 2);
+        helper.setCell(row, sumCostMax, 7);
+
+        helper.setCell(row, null, 1);
+        helper.setCell(row, null, 2);
+        helper.setCell(row, null, 3);
+        helper.setCell(row, null, 5);
+        helper.setCell(row, null, 6);
+        helper.setCell(row, null, 8);
     }
 
     private void fillSummary() {
         Row row = createRow(ROW_HEIGHT);
+        mergeCells(0, 3);
+        mergeCells(4, 6);
+        mergeCells(7, 8);
 
         helper.setTotalCell(row, "Итого по проекту:", 0);
-        helper.setMarkedCell(row, hoursMaxSummary, 1);
-        helper.setMarkedCell(row, costMaxSummary, 2);
+        helper.setMarkedCell(row, hoursMaxSummary, 4);
+        helper.setMarkedCell(row, costMaxSummary, 7);
+
+        helper.setMarkedCell(row, null, 1);
+        helper.setMarkedCell(row, null, 2);
+        helper.setMarkedCell(row, null, 3);
+        helper.setMarkedCell(row, null, 5);
+        helper.setMarkedCell(row, null, 6);
+        helper.setMarkedCell(row, null, 8);
     }
 
     private void configureColumns() {
-        sheet.setColumnWidth(0, 10000);
-        sheet.setColumnWidth(1, 6000);
-        sheet.setColumnWidth(2, 6000);
+        sheet.setColumnWidth(0, 1000);
+        sheet.setColumnWidth(1, 1000);
+        sheet.setColumnWidth(2, 12500);
+        sheet.setColumnWidth(3, 4200);
+        sheet.setColumnWidth(4, 4200);
+        sheet.setColumnWidth(5, 4200);
+        sheet.setColumnWidth(6, 4200);
+        sheet.setColumnWidth(7, 2000);
+        sheet.setColumnWidth(8, 10000);
     }
 }

@@ -34,6 +34,8 @@ public class ExcelWorkbook {
     private CellStyle totalCellStyle;
     private CellStyle lightTotalCellStyle;
     private CellStyle lightHeaderCellStyle;
+    private CellStyle bigTextCellStyle;
+    private CellStyle nonBorderCellStyle;
 
     private CellStyle stringCellStyle;
     private CellStyle digitCellStyle;
@@ -50,6 +52,12 @@ public class ExcelWorkbook {
         Cell cell = row.createCell(column, CellType.STRING);
         cell.setCellValue(name);
         cell.setCellStyle(getStringCellStyle());
+    }
+
+    public void setBigTextCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getBigTextCellStyle());
     }
 
     public void setCell(Row row, double digit, Integer column) {
@@ -98,6 +106,12 @@ public class ExcelWorkbook {
         Cell cell = row.createCell(column, CellType.STRING);
         cell.setCellValue(digit);
         cell.setCellStyle(getBoldDigitCellStyle());
+    }
+
+    public void setNonBorderCell(Row row, String name, Integer column) {
+        Cell cell = row.createCell(column, CellType.STRING);
+        cell.setCellValue(name);
+        cell.setCellStyle(getNonBorderCellStyle());
     }
 
     public void setTotalCell(Row row, String name, Integer column) {
@@ -219,6 +233,18 @@ public class ExcelWorkbook {
         return stringCellStyle;
     }
 
+    private CellStyle getBigTextCellStyle() {
+        if (bigTextCellStyle == null) {
+            bigTextCellStyle = workbook.createCellStyle();
+            bigTextCellStyle.setFont(getDefaultFont());
+            bigTextCellStyle.setVerticalAlignment(VerticalAlignment.TOP);
+            bigTextCellStyle.setWrapText(true);
+            setBorders(bigTextCellStyle);
+        }
+
+        return bigTextCellStyle;
+    }
+
     private CellStyle getBoldCellStyle() {
         if (boldCellStyle == null) {
             boldCellStyle = workbook.createCellStyle();
@@ -305,6 +331,15 @@ public class ExcelWorkbook {
         }
 
         return lightDigitCellStyle;
+    }
+
+    private CellStyle getNonBorderCellStyle() {
+        if (nonBorderCellStyle == null) {
+            nonBorderCellStyle = workbook.createCellStyle();
+            nonBorderCellStyle.setFont(getBoldFont());
+        }
+
+        return nonBorderCellStyle;
     }
 
     private void setBorders(CellStyle cellStyle) {

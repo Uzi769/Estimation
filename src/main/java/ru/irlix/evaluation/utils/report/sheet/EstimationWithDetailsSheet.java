@@ -23,7 +23,9 @@ public class EstimationWithDetailsSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка с детализацией");
         configureColumns();
 
-        fillHeader();
+        fillReportHeader(estimation, request);
+
+        fillTableHeader();
 
         for (Phase phase : estimation.getPhases()) {
             fillPhaseRow(phase, request);
@@ -44,7 +46,7 @@ public class EstimationWithDetailsSheet extends Sheet {
         fillSummary();
     }
 
-    private void fillHeader() {
+    private void fillTableHeader() {
         final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 2);
@@ -198,7 +200,7 @@ public class EstimationWithDetailsSheet extends Sheet {
     private void configureColumns() {
         sheet.setColumnWidth(0, 1000);
         sheet.setColumnWidth(1, 1000);
-        sheet.setColumnWidth(2, 12000);
+        sheet.setColumnWidth(2, 12500);
         sheet.setColumnWidth(3, 8000);
         sheet.setColumnWidth(4, 4200);
         sheet.setColumnWidth(5, 4200);
