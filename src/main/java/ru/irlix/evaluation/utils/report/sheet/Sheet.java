@@ -13,7 +13,7 @@ import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
@@ -81,49 +81,49 @@ public abstract class Sheet {
 
     protected void setInfo(Estimation estimation) {
         Row row = sheet.getRow(2);
-        helper.setBoldCell(row, "Заголовок", 4);
+        helper.setMarkedCell(row, "Заголовок", 4);
         helper.setCell(row, "Коммерческое предложение для компании ООО «" + estimation.getClient() + "»", 5);
         addBorderToMergeRegion(row);
         mergeCells(2, 2, 5, 8);
 
         row = sheet.getRow(3);
-        helper.setBoldCell(row, "Проект", 4);
+        helper.setMarkedCell(row, "Проект", 4);
         helper.setCell(row, estimation.getName(), 5);
         addBorderToMergeRegion(row);
         mergeCells(3, 3, 5, 8);
 
         row = sheet.getRow(4);
-        helper.setBoldCell(row, "Контакты", 4);
+        helper.setMarkedCell(row, "Контакты", 4);
         helper.setCell(row, "Валерий Руссков, +7 902-125-06-54, valery.russkov@irlix.ru", 5);
         addBorderToMergeRegion(row);
         mergeCells(4, 4, 5, 8);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         row = sheet.getRow(5);
-        helper.setBoldCell(row, "Дата", 4);
+        helper.setMarkedCell(row, "Дата", 4);
         helper.setCell(row, formatter.format(new Date()), 5);
         addBorderToMergeRegion(row);
         mergeCells(5, 5, 5, 8);
     }
 
     protected void setDescription() {
-        helper.setBoldCell(sheet.getRow(8), "Ограничения проекта", 1);
+        helper.setMarkedCell(sheet.getRow(8), "Ограничения проекта", 1);
         helper.setBigTextCell(sheet.getRow(9), "Оценка осуществлена на основе технического задания " +
                 "предоставленного заказчиком и 1 конф-колла.", 1);
         mergeCells(9, 11, 1, 2);
-        helper.setCell(sheet.getRow(8), null, 2);
+        helper.setMarkedCell(sheet.getRow(8), null, 2);
         helper.setCell(sheet.getRow(9), null, 2);
         helper.setCell(sheet.getRow(10), null, 1);
         helper.setCell(sheet.getRow(10), null, 2);
         helper.setCell(sheet.getRow(11), null, 1);
         helper.setCell(sheet.getRow(11), null, 2);
 
-        helper.setBoldCell(sheet.getRow(13), "Подход к реализации продуктовых проектов", 1);
+        helper.setMarkedCell(sheet.getRow(13), "Подход к реализации продуктовых проектов", 1);
         helper.setBigTextCell(sheet.getRow(14), "Компания IRLIX применяет собственный подход в реализации " +
                 "проектов. Agile совместно с Scrum Framework. В качестве основных атрибутов задействованы основные " +
                 "практики Scrum, образующие внутренний регламент разработки продуктовых проектов в компании IRLIX.", 1);
         mergeCells(14, 19, 1, 2);
-        helper.setCell(sheet.getRow(13), null, 2);
+        helper.setMarkedCell(sheet.getRow(13), null, 2);
         helper.setCell(sheet.getRow(14), null, 2);
 
         for (int i = 15; i < 20; i++) {
@@ -135,10 +135,10 @@ public abstract class Sheet {
     protected void fillRoleTable(Estimation estimation, ReportRequest request) {
         List<String> roles = getRoles(estimation, request);
 
-        helper.setBoldCell(sheet.getRow(8), "Сотрудник", 4);
+        helper.setMarkedCell(sheet.getRow(8), "Сотрудник", 4);
         helper.setCell(sheet.getRow(8), null, 5);
         mergeCells(8, 8, 4, 5);
-        helper.setBoldCell(sheet.getRow(8), "Кол-во", 6);
+        helper.setMarkedCell(sheet.getRow(8), "Кол-во", 6);
 
         for (int i = 9; i < 20; i++) {
             Row row = sheet.getRow(i);
@@ -162,7 +162,7 @@ public abstract class Sheet {
                 .map(Phase::getName)
                 .collect(Collectors.toList());
 
-        helper.setBoldCell(sheet.getRow(8), "Направления", 8);
+        helper.setMarkedCell(sheet.getRow(8), "Направления", 8);
 
         for (int i = 9; i < 20; i++) {
             Row row = sheet.getRow(i);
@@ -213,7 +213,7 @@ public abstract class Sheet {
     }
 
     protected boolean isFeature(Task task) {
-        return EntityConstants.FEATURE_ID.equals(task.getType().getId());
+        return EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId());
     }
 
     protected void fillReportHeader(Estimation estimation, ReportRequest request) {

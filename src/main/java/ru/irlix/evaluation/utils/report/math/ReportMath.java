@@ -1,10 +1,9 @@
 package ru.irlix.evaluation.utils.report.math;
 
 import org.springframework.stereotype.Component;
-import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import java.util.List;
 
@@ -113,7 +112,7 @@ public class ReportMath {
 
     public static double calcListSummaryMinHoursWithoutQaAndPm(List<Task> tasks, ReportRequest request) {
         return tasks.stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                .mapToDouble(t -> EntitiesIdConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMinHours(t, request)
                         : calcTaskMinHours(t, request)
                 )
@@ -122,7 +121,7 @@ public class ReportMath {
 
     public static double calcListSummaryMaxHoursWithoutQaAndPm(List<Task> tasks, ReportRequest request) {
         return tasks.stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                .mapToDouble(t -> EntitiesIdConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMaxHours(t, request)
                         : calcTaskMaxHours(t, request)
                 )
@@ -131,7 +130,7 @@ public class ReportMath {
 
     public static double calcListSummaryMinCostWithoutQaAndPm(List<Task> tasks, ReportRequest request) {
         return tasks.stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                .mapToDouble(t -> EntitiesIdConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMinCost(t, request)
                         : calcTaskMinCost(t, request)
                 )
@@ -140,7 +139,7 @@ public class ReportMath {
 
     public static double calcListSummaryMaxCostWithoutQaAndPm(List<Task> tasks, ReportRequest request) {
         return tasks.stream()
-                .mapToDouble(t -> EntityConstants.FEATURE_ID.equals(t.getType().getId())
+                .mapToDouble(t -> EntitiesIdConstants.FEATURE_ID.equals(t.getType().getId())
                         ? calcFeatureMaxCost(t, request)
                         : calcTaskMaxCost(t, request)
                 )

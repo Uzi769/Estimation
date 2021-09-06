@@ -5,7 +5,7 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
@@ -32,9 +32,9 @@ public class EstimationWithoutDetailsSheet extends Sheet {
 
             List<Task> notNestedTasks = new ArrayList<>();
             for (Task task : phase.getTasks()) {
-                if (EntityConstants.FEATURE_ID.equals(task.getType().getId())) {
+                if (EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId())) {
                     fillFeatureRowWithNestedTasks(task, request);
-                } else if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
+                } else if (EntitiesIdConstants.TASK_ID.equals(task.getType().getId())) {
                     notNestedTasks.add(task);
                 }
             }

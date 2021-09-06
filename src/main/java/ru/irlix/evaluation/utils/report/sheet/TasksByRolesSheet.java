@@ -27,7 +27,7 @@ public class TasksByRolesSheet extends Sheet {
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Task by roles");
+        sheet = helper.getWorkbook().createSheet("Оценка по фичам");
         configureColumns();
 
         fillReportHeader(estimation, request);
