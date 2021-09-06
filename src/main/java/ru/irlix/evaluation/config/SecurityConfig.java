@@ -62,12 +62,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     public Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
         JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
 
-        return new Converter<>() {
-            @Override
-            public Object convert(Object o) {
-                return null;
-            }
-
+        return new Converter<Jwt, Collection<GrantedAuthority>>() {
             @Override
             public Collection<GrantedAuthority> convert(Jwt jwt) {
                 Collection<GrantedAuthority> grantedAuthorities = delegate.convert(jwt);
@@ -91,6 +86,5 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
             }
         };
     }
-
 
 }
