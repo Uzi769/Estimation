@@ -26,4 +26,10 @@ public class Role {
 
     @OneToMany(mappedBy = "role")
     private List<Task> tasks;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
+    private List<User> users;
+
+    @OneToMany(mappedBy = "role")
+    private List<Estimation> estimations;
 }
