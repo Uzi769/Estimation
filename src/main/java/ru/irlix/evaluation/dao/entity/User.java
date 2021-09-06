@@ -29,7 +29,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "estimation_id"))
     private List<Estimation> estimations;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_estimation",
             joinColumns = @JoinColumn(name = "user_id"),

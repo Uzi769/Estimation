@@ -29,7 +29,7 @@ public class Phase {
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
