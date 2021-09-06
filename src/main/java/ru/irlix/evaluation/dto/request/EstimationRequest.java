@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import javax.validation.constraints.Positive;
 
@@ -23,7 +23,7 @@ public class EstimationRequest {
     private Integer risk;
 
     @Positive(message = "{status.positive}")
-    private Long status = EntityConstants.DEFAULT_STATUS_ID;
+    private Long status = EntitiesIdConstants.DEFAULT_STATUS_ID;
 
     private String creator;
 }

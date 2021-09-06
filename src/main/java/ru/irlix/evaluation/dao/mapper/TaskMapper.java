@@ -15,7 +15,8 @@ import ru.irlix.evaluation.dao.mapper.helper.TaskHelper;
 import ru.irlix.evaluation.dao.mapper.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
+
 
 import java.util.List;
 
@@ -68,24 +69,24 @@ public abstract class TaskMapper {
         task.setPhase(phase);
 
         if (request.getType() == null) {
-            request.setType(EntityConstants.TASK_ID);
+            request.setType(EntitiesIdConstants.TASK_ID);
         }
 
         TaskTypeDictionary type = taskTypeHelper.findTypeById(request.getType());
         task.setType(type);
 
-        if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
-            if (request.getFeatureId() != null) {
-                Task feature = taskHelper.findTaskById(request.getFeatureId());
-                task.setParent(feature);
-            }
-
+        if (EntitiesIdConstants.TASK_ID.equals(task.getType().getId())) {
             if (request.getRoleId() == null) {
-                request.setRoleId(EntityConstants.DEFAULT_ROLE_ID);
+                request.setRoleId(EntitiesIdConstants.DEFAULT_ROLE_ID);
             }
 
             Role role = roleHelper.findRoleById(request.getRoleId());
             task.setRole(role);
+
+            if (request.getFeatureId() != null) {
+                Task feature = taskHelper.findTaskById(request.getFeatureId());
+                task.setParent(feature);
+            }
         }
     }
 

@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.irlix.evaluation.utils.marker.OnCreate;
-import ru.irlix.evaluation.utils.marker.OnUpdate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
@@ -16,15 +16,15 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class PhaseRequest {
 
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "{name.notNull}")
+    @NotNull(groups = OnCreate.class, message = "{name.notNull}")
     private String name;
 
-    @NotNull(groups = {OnCreate.class, OnUpdate.class}, message = "{estimationId.notNull}")
+    @NotNull(groups = OnCreate.class, message = "{estimationId.notNull}")
     @Positive(message = "{estimationId.positive}")
     private Long estimationId;
 
     @NotNull(groups = OnCreate.class, message = "{sortOrder.notNull}")
-    @Positive(message = "{sortOrder.positive}")
+    @PositiveOrZero(message = "{sortOrder.positiveOrZero}")
     private Integer sortOrder;
 
     private Integer managementReserve;

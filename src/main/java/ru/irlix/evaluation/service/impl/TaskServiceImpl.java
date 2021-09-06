@@ -18,7 +18,7 @@ import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
-import ru.irlix.evaluation.utils.constant.EntityConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,8 +56,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public TaskResponse updateTask(Long id, TaskRequest taskRequest) {
-        Task task = findTaskById(id);
-        checkAndUpdateFields(task, taskRequest);
+        Task task = updateTakById(id, taskRequest);
         Task savedTask = taskRepository.save(task);
 
         log.info("Task with id " + savedTask.getId() + " updated");
@@ -68,17 +67,20 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public List<TaskResponse> updateTasks(List<TaskUpdateRequest> tasksRequest) {
         List<Task> updatedTasks = tasksRequest.stream()
-                .map(t -> {
-                    Task taskToUpdate = findTaskById(t.getId());
-                    checkAndUpdateFields(taskToUpdate, t);
-                    return taskToUpdate;
-                })
+                .map(request -> updateTakById(request.getId(), request))
                 .collect(Collectors.toList());
 
         List<Task> savedTasks = taskRepository.saveAll(updatedTasks);
 
         log.info("Task list updated");
         return mapper.taskToResponse(savedTasks);
+    }
+
+    private Task updateTakById(Long id, TaskRequest request) {
+        Task taskToUpdate = findTaskById(id);
+        checkAndUpdateFields(taskToUpdate, request);
+
+        return taskToUpdate;
     }
 
     @Override
@@ -153,7 +155,7 @@ public class TaskServiceImpl implements TaskService {
             task.setPhase(phase);
         }
 
-        if (EntityConstants.TASK_ID.equals(task.getType().getId())) {
+        if (EntitiesIdConstants.TASK_ID.equals(task.getType().getId())) {
             if (request.getRepeatCount() != null) {
                 task.setRepeatCount(request.getRepeatCount());
             }

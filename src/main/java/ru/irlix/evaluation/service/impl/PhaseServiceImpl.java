@@ -8,6 +8,7 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
+import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.PhaseRepository;
@@ -15,6 +16,7 @@ import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.PhaseService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -47,12 +49,30 @@ public class PhaseServiceImpl implements PhaseService {
     @Override
     @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
-        Phase phase = findPhaseById(id);
-        checkAndUpdateFields(phase, phaseRequest);
+        Phase phase = updatePhaseById(id, phaseRequest);
         Phase savedPhase = phaseRepository.save(phase);
 
         log.info("Phase with id " + savedPhase.getId() + " updated");
         return mapper.phaseToPhaseResponse(savedPhase);
+    }
+
+    @Override
+    @Transactional
+    public List<PhaseResponse> updatePhases(List<PhaseUpdateRequest> phaseRequests) {
+        List<Phase> updatedPhases = phaseRequests.stream()
+                .map(request -> updatePhaseById(request.getId(), request))
+                .collect(Collectors.toList());
+
+        List<Phase> savedPhases = phaseRepository.saveAll(updatedPhases);
+
+        log.info("Phase list updated");
+        return mapper.phaseToPhaseResponse(savedPhases);
+    }
+
+    private Phase updatePhaseById(Long id, PhaseRequest request) {
+        Phase phaseToUpdate = findPhaseById(id);
+        checkAndUpdateFields(phaseToUpdate, request);
+        return phaseToUpdate;
     }
 
     private void checkAndUpdateFields(Phase phase, PhaseRequest phaseRequest) {
