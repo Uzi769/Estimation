@@ -58,4 +58,11 @@ public class Estimation {
             joinColumns = @JoinColumn(name = "estimation_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role role;
+
+    @PrePersist
+    public void prePersist() {
+        if (risk == null) {
+            risk = 0;
+        }
+    }
 }

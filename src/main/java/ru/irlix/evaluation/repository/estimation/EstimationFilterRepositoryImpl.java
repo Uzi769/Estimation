@@ -97,17 +97,13 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
         if (StringUtils.isNotEmpty(request.getText())) {
             filterPredicates.add(builder.like(builder.lower(root.get("name")), "%" + request.getText().toLowerCase() + "%"));
-        }
-
-        if (StringUtils.isNotEmpty(request.getText())) {
             filterPredicates.add(builder.like(builder.lower(root.get("client")), "%" + request.getText().toLowerCase() + "%"));
-        }
-
-        if (StringUtils.isNotEmpty(request.getText())) {
             filterPredicates.add(builder.like(builder.lower(root.get("creator")), "%" + request.getText().toLowerCase() + "%"));
         }
 
-        return builder.or(filterPredicates.toArray(new Predicate[0]));
+        return filterPredicates.isEmpty()
+                ? builder.and()
+                : builder.or(filterPredicates.toArray(new Predicate[0]));
     }
 
     private Long getTotalCount(Predicate filterPredicate) {
