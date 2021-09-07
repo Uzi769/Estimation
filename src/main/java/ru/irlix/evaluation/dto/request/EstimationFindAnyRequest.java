@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -13,6 +14,12 @@ import javax.validation.constraints.PositiveOrZero;
 public class EstimationFindAnyRequest {
 
     private String text;
+
+    private Long status;
+
+    private Instant beginDate;
+
+    private Instant endDate;
 
     @PositiveOrZero(message = "{page.positiveOrZero}")
     private Integer page = 0;

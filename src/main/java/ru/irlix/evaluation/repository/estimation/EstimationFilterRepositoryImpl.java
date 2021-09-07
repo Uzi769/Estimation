@@ -93,21 +93,31 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     }
 
     private Predicate getPredicate(EstimationFindAnyRequest request) {
-        List<Predicate> filterPredicates = new ArrayList<>();
+        List<Predicate> textPredicates = new ArrayList<>();
+        List<Predicate> otherPredicates = new ArrayList<>();
 
         if (StringUtils.isNotEmpty(request.getText())) {
-            filterPredicates.add(builder.like(builder.lower(root.get("name")), "%" + request.getText().toLowerCase() + "%"));
+            textPredicates.add(builder.like(builder.lower(root.get("name")), "%" + request.getText().toLowerCase() + "%"));
+            textPredicates.add(builder.like(builder.lower(root.get("client")), "%" + request.getText().toLowerCase() + "%"));
+            textPredicates.add(builder.like(builder.lower(root.get("creator")), "%" + request.getText().toLowerCase() + "%"));
         }
 
-        if (StringUtils.isNotEmpty(request.getText())) {
-            filterPredicates.add(builder.like(builder.lower(root.get("client")), "%" + request.getText().toLowerCase() + "%"));
+        if (request.getStatus() != null) {
+            otherPredicates.add(builder.equal(root.get("status").get("id"), request.getStatus()));
         }
 
-        if (StringUtils.isNotEmpty(request.getText())) {
-            filterPredicates.add(builder.like(builder.lower(root.get("creator")), "%" + request.getText().toLowerCase() + "%"));
+        if (request.getBeginDate() != null) {
+            otherPredicates.add(builder.greaterThanOrEqualTo(root.get("createDate"), request.getBeginDate()));
         }
 
-        return builder.or(filterPredicates.toArray(new Predicate[0]));
+        if (request.getEndDate() != null) {
+            otherPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
+        }
+
+        return builder.and(
+                textPredicates.isEmpty() ? builder.and() : builder.or(textPredicates.toArray(new Predicate[0])),
+                builder.and(otherPredicates.toArray(new Predicate[0]))
+        );
     }
 
     private Long getTotalCount(Predicate filterPredicate) {
