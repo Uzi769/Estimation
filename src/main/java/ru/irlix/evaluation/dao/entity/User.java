@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,4 +36,14 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Role role;
+
+    @Column(name = "deleted")
+    private Boolean deleted;
+
+    @PrePersist
+    public void prePersist() {
+        if (deleted == null) {
+            deleted = false;
+        }
+    }
 }
