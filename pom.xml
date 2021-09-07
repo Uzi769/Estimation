@@ -24,7 +24,7 @@
 		<springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
 		<keycloak.version>15.0.2</keycloak.version>
 		<security.version>2.5.4</security.version>
-		<oauth2.version>5.5.2</oauth2.version>
+		<oauth2.version>5.3.11.RELEASE</oauth2.version>
 	</properties>
 
 	<dependencies>
@@ -83,12 +83,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.keycloak</groupId>
-			<artifactId>keycloak-spring-boot-starter</artifactId>
-			<version>${keycloak.version}</version>
 		</dependency>
 
 		<dependency>

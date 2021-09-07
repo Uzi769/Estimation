@@ -12,6 +12,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  security.oauth2.resourceserver.jwt:
+    jwk-set-uri: ${JWK_SET_URI}
+    issuer-uri: ${JWT_ISSUER_URI}
 
   jackson:
     serialization:
