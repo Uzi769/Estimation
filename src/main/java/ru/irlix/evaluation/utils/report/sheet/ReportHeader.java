@@ -51,16 +51,14 @@ public class ReportHeader {
         sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(descriptionFirstRow + 4),
                 "Ниже указана ориентировочная оценка проекта", 1);
         
-        sheet.mergeCells(0, 6, 0, lastColumn);
-        sheet.mergeCells(14, 14, 0, lastColumn);
-        sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 0, lastColumn);
-        sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 0, lastColumn);
+        sheet.mergeCells(0, 6, 1, lastColumn);
+        sheet.mergeCells(14, 14, 1, lastColumn);
+        sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 1, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 1, lastColumn);
         sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 1, lastColumn);
-        sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 1, lastColumn);
 
-        sheet.mergeCells(7, 13, 0, 0);
-        sheet.mergeCells(15, descriptionFirstRow - 2, 0, 0);
-        sheet.mergeCells(descriptionFirstRow, descriptionFirstRow + 2, 0, 0);
+        sheet.mergeCells(0, descriptionFirstRow + 5, 0, 0);
         sheet.mergeCells(15, descriptionFirstRow - 2, 3, 3);
         sheet.mergeCells(15, descriptionFirstRow - 2, 7, lastColumn);
     }

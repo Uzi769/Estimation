@@ -23,7 +23,7 @@ public class ExcelWorkbook {
     private Font headerFont;
     private Font defaultFont;
     private Font boldFont;
-    private Font mianHeaderFont;
+    private Font mainHeaderFont;
     private Font lightFont;
 
     private CellStyle headerCellStyle;
@@ -169,16 +169,16 @@ public class ExcelWorkbook {
     }
 
     public Font getMainHeaderFont() {
-        if (mianHeaderFont == null) {
-            mianHeaderFont = workbook.createFont();
-            mianHeaderFont.setFontHeightInPoints((short) 14);
-            mianHeaderFont.setFontName("Trebuchet MS");
-            mianHeaderFont.setColor(IndexedColors.GREY_80_PERCENT.getIndex());
-            mianHeaderFont.setBold(true);
-            mianHeaderFont.setItalic(false);
+        if (mainHeaderFont == null) {
+            mainHeaderFont = workbook.createFont();
+            mainHeaderFont.setFontHeightInPoints((short) 14);
+            mainHeaderFont.setFontName("Trebuchet MS");
+            mainHeaderFont.setColor(IndexedColors.GREY_80_PERCENT.getIndex());
+            mainHeaderFont.setBold(true);
+            mainHeaderFont.setItalic(false);
         }
 
-        return mianHeaderFont;
+        return mainHeaderFont;
     }
 
     private Font getDefaultFont() {
