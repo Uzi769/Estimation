@@ -15,7 +15,7 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Оценка по фазам");
+        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.phaseEstimation"));
         configureColumns();
 
         fillReportHeader(estimation, request, 7);
@@ -35,9 +35,9 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         mergeCells(0, 3);
         mergeCells(4, 6);
 
-        helper.setHeaderCell(row, "Фаза", 0);
-        helper.setHeaderCell(row, "Часы", 4);
-        helper.setHeaderCell(row, "Стоимость, RUB", 7);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.phases"), 0);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.hours"), 4);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.cost"), 7);
 
         helper.setHeaderCell(row, null, 1);
         helper.setHeaderCell(row, null, 2);
@@ -73,7 +73,7 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         mergeCells(0, 3);
         mergeCells(4, 6);
 
-        helper.setTotalCell(row, "Итого по проекту:", 0);
+        helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
         helper.setMarkedCell(row, hoursMaxSummary, 4);
         helper.setMarkedCell(row, costMaxSummary, 7);
 

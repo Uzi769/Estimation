@@ -27,12 +27,12 @@ public class TasksByRolesSheet extends EstimationReportSheet {
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Оценка по фичам");
+        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.featureEstimation"));
         configureColumns();
 
         fillReportHeader(estimation, request, 7);
 
-        fillTableHeader("Фичи", false);
+        fillTableHeader(messageBundle.getString("columnName.phases"), false);
 
         for (Phase phase : estimation.getPhases()) {
             List<Task> features = phase.getTasks().stream()
@@ -53,7 +53,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillSummary(TableType.DEFAULT_TABLE);
 
         createRow(super.ROW_HEIGHT);
-        fillTableHeader("Задачи", true);
+        fillTableHeader(messageBundle.getString("columnName.tasks"), true);
 
         for (Phase phase : estimation.getPhases()) {
             List<Task> tasks = phase.getTasks().stream()
@@ -84,21 +84,21 @@ public class TasksByRolesSheet extends EstimationReportSheet {
 
         if (isLight) {
             helper.setLightHeaderCell(row, taskType, 0);
-            helper.setLightHeaderCell(row, "Часы (мин)", 3);
-            helper.setLightHeaderCell(row, "Стоимость (мин), RUB", 4);
-            helper.setLightHeaderCell(row, "Часы (наиболее вероятные)", 5);
-            helper.setLightHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-            helper.setLightHeaderCell(row, "Комментарии", 7);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.hoursMin"), 3);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.costMin"), 4);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.probableHours"), 5);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.probableCost"), 6);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.comment"), 7);
 
             helper.setLightHeaderCell(row, null, 1);
             helper.setLightHeaderCell(row, null, 2);
         } else {
             helper.setHeaderCell(row, taskType, 0);
-            helper.setHeaderCell(row, "Часы (мин)", 3);
-            helper.setHeaderCell(row, "Стоимость (мин), RUB", 4);
-            helper.setHeaderCell(row, "Часы (наиболее вероятные)", 5);
-            helper.setHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-            helper.setHeaderCell(row, "Комментарии", 7);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.hoursMin"), 3);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.costMin"), 4);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.probableHours"), 5);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.probableCost"), 6);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.comment"), 7);
 
             helper.setHeaderCell(row, null, 1);
             helper.setHeaderCell(row, null, 2);
@@ -196,7 +196,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         if (ReportMath.calcQaMaxHours(task, request) > 0) {
             row = createRow(ROW_HEIGHT);
 
-            helper.setCell(row, "Специалист по тестированию", 2);
+            helper.setCell(row, messageBundle.getString("cellName.tester"), 2);
             helper.setCell(row, ReportMath.calcQaMinHours(task, request), 3);
             helper.setCell(row, ReportMath.calcQaMinCost(task, request), 4);
             helper.setCell(row, ReportMath.calcQaMaxHours(task, request), 5);
@@ -210,7 +210,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         if (ReportMath.calcPmMaxCost(task, request) > 0) {
             row = createRow(ROW_HEIGHT);
 
-            helper.setCell(row, "Руководитель", 2);
+            helper.setCell(row, messageBundle.getString("cellName.manager"), 2);
             helper.setCell(row, ReportMath.calcPmMinHours(task, request), 3);
             helper.setCell(row, ReportMath.calcPmMinCost(task, request), 4);
             helper.setCell(row, ReportMath.calcPmMaxHours(task, request), 5);
@@ -241,7 +241,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             Row row = createRow(ROW_HEIGHT);
 
-            helper.setCell(row, "Специалист по тестированию", 2);
+            helper.setCell(row, messageBundle.getString("cellName.tester"), 2);
             helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 3);
             helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 4);
             helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks, request), 5);
@@ -255,7 +255,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
             Row row = createRow(ROW_HEIGHT);
 
-            helper.setCell(row, "Руководитель", 2);
+            helper.setCell(row, messageBundle.getString("cellName.manager"), 2);
             helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 3);
             helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 4);
             helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks, request), 5);
@@ -273,7 +273,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
 
         switch (tableType) {
             case DEFAULT_TABLE:
-                helper.setTotalCell(row, "Итого по проекту:", 0);
+                helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
                 helper.setMarkedCell(row, hoursMinSummary, 3);
                 helper.setMarkedCell(row, costMinSummary, 4);
                 helper.setMarkedCell(row, hoursMaxSummary, 5);
@@ -284,7 +284,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
                 helper.setMarkedCell(row, null, 7);
                 break;
             case LIGHT_TABLE:
-                helper.setLightTotalCell(row, "Итого по проекту:", 0);
+                helper.setLightTotalCell(row, messageBundle.getString("cellName.summary"), 0);
                 helper.setLightCell(row, otherTasksMinHoursSummary, 3);
                 helper.setLightCell(row, otherTasksMinCostSummary, 4);
                 helper.setLightCell(row, otherTasksMaxHoursSummary, 5);
@@ -295,7 +295,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
                 helper.setLightCell(row, null, 7);
                 break;
             case NONE:
-                helper.setTotalCell(row, "Итого по проекту:", 0);
+                helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
                 helper.setMarkedCell(row, otherTasksMinHoursSummary + hoursMinSummary, 3);
                 helper.setMarkedCell(row, otherTasksMinCostSummary + costMinSummary, 4);
                 helper.setMarkedCell(row, otherTasksMaxHoursSummary + hoursMaxSummary, 5);

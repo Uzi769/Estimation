@@ -20,7 +20,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Оценка без детализации");
+        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.withoutDetails"));
         configureColumns();
 
         fillReportHeader(estimation, request, 7);
@@ -50,12 +50,12 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 2);
 
-        helper.setHeaderCell(row, "Задачи", 0);
-        helper.setHeaderCell(row, "Часы (мин)", 3);
-        helper.setHeaderCell(row, "Стоимость (мин), RUB", 4);
-        helper.setHeaderCell(row, "Часы (наиболее вероятные)", 5);
-        helper.setHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-        helper.setHeaderCell(row, "Комментарии", 7);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.tasks"), 0);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.hoursMin"), 3);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.costMin"), 4);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.probableHours"), 5);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.probableCost"), 6);
+        helper.setHeaderCell(row, messageBundle.getString("columnName.comment"), 7);
 
         helper.setHeaderCell(row, null, 1);
         helper.setHeaderCell(row, null, 2);
@@ -145,7 +145,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
     private void fillQaRow(List<Task> tasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        helper.setCell(row, "Тестирование", 2);
+        helper.setCell(row, messageBundle.getString("cellName.testing"), 2);
         helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 3);
         helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 4);
         helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks, request), 5);
@@ -158,7 +158,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
     private void fillPmRow(List<Task> tasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        helper.setCell(row, "Управление", 2);
+        helper.setCell(row, messageBundle.getString("cellName.management"), 2);
         helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 3);
         helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 4);
         helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks, request), 5);
@@ -173,7 +173,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
-        helper.setTotalCell(row, "Итого по проекту:", 0);
+        helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
         helper.setMarkedCell(row, hoursMinSummary, 3);
         helper.setMarkedCell(row, costMinSummary, 4);
         helper.setMarkedCell(row, hoursMaxSummary, 5);

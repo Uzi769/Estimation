@@ -7,21 +7,20 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
+import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,6 +31,8 @@ public class ReportHeader {
     private int additionalRowsCount = 0;
 
     private final int DEFAULT_ROWS_COUNT = 21;
+
+    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", LocaleConstants.DEFAULT_LOCALE, new UTF8Control());
 
     public void fillHeader(Estimation estimation, ReportRequest request, int lastColumn) {
         int ENDING_ROWS_COUNT = 6;
@@ -49,7 +50,7 @@ public class ReportHeader {
 
         setDescription(lastColumn, descriptionFirstRow);
         sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(descriptionFirstRow + 4),
-                "Ниже указана ориентировочная оценка проекта", 1);
+                messageBundle.getString("string.approximateEstimation"), 1);
         
         sheet.mergeCells(0, 6, 1, lastColumn);
         sheet.mergeCells(14, 14, 1, lastColumn);
@@ -85,46 +86,43 @@ public class ReportHeader {
 
     private void setInfo(Estimation estimation, int lastColumn) {
         Row row = sheet.getSheet().getRow(7);
-        sheet.getHelper().setNonBorderHeaderCell(row, "Коммерческое предложение для компании ООО «" + estimation.getClient() + "»", 1);
+        sheet.getHelper().setNonBorderHeaderCell(row, messageBundle.getString("string.commercialOffer") + " «" + estimation.getClient() + "»", 1);
         sheet.mergeCells(7, 8, 1, lastColumn);
 
         row = sheet.getSheet().getRow(9);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Проект", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, messageBundle.getString("cellName.project"), 1);
         sheet.getHelper().setNonBorderCell(row, estimation.getName(), 3);
         sheet.mergeCells(9, 9, 1, 2);
         sheet.mergeCells(9, 9, 3, lastColumn);
 
         row = sheet.getSheet().getRow(10);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Контакты", 1);
-        sheet.getHelper().setNonBorderCell(row, "Валерий Руссков, +7 902-125-06-54, valery.russkov@irlix.ru", 3);
+        sheet.getHelper().setNonBorderMarkedCell(row, messageBundle.getString("cellName.contacts"), 1);
+        sheet.getHelper().setNonBorderCell(row, messageBundle.getString("string.contacts"), 3);
         sheet.mergeCells(10, 10, 1, 2);
         sheet.mergeCells(10, 10, 3, lastColumn);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         row = sheet.getSheet().getRow(11);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Дата", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, messageBundle.getString("cellName.date"), 1);
         sheet.getHelper().setNonBorderCell(row, formatter.format(new Date()), 3);
         sheet.mergeCells(11, 11, 1, 2);
         sheet.mergeCells(11, 11, 3, lastColumn);
 
         row = sheet.getSheet().getRow(12);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Описание", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, messageBundle.getString("cellName.description"), 1);
         sheet.mergeCells(12, 12, 1, 2);
         sheet.mergeCells(12, 12, 3, lastColumn);
 
         row = sheet.getSheet().getRow(13);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Ограничения проекта", 1);
-        sheet.getHelper().setNonBorderCell(row, "Оценка осуществлена на основе технического задания " +
-                "предоставленного заказчиком и 1 конф-колла.", 3);
+        sheet.getHelper().setNonBorderMarkedCell(row, messageBundle.getString("cellName.projectRestrictions"), 1);
+        sheet.getHelper().setNonBorderCell(row, messageBundle.getString("string.projectRestrictions"), 3);
         sheet.mergeCells(13, 13, 1, 2);
         sheet.mergeCells(13, 13, 3, lastColumn);
     }
 
     private void setDescription(int lastColumn, int startRow) {
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow), "Подход к реализации продуктовых проектов", 1);
-        sheet.getHelper().setBigTextCell(sheet.getSheet().getRow(startRow + 1), "Компания IRLIX применяет собственный подход в реализации " +
-                "проектов. Agile совместно с Scrum Framework. В качестве основных атрибутов задействованы основные " +
-                "практики Scrum, образующие внутренний регламент разработки продуктовых проектов в компании IRLIX.", 1);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow), messageBundle.getString("cellName.approach"), 1);
+        sheet.getHelper().setBigTextCell(sheet.getSheet().getRow(startRow + 1), messageBundle.getString("string.approach"), 1);
         sheet.mergeCells(startRow, startRow, 1, lastColumn);
         sheet.mergeCells(startRow + 1, startRow + 2, 1, lastColumn);
     }
@@ -132,9 +130,9 @@ public class ReportHeader {
     private void fillRoleTable(Estimation estimation, ReportRequest request) {
         List<String> roles = getRoles(estimation, request);
 
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Сотрудник", 4);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.employer"), 4);
         sheet.mergeCells(15, 15, 4, 5);
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Кол-во", 6);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.count"), 6);
 
         int currentRow = 16;
         for (String role : roles) {
@@ -158,7 +156,7 @@ public class ReportHeader {
                 .map(Phase::getName)
                 .collect(Collectors.toList());
 
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Направления", 1);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.direction"), 1);
         sheet.mergeCells(15, 15, 1, 2);
 
         int currentRow = 16;
@@ -195,11 +193,11 @@ public class ReportHeader {
                 .collect(Collectors.toList());
 
         if (ReportMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
-            rolesStrings.add("Специалист по тестированию");
+            rolesStrings.add(messageBundle.getString("cellName.tester"));
         }
 
         if (ReportMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
-            rolesStrings.add("Руководитель проекта");
+            rolesStrings.add(messageBundle.getString("cellName.projectManager"));
         }
 
         return rolesStrings;
