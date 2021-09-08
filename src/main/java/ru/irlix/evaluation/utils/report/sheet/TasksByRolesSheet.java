@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TasksByRolesSheet extends Sheet {
+public class TasksByRolesSheet extends EstimationReportSheet {
 
     private double otherTasksMinHoursSummary;
     private double otherTasksMinCostSummary;
@@ -30,7 +30,7 @@ public class TasksByRolesSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка по фичам");
         configureColumns();
 
-        fillReportHeader(estimation, request);
+        fillReportHeader(estimation, request, 7);
 
         fillTableHeader("Фичи", false);
 
@@ -81,7 +81,6 @@ public class TasksByRolesSheet extends Sheet {
         final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         if (isLight) {
             helper.setLightHeaderCell(row, taskType, 0);
@@ -93,7 +92,6 @@ public class TasksByRolesSheet extends Sheet {
 
             helper.setLightHeaderCell(row, null, 1);
             helper.setLightHeaderCell(row, null, 2);
-            helper.setLightHeaderCell(row, null, 8);
         } else {
             helper.setHeaderCell(row, taskType, 0);
             helper.setHeaderCell(row, "Часы (мин)", 3);
@@ -104,14 +102,12 @@ public class TasksByRolesSheet extends Sheet {
 
             helper.setHeaderCell(row, null, 1);
             helper.setHeaderCell(row, null, 2);
-            helper.setHeaderCell(row, null, 8);
         }
     }
 
     private void fillPhaseRow(Phase phase, ReportRequest request, List<Task> tasks, boolean isLight) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         double sumHoursMin = ReportMath.calcListSummaryMinHours(tasks, request);
         double sumCostMin = ReportMath.calcListSummaryMinCost(tasks, request);
@@ -128,7 +124,6 @@ public class TasksByRolesSheet extends Sheet {
             helper.setLightCell(row, null, 1);
             helper.setLightCell(row, null, 2);
             helper.setLightCell(row, null, 7);
-            helper.setLightCell(row, null, 8);
 
             otherTasksMinHoursSummary += sumHoursMin;
             otherTasksMinCostSummary += sumCostMin;
@@ -144,7 +139,6 @@ public class TasksByRolesSheet extends Sheet {
             helper.setMarkedCell(row, null, 1);
             helper.setMarkedCell(row, null, 2);
             helper.setMarkedCell(row, null, 7);
-            helper.setMarkedCell(row, null, 8);
 
             hoursMinSummary += sumHoursMin;
             costMinSummary += sumCostMin;
@@ -156,7 +150,6 @@ public class TasksByRolesSheet extends Sheet {
     private void fillFeatureRow(Task feature, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
-        mergeCells(7, 8);
 
         helper.setBoldCell(row, feature.getName(), 1);
         helper.setCell(row, ReportMath.calcFeatureMinHours(feature, request), 3);
@@ -166,7 +159,6 @@ public class TasksByRolesSheet extends Sheet {
         helper.setCell(row, feature.getComment(), 7);
 
         helper.setCell(row, null, 0);
-        helper.setCell(row, null, 8);
 
         fillRoleRow(feature.getTasks(), request);
     }
@@ -174,7 +166,6 @@ public class TasksByRolesSheet extends Sheet {
     private void fillTaskRow(Task task, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
-        mergeCells(7, 8);
 
         helper.setCell(row, task.getName(), 1);
         helper.setCell(row, ReportMath.calcTaskMinHoursWithQaAndPm(task, request), 3);
@@ -185,14 +176,12 @@ public class TasksByRolesSheet extends Sheet {
 
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 2);
-        helper.setCell(row, null, 8);
 
         fillRoleRow(task, request);
     }
 
     private void fillRoleRow(Task task, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
-        mergeCells(7, 8);
 
         helper.setCell(row, task.getRole().getDisplayValue(), 2);
         helper.setCell(row, ReportMath.calcTaskMinHours(task, request), 3);
@@ -203,11 +192,9 @@ public class TasksByRolesSheet extends Sheet {
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 1);
         helper.setCell(row, null, 7);
-        helper.setCell(row, null, 8);
 
         if (ReportMath.calcQaMaxHours(task, request) > 0) {
             row = createRow(ROW_HEIGHT);
-            mergeCells(7, 8);
 
             helper.setCell(row, "Специалист по тестированию", 2);
             helper.setCell(row, ReportMath.calcQaMinHours(task, request), 3);
@@ -218,12 +205,10 @@ public class TasksByRolesSheet extends Sheet {
             helper.setCell(row, null, 0);
             helper.setCell(row, null, 1);
             helper.setCell(row, null, 7);
-            helper.setCell(row, null, 8);
         }
 
         if (ReportMath.calcPmMaxCost(task, request) > 0) {
             row = createRow(ROW_HEIGHT);
-            mergeCells(7, 8);
 
             helper.setCell(row, "Руководитель", 2);
             helper.setCell(row, ReportMath.calcPmMinHours(task, request), 3);
@@ -234,7 +219,6 @@ public class TasksByRolesSheet extends Sheet {
             helper.setCell(row, null, 0);
             helper.setCell(row, null, 1);
             helper.setCell(row, null, 7);
-            helper.setCell(row, null, 8);
         }
     }
 
@@ -243,8 +227,6 @@ public class TasksByRolesSheet extends Sheet {
 
         for (Role role : tasksByRole.keySet()) {
             Row row = createRow(ROW_HEIGHT);
-            mergeCells(7, 8);
-
             helper.setCell(row, role.getDisplayValue(), 2);
             helper.setCell(row, ReportMath.calcListSummaryMinHoursWithoutQaAndPm(tasksByRole.get(role), request), 3);
             helper.setCell(row, ReportMath.calcListSummaryMinCostWithoutQaAndPm(tasksByRole.get(role), request), 4);
@@ -254,12 +236,10 @@ public class TasksByRolesSheet extends Sheet {
             helper.setCell(row, null, 0);
             helper.setCell(row, null, 1);
             helper.setCell(row, null, 7);
-            helper.setCell(row, null, 8);
         }
 
         if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             Row row = createRow(ROW_HEIGHT);
-            mergeCells(7, 8);
 
             helper.setCell(row, "Специалист по тестированию", 2);
             helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 3);
@@ -270,12 +250,10 @@ public class TasksByRolesSheet extends Sheet {
             helper.setCell(row, null, 0);
             helper.setCell(row, null, 1);
             helper.setCell(row, null, 7);
-            helper.setCell(row, null, 8);
         }
 
         if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
             Row row = createRow(ROW_HEIGHT);
-            mergeCells(7, 8);
 
             helper.setCell(row, "Руководитель", 2);
             helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 3);
@@ -286,14 +264,12 @@ public class TasksByRolesSheet extends Sheet {
             helper.setCell(row, null, 0);
             helper.setCell(row, null, 1);
             helper.setCell(row, null, 7);
-            helper.setCell(row, null, 8);
         }
     }
 
     private void fillSummary(TableType tableType) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         switch (tableType) {
             case DEFAULT_TABLE:
@@ -306,7 +282,6 @@ public class TasksByRolesSheet extends Sheet {
                 helper.setMarkedCell(row, null, 1);
                 helper.setMarkedCell(row, null, 2);
                 helper.setMarkedCell(row, null, 7);
-                helper.setMarkedCell(row, null, 8);
                 break;
             case LIGHT_TABLE:
                 helper.setLightTotalCell(row, "Итого по проекту:", 0);
@@ -318,7 +293,6 @@ public class TasksByRolesSheet extends Sheet {
                 helper.setLightCell(row, null, 1);
                 helper.setLightCell(row, null, 2);
                 helper.setLightCell(row, null, 7);
-                helper.setLightCell(row, null, 8);
                 break;
             case NONE:
                 helper.setTotalCell(row, "Итого по проекту:", 0);
@@ -330,7 +304,6 @@ public class TasksByRolesSheet extends Sheet {
                 helper.setMarkedCell(row, null, 1);
                 helper.setMarkedCell(row, null, 2);
                 helper.setMarkedCell(row, null, 7);
-                helper.setMarkedCell(row, null, 8);
                 break;
         }
     }
@@ -343,7 +316,6 @@ public class TasksByRolesSheet extends Sheet {
         sheet.setColumnWidth(4, 4200);
         sheet.setColumnWidth(5, 4200);
         sheet.setColumnWidth(6, 4200);
-        sheet.setColumnWidth(7, 2000);
-        sheet.setColumnWidth(8, 10000);
+        sheet.setColumnWidth(7, 12000);
     }
 }

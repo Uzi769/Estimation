@@ -12,7 +12,7 @@ import ru.irlix.evaluation.utils.report.math.ReportMath;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationWithoutDetailsSheet extends Sheet {
+public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
     public EstimationWithoutDetailsSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;
@@ -23,7 +23,7 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка без детализации");
         configureColumns();
 
-        fillReportHeader(estimation, request);
+        fillReportHeader(estimation, request, 7);
 
         fillTableHeader();
 
@@ -49,7 +49,6 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         helper.setHeaderCell(row, "Задачи", 0);
         helper.setHeaderCell(row, "Часы (мин)", 3);
@@ -60,13 +59,11 @@ public class EstimationWithoutDetailsSheet extends Sheet {
 
         helper.setHeaderCell(row, null, 1);
         helper.setHeaderCell(row, null, 2);
-        helper.setHeaderCell(row, null, 8);
     }
 
     private void fillPhaseRow(Phase phase, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         helper.setMarkedCell(row, phase.getName(), 0);
 
@@ -89,15 +86,12 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         helper.setMarkedCell(row, null, 1);
         helper.setMarkedCell(row, null, 2);
         helper.setMarkedCell(row, null, 7);
-        helper.setMarkedCell(row, null, 8);
     }
 
     private void fillTaskRow(Task task, ReportRequest request, int column) {
         Row row = createRow(ROW_HEIGHT);
-        mergeCells(7, 8);
 
         helper.setCell(row, null, 0);
-        helper.setCell(row, null, 8);
 
         if (column == 1) {
             mergeCells(column, 2);
@@ -122,7 +116,6 @@ public class EstimationWithoutDetailsSheet extends Sheet {
     private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
-        mergeCells(7, 8);
 
         helper.setBoldCell(row, null, 0);
         helper.setBoldCell(row, feature.getName(), 1);
@@ -132,7 +125,6 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         helper.setBoldCell(row, ReportMath.calcFeatureMaxHours(feature, request), 5);
         helper.setBoldCell(row, ReportMath.calcFeatureMaxCost(feature, request), 6);
         helper.setBoldCell(row, feature.getComment(), 7);
-        helper.setBoldCell(row, null, 8);
 
         for (Task nestedTask : feature.getTasks()) {
             fillTaskRow(nestedTask, request, 2);
@@ -159,11 +151,9 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks, request), 5);
         helper.setCell(row, ReportMath.calcQaSummaryMaxCost(tasks, request), 6);
 
-        mergeCells(7, 8);
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 1);
         helper.setCell(row, null, 7);
-        helper.setCell(row, null, 8);
     }
 
     private void fillPmRow(List<Task> tasks, ReportRequest request) {
@@ -174,17 +164,14 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks, request), 5);
         helper.setCell(row, ReportMath.calcPmSummaryMaxCost(tasks, request), 6);
 
-        mergeCells(7, 8);
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 1);
         helper.setCell(row, null, 7);
-        helper.setCell(row, null, 8);
     }
 
     private void fillSummary() {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
-        mergeCells(7, 8);
 
         helper.setTotalCell(row, "Итого по проекту:", 0);
         helper.setMarkedCell(row, hoursMinSummary, 3);
@@ -195,7 +182,6 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         helper.setMarkedCell(row, null, 1);
         helper.setMarkedCell(row, null, 2);
         helper.setMarkedCell(row, null, 7);
-        helper.setMarkedCell(row, null, 8);
     }
 
     private void configureColumns() {
@@ -206,7 +192,6 @@ public class EstimationWithoutDetailsSheet extends Sheet {
         sheet.setColumnWidth(4, 4200);
         sheet.setColumnWidth(5, 4200);
         sheet.setColumnWidth(6, 4200);
-        sheet.setColumnWidth(7, 2000);
-        sheet.setColumnWidth(8, 10000);
+        sheet.setColumnWidth(7, 12000);
     }
 }

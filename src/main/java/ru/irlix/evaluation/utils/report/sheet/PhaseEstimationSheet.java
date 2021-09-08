@@ -7,7 +7,7 @@ import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
-public class PhaseEstimationSheet extends Sheet {
+public class PhaseEstimationSheet extends EstimationReportSheet {
 
     public PhaseEstimationSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;
@@ -18,7 +18,7 @@ public class PhaseEstimationSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка по фазам");
         configureColumns();
 
-        fillReportHeader(estimation, request);
+        fillReportHeader(estimation, request, 7);
 
         fillTableHeader();
 
@@ -34,7 +34,6 @@ public class PhaseEstimationSheet extends Sheet {
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);
-        mergeCells(7, 8);
 
         helper.setHeaderCell(row, "Фаза", 0);
         helper.setHeaderCell(row, "Часы", 4);
@@ -45,14 +44,12 @@ public class PhaseEstimationSheet extends Sheet {
         helper.setHeaderCell(row, null, 3);
         helper.setHeaderCell(row, null, 5);
         helper.setHeaderCell(row, null, 6);
-        helper.setHeaderCell(row, null, 8);
     }
 
     private void fillPhaseRow(Phase phase, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);
-        mergeCells(7, 8);
 
         helper.setCell(row, phase.getName(), 0);
 
@@ -69,14 +66,12 @@ public class PhaseEstimationSheet extends Sheet {
         helper.setCell(row, null, 3);
         helper.setCell(row, null, 5);
         helper.setCell(row, null, 6);
-        helper.setCell(row, null, 8);
     }
 
     private void fillSummary() {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);
-        mergeCells(7, 8);
 
         helper.setTotalCell(row, "Итого по проекту:", 0);
         helper.setMarkedCell(row, hoursMaxSummary, 4);
@@ -87,7 +82,6 @@ public class PhaseEstimationSheet extends Sheet {
         helper.setMarkedCell(row, null, 3);
         helper.setMarkedCell(row, null, 5);
         helper.setMarkedCell(row, null, 6);
-        helper.setMarkedCell(row, null, 8);
     }
 
     private void configureColumns() {
@@ -98,7 +92,6 @@ public class PhaseEstimationSheet extends Sheet {
         sheet.setColumnWidth(4, 4200);
         sheet.setColumnWidth(5, 4200);
         sheet.setColumnWidth(6, 4200);
-        sheet.setColumnWidth(7, 2000);
-        sheet.setColumnWidth(8, 10000);
+        sheet.setColumnWidth(7, 12000);
     }
 }

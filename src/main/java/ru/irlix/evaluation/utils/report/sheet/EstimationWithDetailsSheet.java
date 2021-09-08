@@ -12,7 +12,7 @@ import ru.irlix.evaluation.utils.report.math.ReportMath;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EstimationWithDetailsSheet extends Sheet {
+public class EstimationWithDetailsSheet extends EstimationReportSheet {
 
     public EstimationWithDetailsSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;
@@ -23,7 +23,7 @@ public class EstimationWithDetailsSheet extends Sheet {
         sheet = helper.getWorkbook().createSheet("Оценка с детализацией");
         configureColumns();
 
-        fillReportHeader(estimation, request);
+        fillReportHeader(estimation, request, 8);
 
         fillTableHeader();
 

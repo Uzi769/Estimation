@@ -8,7 +8,7 @@ import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithoutDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.PhaseEstimationSheet;
-import ru.irlix.evaluation.utils.report.sheet.Sheet;
+import ru.irlix.evaluation.utils.report.sheet.EstimationReportSheet;
 import ru.irlix.evaluation.utils.report.sheet.TasksByRolesSheet;
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class ReportHelper {
     public Resource getEstimationReportResource(Estimation estimation, ReportRequest request) throws IOException {
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
-        List<Sheet> sheets = new ArrayList<>();
+        List<EstimationReportSheet> sheets = new ArrayList<>();
         sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
         sheets.add(new EstimationWithoutDetailsSheet(excelWorkbook));
         sheets.add(new TasksByRolesSheet(excelWorkbook));
