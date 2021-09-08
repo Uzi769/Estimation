@@ -2,23 +2,27 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
-import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.StatusRepository;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
+import ru.irlix.evaluation.utils.report.ReportHelper;
 
+import java.io.IOException;
 import java.util.List;
 
 @Log4j2
@@ -30,6 +34,7 @@ public class EstimationServiceImpl implements EstimationService {
     private StatusRepository statusRepository;
     private EstimationMapper estimationMapper;
     private PhaseMapper phaseMapper;
+    private ReportHelper reportHelper;
 
     @Override
     @Transactional
@@ -123,5 +128,15 @@ public class EstimationServiceImpl implements EstimationService {
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Resource getEstimationsReport(Long id, ReportRequest request) throws IOException {
+        Estimation estimation = findEstimationById(id);
+        Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
+
+        log.info("Estimation report generated");
+        return estimationReport;
     }
 }

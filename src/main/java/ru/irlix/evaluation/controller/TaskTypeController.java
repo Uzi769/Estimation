@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.TaskTypeRequest;
 import ru.irlix.evaluation.dto.response.TaskTypeResponse;
 import ru.irlix.evaluation.service.TaskTypeService;
-import ru.irlix.evaluation.utils.UrlConstants;
+import ru.irlix.evaluation.utils.constant.UrlConstants;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;

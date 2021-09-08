@@ -18,7 +18,7 @@ import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.TaskRepository;
 import ru.irlix.evaluation.service.TaskService;
-import ru.irlix.evaluation.utils.EntitiesIdConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import java.util.List;
 import java.util.stream.Collectors;

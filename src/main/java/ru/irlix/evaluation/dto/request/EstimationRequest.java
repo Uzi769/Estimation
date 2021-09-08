@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.irlix.evaluation.utils.EntitiesIdConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import javax.validation.constraints.Positive;
 
