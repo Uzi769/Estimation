@@ -1,17 +1,20 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
 import org.apache.poi.ss.usermodel.Row;
+import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
+import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.enums.TableType;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class TasksByRolesSheet extends EstimationReportSheet {
@@ -21,18 +24,20 @@ public class TasksByRolesSheet extends EstimationReportSheet {
     private double otherTasksMaxHoursSummary;
     private double otherTasksMaxCostSummary;
 
+    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", LocaleConstants.DEFAULT_LOCALE, new UTF8Control());
+
     public TasksByRolesSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;
     }
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet("Оценка по фичам");
+        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.phaseEstimation"));
         configureColumns();
 
         fillReportHeader(estimation, request, 7);
 
-        fillTableHeader("Фичи", false);
+        fillTableHeader(messageBundle.getString("columnName.phases"), false);
 
         for (Phase phase : estimation.getPhases()) {
             List<Task> features = phase.getTasks().stream()
@@ -53,7 +58,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillSummary(TableType.DEFAULT_TABLE);
 
         createRow(super.ROW_HEIGHT);
-        fillTableHeader("Задачи", true);
+        fillTableHeader(messageBundle.getString("columnName.tasks"), true);
 
         for (Phase phase : estimation.getPhases()) {
             List<Task> tasks = phase.getTasks().stream()
@@ -84,21 +89,21 @@ public class TasksByRolesSheet extends EstimationReportSheet {
 
         if (isLight) {
             helper.setLightHeaderCell(row, taskType, 0);
-            helper.setLightHeaderCell(row, "Часы (мин)", 3);
-            helper.setLightHeaderCell(row, "Стоимость (мин), RUB", 4);
-            helper.setLightHeaderCell(row, "Часы (наиболее вероятные)", 5);
-            helper.setLightHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-            helper.setLightHeaderCell(row, "Комментарии", 7);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.hoursMin"), 3);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.costMin"), 4);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.probableHours"), 5);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.probableCost"), 6);
+            helper.setLightHeaderCell(row, messageBundle.getString("columnName.comment"), 7);
 
             helper.setLightHeaderCell(row, null, 1);
             helper.setLightHeaderCell(row, null, 2);
         } else {
             helper.setHeaderCell(row, taskType, 0);
-            helper.setHeaderCell(row, "Часы (мин)", 3);
-            helper.setHeaderCell(row, "Стоимость (мин), RUB", 4);
-            helper.setHeaderCell(row, "Часы (наиболее вероятные)", 5);
-            helper.setHeaderCell(row, "Стоимость (наиболее вероятная)", 6);
-            helper.setHeaderCell(row, "Комментарии", 7);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.hoursMin"), 3);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.costMin"), 4);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.probableHours"), 5);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.probableCost"), 6);
+            helper.setHeaderCell(row, messageBundle.getString("columnName.comment"), 7);
 
             helper.setHeaderCell(row, null, 1);
             helper.setHeaderCell(row, null, 2);
