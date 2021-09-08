@@ -4,15 +4,25 @@ import lombok.Getter;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
+import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
+import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
+
+import java.util.ResourceBundle;
 
 @Getter
 public abstract class EstimationReportSheet {
     public abstract void getSheet(Estimation estimation, ReportRequest request);
+
+    protected final ResourceBundle messageBundle = ResourceBundle.getBundle(
+            "messages",
+            LocaleConstants.DEFAULT_LOCALE,
+            new UTF8Control()
+    );
 
     protected ExcelWorkbook helper;
     protected HSSFSheet sheet;
