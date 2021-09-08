@@ -1,23 +1,18 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
 import org.apache.poi.ss.usermodel.Row;
-import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class EstimationWithDetailsSheet extends EstimationReportSheet {
-
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", LocaleConstants.DEFAULT_LOCALE, new UTF8Control());
 
     public EstimationWithDetailsSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;

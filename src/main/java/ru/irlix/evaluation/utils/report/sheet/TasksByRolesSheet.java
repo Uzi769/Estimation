@@ -1,20 +1,17 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
 import org.apache.poi.ss.usermodel.Row;
-import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.enums.TableType;
 import ru.irlix.evaluation.utils.report.math.ReportMath;
 
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class TasksByRolesSheet extends EstimationReportSheet {
@@ -24,15 +21,13 @@ public class TasksByRolesSheet extends EstimationReportSheet {
     private double otherTasksMaxHoursSummary;
     private double otherTasksMaxCostSummary;
 
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", LocaleConstants.DEFAULT_LOCALE, new UTF8Control());
-
     public TasksByRolesSheet(ExcelWorkbook excelWorkbook) {
         helper = excelWorkbook;
     }
 
     @Override
     public void getSheet(Estimation estimation, ReportRequest request) {
-        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.phaseEstimation"));
+        sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.featureEstimation"));
         configureColumns();
 
         fillReportHeader(estimation, request, 7);
