@@ -30,7 +30,6 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
     }
 
     private void fillTableHeader() {
-        final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);

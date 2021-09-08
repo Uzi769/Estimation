@@ -10,13 +10,8 @@ import java.util.List;
 @Component
 public class ReportMath {
 
-    private static final PertMath pertMath;
-    private static final RangeMath rangeMath;
-
-    static {
-        pertMath = new PertMath();
-        rangeMath = new RangeMath();
-    }
+    private static final PertMath pertMath = new PertMath();
+    private static final RangeMath rangeMath = new RangeMath();
 
     public static double calcTaskMinHours(Task task, ReportRequest request) {
         Calculable math = request.isPert() ? pertMath : rangeMath;

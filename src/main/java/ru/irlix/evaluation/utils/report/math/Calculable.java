@@ -5,6 +5,9 @@ import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.exception.NotFoundException;
+import ru.irlix.evaluation.utils.report.enums.EmployeeRole;
+
+import java.util.Locale;
 
 public abstract class Calculable {
 
@@ -41,18 +44,18 @@ public abstract class Calculable {
     }
 
     protected static double getRoleCost(Task task, ReportRequest request) {
-        String roleValue = task.getRole() != null
-                ? task.getRole().getValue()
-                : "analyst";
+        EmployeeRole role = task.getRole() != null
+                ? EmployeeRole.valueOf(task.getRole().getValue().toUpperCase(Locale.ROOT))
+                : EmployeeRole.ANALYST;
 
-        switch (roleValue) {
-            case "analyst":
+        switch (role) {
+            case ANALYST:
                 return request.getAnalystCost();
-            case "developer":
+            case DEVELOPER:
                 return request.getDevCost();
-            case "designer":
+            case DESIGNER:
                 return request.getDesignCost();
-            case "tester":
+            case TESTER:
                 return request.getQaCost();
             default:
                 throw new NotFoundException("Role with value " + task.getRole().getValue() + " not found");

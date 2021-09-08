@@ -27,11 +27,11 @@ import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
 public class ReportHeader {
-    
+
     private final EstimationReportSheet sheet;
     private int additionalRowsCount = 0;
 
-    private final int DEFAULT_ROWS_COUNT = 21;
+    private final int DEFAULT_ROWS_COUNT = 16;
 
     public void fillHeader(Estimation estimation, ReportRequest request, int lastColumn) {
         int ENDING_ROWS_COUNT = 6;
@@ -43,22 +43,21 @@ public class ReportHeader {
         fillRoleTable(estimation, request);
         fillPhaseTable(estimation);
 
-        int descriptionFirstRow = DEFAULT_ROWS_COUNT + additionalRowsCount;
+        int descriptionFirstRow = DEFAULT_ROWS_COUNT + additionalRowsCount + 1;
 
         IntStream.range(0, ENDING_ROWS_COUNT).forEach(i -> sheet.createRow(sheet.ROW_HEIGHT));
 
         setDescription(lastColumn, descriptionFirstRow);
         sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(descriptionFirstRow + 4),
-                "Ниже указана ориентировочная оценка проекта", 1);
-        
-        sheet.mergeCells(0, 6, 1, lastColumn);
-        sheet.mergeCells(14, 14, 1, lastColumn);
-        sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 1, lastColumn);
-        sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 1, lastColumn);
-        sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 1, lastColumn);
-        sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 1, lastColumn);
+                "Ниже указана ориентировочная оценка проекта", 0);
 
-        sheet.mergeCells(0, descriptionFirstRow + 5, 0, 0);
+        sheet.mergeCells(0, 6, 0, lastColumn);
+        sheet.mergeCells(14, 14, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 0, lastColumn);
+
         sheet.mergeCells(15, descriptionFirstRow - 2, 3, 3);
         sheet.mergeCells(15, descriptionFirstRow - 2, 7, lastColumn);
     }
@@ -85,48 +84,49 @@ public class ReportHeader {
 
     private void setInfo(Estimation estimation, int lastColumn) {
         Row row = sheet.getSheet().getRow(7);
-        sheet.getHelper().setNonBorderHeaderCell(row, "Коммерческое предложение для компании ООО «" + estimation.getClient() + "»", 1);
-        sheet.mergeCells(7, 8, 1, lastColumn);
+        sheet.getHelper().setNonBorderHeaderCell(row, "Коммерческое предложение для компании ООО «" + estimation.getClient() + "»", 0);
+        sheet.mergeCells(7, 8, 0, lastColumn);
 
         row = sheet.getSheet().getRow(9);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Проект", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, "Проект", 0);
         sheet.getHelper().setNonBorderCell(row, estimation.getName(), 3);
-        sheet.mergeCells(9, 9, 1, 2);
+        sheet.mergeCells(9, 9, 0, 2);
         sheet.mergeCells(9, 9, 3, lastColumn);
 
         row = sheet.getSheet().getRow(10);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Контакты", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, "Контакты", 0);
         sheet.getHelper().setNonBorderCell(row, "Валерий Руссков, +7 902-125-06-54, valery.russkov@irlix.ru", 3);
-        sheet.mergeCells(10, 10, 1, 2);
+        sheet.mergeCells(10, 10, 0, 2);
         sheet.mergeCells(10, 10, 3, lastColumn);
 
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         row = sheet.getSheet().getRow(11);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Дата", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, "Дата", 0);
         sheet.getHelper().setNonBorderCell(row, formatter.format(new Date()), 3);
-        sheet.mergeCells(11, 11, 1, 2);
+        sheet.mergeCells(11, 11, 0, 2);
         sheet.mergeCells(11, 11, 3, lastColumn);
 
         row = sheet.getSheet().getRow(12);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Описание", 1);
-        sheet.mergeCells(12, 12, 1, 2);
+        sheet.getHelper().setNonBorderMarkedCell(row, "Описание", 0);
+        sheet.mergeCells(12, 12, 0, 2);
         sheet.mergeCells(12, 12, 3, lastColumn);
 
         row = sheet.getSheet().getRow(13);
-        sheet.getHelper().setNonBorderMarkedCell(row, "Ограничения проекта", 1);
+        sheet.getHelper().setNonBorderMarkedCell(row, "Ограничения проекта", 0);
         sheet.getHelper().setNonBorderCell(row, "Оценка осуществлена на основе технического задания " +
                 "предоставленного заказчиком и 1 конф-колла.", 3);
-        sheet.mergeCells(13, 13, 1, 2);
+        sheet.mergeCells(13, 13, 0, 2);
         sheet.mergeCells(13, 13, 3, lastColumn);
     }
 
     private void setDescription(int lastColumn, int startRow) {
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow), "Подход к реализации продуктовых проектов", 1);
+        sheet.createRow(sheet.ROW_HEIGHT);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow), "Подход к реализации продуктовых проектов", 0);
         sheet.getHelper().setBigTextCell(sheet.getSheet().getRow(startRow + 1), "Компания IRLIX применяет собственный подход в реализации " +
                 "проектов. Agile совместно с Scrum Framework. В качестве основных атрибутов задействованы основные " +
-                "практики Scrum, образующие внутренний регламент разработки продуктовых проектов в компании IRLIX.", 1);
-        sheet.mergeCells(startRow, startRow, 1, lastColumn);
-        sheet.mergeCells(startRow + 1, startRow + 2, 1, lastColumn);
+                "практики Scrum, образующие внутренний регламент разработки продуктовых проектов в компании IRLIX.", 0);
+        sheet.mergeCells(startRow, startRow, 0, lastColumn);
+        sheet.mergeCells(startRow + 1, startRow + 2, 0, lastColumn);
     }
 
     private void fillRoleTable(Estimation estimation, ReportRequest request) {
@@ -136,18 +136,20 @@ public class ReportHeader {
         sheet.mergeCells(15, 15, 4, 5);
         sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Кол-во", 6);
 
-        int currentRow = 16;
+        int rowCount = 0;
         for (String role : roles) {
-            sheet.mergeCells(currentRow, currentRow, 4, 5);
-            Row row = sheet.getSheet().getRow(currentRow);
-            sheet.getHelper().setNonBorderCell(row, role, 4);
-            sheet.getHelper().setNonBorderDigitCell(row, 1, 6);
-            currentRow++;
-
-            if (currentRow >= DEFAULT_ROWS_COUNT + additionalRowsCount) {
+            if (rowCount + 1 > additionalRowsCount) {
                 sheet.createRow(sheet.ROW_HEIGHT);
                 additionalRowsCount++;
             }
+
+            int rowNum = rowCount + DEFAULT_ROWS_COUNT;
+            Row row = sheet.getSheet().getRow(rowNum);
+            sheet.mergeCells(rowNum, rowNum, 4, 5);
+
+            sheet.getHelper().setNonBorderCell(row, role, 4);
+            sheet.getHelper().setNonBorderDigitCell(row, 1, 6);
+            rowCount++;
         }
 
         mergeOtherColumn(estimation.getPhases().size(), roles.size());
@@ -158,19 +160,20 @@ public class ReportHeader {
                 .map(Phase::getName)
                 .collect(Collectors.toList());
 
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Направления", 1);
-        sheet.mergeCells(15, 15, 1, 2);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), "Направления", 0);
+        sheet.mergeCells(15, 15, 0, 2);
 
-        int currentRow = 16;
+        int rowCount = 0;
         for (String phase : phases) {
-            sheet.mergeCells(currentRow, currentRow, 1, 2);
-            sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(currentRow), phase, 1);
-            currentRow++;
-
-            if (currentRow >= DEFAULT_ROWS_COUNT + additionalRowsCount) {
+            if (rowCount + 1 > additionalRowsCount) {
                 sheet.createRow(sheet.ROW_HEIGHT);
                 additionalRowsCount++;
             }
+
+            int rowNum = rowCount + DEFAULT_ROWS_COUNT;
+            sheet.mergeCells(rowNum, rowNum, 0, 2);
+            sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(rowNum), phase, 0);
+            rowCount++;
         }
     }
 
@@ -206,12 +209,12 @@ public class ReportHeader {
     }
 
     private void mergeOtherColumn(int phaseCount, int roleCount) {
-        int startRow = Math.min(phaseCount, roleCount) + 16;
-        int endRow = Math.max(phaseCount, roleCount) + 16;
+        int startRow = Math.min(phaseCount, roleCount) + DEFAULT_ROWS_COUNT;
+        int endRow = Math.max(phaseCount, roleCount) + DEFAULT_ROWS_COUNT;
 
         if (phaseCount < roleCount) {
             while (startRow < endRow) {
-                sheet.mergeCells(startRow, startRow, 1, 2);
+                sheet.mergeCells(startRow, startRow, 0, 2);
                 startRow++;
             }
         } else if (phaseCount > roleCount) {
