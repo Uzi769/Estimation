@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
@@ -68,6 +69,14 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         Page<Estimation> estimationList = estimationRepository.filter(request);
+        log.info("Estimations filtered and found");
+        return estimationMapper.estimationToEstimationResponse(estimationList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
+        Page<Estimation> estimationList = estimationRepository.findAny(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
