@@ -33,6 +33,7 @@ public abstract class EstimationReportSheet {
     protected double costMaxSummary;
 
     protected final short ROW_HEIGHT = 380;
+    protected final short HEADER_ROW_HEIGHT = 1050;
 
     protected int rowNum = 0;
 

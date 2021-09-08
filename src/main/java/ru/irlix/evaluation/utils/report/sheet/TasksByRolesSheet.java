@@ -78,7 +78,6 @@ public class TasksByRolesSheet extends EstimationReportSheet {
     }
 
     private void fillTableHeader(String taskType, boolean isLight) {
-        final short HEADER_ROW_HEIGHT = 1050;
         Row row = createRow(HEADER_ROW_HEIGHT);
         mergeCells(0, 2);
 
