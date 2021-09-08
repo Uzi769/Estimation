@@ -32,10 +32,12 @@ public class ReportHeader {
 
     private final int DEFAULT_ROWS_COUNT = 16;
 
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", LocaleConstants.DEFAULT_LOCALE, new UTF8Control());
+    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages",
+            LocaleConstants.DEFAULT_LOCALE,
+            new UTF8Control());
 
     public void fillHeader(Estimation estimation, ReportRequest request, int lastColumn) {
-        int ENDING_ROWS_COUNT = 6;
+        int ENDING_ROWS_COUNT = 7;
 
         IntStream.range(0, DEFAULT_ROWS_COUNT).forEach(i -> sheet.createRow(sheet.ROW_HEIGHT));
 
@@ -50,14 +52,14 @@ public class ReportHeader {
 
         setDescription(lastColumn, descriptionFirstRow);
         sheet.getHelper().setNonBorderCell(sheet.getSheet().getRow(descriptionFirstRow + 4),
-                messageBundle.getString("string.approximateEstimation"), 1);
-        
-                sheet.mergeCells(0, 6, 0, lastColumn);
-                sheet.mergeCells(14, 14, 0, lastColumn);
-                sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 0, lastColumn);
-                sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 0, lastColumn);
-                sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 0, lastColumn);
-                sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 0, lastColumn);
+                messageBundle.getString("string.approximateEstimation"), 0);
+
+        sheet.mergeCells(0, 6, 0, lastColumn);
+        sheet.mergeCells(14, 14, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow - 1, descriptionFirstRow - 1, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 0, lastColumn);
+        sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 0, lastColumn);
         sheet.mergeCells(15, descriptionFirstRow - 2, 3, 3);
         sheet.mergeCells(15, descriptionFirstRow - 2, 7, lastColumn);
     }
@@ -84,7 +86,8 @@ public class ReportHeader {
 
     private void setInfo(Estimation estimation, int lastColumn) {
         Row row = sheet.getSheet().getRow(7);
-        sheet.getHelper().setNonBorderHeaderCell(row, messageBundle.getString("string.commercialOffer") + " «" + estimation.getClient() + "»", 0);
+        sheet.getHelper().setNonBorderHeaderCell(row, messageBundle.getString("string.commercialOffer") +
+                " «" + estimation.getClient() + "»", 0);
         sheet.mergeCells(7, 8, 0, lastColumn);
 
         row = sheet.getSheet().getRow(9);
@@ -119,8 +122,10 @@ public class ReportHeader {
     }
 
     private void setDescription(int lastColumn, int startRow) {
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow), messageBundle.getString("cellName.approach"), 1);
-        sheet.getHelper().setBigTextCell(sheet.getSheet().getRow(startRow + 1), messageBundle.getString("string.approach"), 1);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(startRow),
+                messageBundle.getString("cellName.approach"), 0);
+        sheet.getHelper().setBigTextCell(sheet.getSheet().getRow(startRow + 1),
+                messageBundle.getString("string.approach"), 0);
         sheet.mergeCells(startRow, startRow, 0, lastColumn);
         sheet.mergeCells(startRow + 1, startRow + 2, 0, lastColumn);
     }
@@ -128,9 +133,11 @@ public class ReportHeader {
     private void fillRoleTable(Estimation estimation, ReportRequest request) {
         List<String> roles = getRoles(estimation, request);
 
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.employer"), 4);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15),
+                messageBundle.getString("columnName.employer"), 4);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15),
+                messageBundle.getString("columnName.count"), 6);
         sheet.mergeCells(15, 15, 4, 5);
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.count"), 6);
 
         int rowCount = 0;
         for (String role : roles) {
@@ -156,7 +163,8 @@ public class ReportHeader {
                 .map(Phase::getName)
                 .collect(Collectors.toList());
 
-        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15), messageBundle.getString("columnName.direction"), 1);
+        sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15),
+                messageBundle.getString("columnName.direction"), 0);
         sheet.mergeCells(15, 15, 0, 2);
 
         int rowCount = 0;
