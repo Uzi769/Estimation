@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.utils;
+package ru.irlix.evaluation.utils.constant;
 
 public class UrlConstants {
     public static final String BASE_URL = "/api/v1";

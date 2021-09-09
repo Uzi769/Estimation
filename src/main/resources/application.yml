@@ -43,3 +43,6 @@ keycloak:
     password: ${KEYCLOAK_PWD}
 
   public-client: true
+
+document-path: ${DOC_PATH:report.xls}
+

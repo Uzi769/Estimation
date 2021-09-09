@@ -22,13 +22,11 @@ public abstract class PhaseMapper {
     @Mapping(target = "estimation", ignore = true)
     public abstract Phase phaseRequestToPhase(PhaseRequest phaseRequest);
 
-    @Mapping(target = "estimation", ignore = true)
     public abstract List<Phase> phaseRequestToPhase(List<PhaseRequest> phaseRequest);
 
     @Mapping(target = "estimationId", ignore = true)
     public abstract PhaseResponse phaseToPhaseResponse(Phase phase);
 
-    @Mapping(target = "estimationId", ignore = true)
     public abstract List<PhaseResponse> phaseToPhaseResponse(List<Phase> phase);
 
     @AfterMapping

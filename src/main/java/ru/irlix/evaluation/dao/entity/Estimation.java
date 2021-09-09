@@ -49,4 +49,20 @@ public class Estimation {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     @OrderBy("sortOrder ASC")
     private List<Phase> phases;
+
+    @ManyToMany(mappedBy = "estimations")
+    private List<User> users;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_estimation",
+            joinColumns = @JoinColumn(name = "estimation_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Role role;
+
+    @PrePersist
+    public void prePersist() {
+        if (risk == null) {
+            risk = 0;
+        }
+    }
 }

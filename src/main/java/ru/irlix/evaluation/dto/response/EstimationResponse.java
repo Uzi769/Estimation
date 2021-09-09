@@ -27,5 +27,9 @@ public class EstimationResponse {
 
     private Long status;
 
+    private Double hoursMin;
+
+    private Double hoursMax;
+
     private List<PhaseResponse> phases;
 }

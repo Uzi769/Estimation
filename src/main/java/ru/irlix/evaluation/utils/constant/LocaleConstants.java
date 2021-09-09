@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.utils;
+package ru.irlix.evaluation.utils.constant;
 
 import java.util.Locale;
 

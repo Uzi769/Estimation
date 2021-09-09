@@ -8,7 +8,7 @@ import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.request.TaskUpdateRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.service.TaskService;
-import ru.irlix.evaluation.utils.UrlConstants;
+import ru.irlix.evaluation.utils.constant.UrlConstants;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.Valid;

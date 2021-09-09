@@ -15,7 +15,8 @@ import ru.irlix.evaluation.dao.mapper.helper.TaskHelper;
 import ru.irlix.evaluation.dao.mapper.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
-import ru.irlix.evaluation.utils.EntitiesIdConstants;
+import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
+
 
 import java.util.List;
 
@@ -40,12 +41,6 @@ public abstract class TaskMapper {
     @Mapping(target = "parent", ignore = true)
     public abstract Task taskRequestToTask(TaskRequest taskRequest);
 
-    @Mapping(target = "type", ignore = true)
-    @Mapping(target = "phase", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "parent", ignore = true)
-    @Mapping(target = "hoursMax", ignore = true)
-    @Mapping(target = "hoursMin", ignore = true)
     public abstract List<Task> taskRequestToTask(List<TaskRequest> taskRequest);
 
     @Mapping(target = "type", ignore = true)
@@ -55,11 +50,6 @@ public abstract class TaskMapper {
     @Mapping(target = "tasks", ignore = true)
     public abstract TaskResponse taskToResponse(Task task);
 
-    @Mapping(target = "type", ignore = true)
-    @Mapping(target = "phaseId", ignore = true)
-    @Mapping(target = "roleId", ignore = true)
-    @Mapping(target = "parentId", ignore = true)
-    @Mapping(target = "tasks", ignore = true)
     public abstract List<TaskResponse> taskToResponse(List<Task> tasks);
 
     @AfterMapping
