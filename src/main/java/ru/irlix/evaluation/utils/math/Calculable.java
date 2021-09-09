@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.utils.report.math;
+package ru.irlix.evaluation.utils.math;
 
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;

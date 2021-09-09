@@ -7,7 +7,7 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.math.ReportMath;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,19 +66,19 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
         helper.setMarkedCell(row, phase.getName(), 0);
 
-        double sumHoursMin = ReportMath.calcListSummaryMinHours(phase.getTasks(), request);
+        double sumHoursMin = EstimationMath.calcListSummaryMinHours(phase.getTasks(), request);
         hoursMinSummary += sumHoursMin;
         helper.setMarkedCell(row, sumHoursMin, 3);
 
-        double sumCostMin = ReportMath.calcListSummaryMinCost(phase.getTasks(), request);
+        double sumCostMin = EstimationMath.calcListSummaryMinCost(phase.getTasks(), request);
         costMinSummary += sumCostMin;
         helper.setMarkedCell(row, sumCostMin, 4);
 
-        double sumHoursMax = ReportMath.calcListSummaryMaxHours(phase.getTasks(), request);
+        double sumHoursMax = EstimationMath.calcListSummaryMaxHours(phase.getTasks(), request);
         hoursMaxSummary += sumHoursMax;
         helper.setMarkedCell(row, sumHoursMax, 5);
 
-        double sumCostMax = ReportMath.calcListSummaryMaxCost(phase.getTasks(), request);
+        double sumCostMax = EstimationMath.calcListSummaryMaxCost(phase.getTasks(), request);
         costMaxSummary += sumCostMax;
         helper.setMarkedCell(row, sumCostMax, 6);
 
@@ -96,10 +96,10 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
             mergeCells(column, 2);
             helper.setCell(row, task.getName(), column);
             helper.setCell(row, null, 2);
-            helper.setCell(row, ReportMath.calcTaskMinHoursWithQaAndPm(task, request), 3);
-            helper.setCell(row, ReportMath.calcTaskMinCostWithQaAndPm(task, request), 4);
-            helper.setCell(row, ReportMath.calcTaskMaxHoursWithQaAndPm(task, request), 5);
-            helper.setCell(row, ReportMath.calcTaskMaxCostWithQaAndPm(task, request), 6);
+            helper.setCell(row, EstimationMath.calcTaskMinHoursWithQaAndPm(task, request), 3);
+            helper.setCell(row, EstimationMath.calcTaskMinCostWithQaAndPm(task, request), 4);
+            helper.setCell(row, EstimationMath.calcTaskMaxHoursWithQaAndPm(task, request), 5);
+            helper.setCell(row, EstimationMath.calcTaskMaxCostWithQaAndPm(task, request), 6);
             helper.setCell(row, task.getComment(), 7);
         } else {
             helper.setCell(row, null, 1);
@@ -119,10 +119,10 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setBoldCell(row, null, 0);
         helper.setBoldCell(row, feature.getName(), 1);
         helper.setBoldCell(row, null, 2);
-        helper.setBoldCell(row, ReportMath.calcFeatureMinHours(feature, request), 3);
-        helper.setBoldCell(row, ReportMath.calcFeatureMinCost(feature, request), 4);
-        helper.setBoldCell(row, ReportMath.calcFeatureMaxHours(feature, request), 5);
-        helper.setBoldCell(row, ReportMath.calcFeatureMaxCost(feature, request), 6);
+        helper.setBoldCell(row, EstimationMath.calcFeatureMinHours(feature, request), 3);
+        helper.setBoldCell(row, EstimationMath.calcFeatureMinCost(feature, request), 4);
+        helper.setBoldCell(row, EstimationMath.calcFeatureMaxHours(feature, request), 5);
+        helper.setBoldCell(row, EstimationMath.calcFeatureMaxCost(feature, request), 6);
         helper.setBoldCell(row, feature.getComment(), 7);
 
         for (Task nestedTask : feature.getTasks()) {
@@ -133,11 +133,11 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
     }
 
     private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
-        if (ReportMath.calcQaSummaryMaxHours(tasks, request) > 0) {
+        if (EstimationMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             fillQaRow(tasks, request);
         }
 
-        if (ReportMath.calcPmSummaryMaxHours(tasks, request) > 0) {
+        if (EstimationMath.calcPmSummaryMaxHours(tasks, request) > 0) {
             fillPmRow(tasks, request);
         }
     }
@@ -145,10 +145,10 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
     private void fillQaRow(List<Task> tasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         helper.setCell(row, messageBundle.getString("cellName.testing"), 2);
-        helper.setCell(row, ReportMath.calcQaSummaryMinHours(tasks, request), 3);
-        helper.setCell(row, ReportMath.calcQaSummaryMinCost(tasks, request), 4);
-        helper.setCell(row, ReportMath.calcQaSummaryMaxHours(tasks, request), 5);
-        helper.setCell(row, ReportMath.calcQaSummaryMaxCost(tasks, request), 6);
+        helper.setCell(row, EstimationMath.calcQaSummaryMinHours(tasks, request), 3);
+        helper.setCell(row, EstimationMath.calcQaSummaryMinCost(tasks, request), 4);
+        helper.setCell(row, EstimationMath.calcQaSummaryMaxHours(tasks, request), 5);
+        helper.setCell(row, EstimationMath.calcQaSummaryMaxCost(tasks, request), 6);
 
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 1);
@@ -158,10 +158,10 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
     private void fillPmRow(List<Task> tasks, ReportRequest request) {
         Row row = createRow(ROW_HEIGHT);
         helper.setCell(row, messageBundle.getString("cellName.management"), 2);
-        helper.setCell(row, ReportMath.calcPmSummaryMinHours(tasks, request), 3);
-        helper.setCell(row, ReportMath.calcPmSummaryMinCost(tasks, request), 4);
-        helper.setCell(row, ReportMath.calcPmSummaryMaxHours(tasks, request), 5);
-        helper.setCell(row, ReportMath.calcPmSummaryMaxCost(tasks, request), 6);
+        helper.setCell(row, EstimationMath.calcPmSummaryMinHours(tasks, request), 3);
+        helper.setCell(row, EstimationMath.calcPmSummaryMinCost(tasks, request), 4);
+        helper.setCell(row, EstimationMath.calcPmSummaryMaxHours(tasks, request), 5);
+        helper.setCell(row, EstimationMath.calcPmSummaryMaxCost(tasks, request), 6);
 
         helper.setCell(row, null, 0);
         helper.setCell(row, null, 1);

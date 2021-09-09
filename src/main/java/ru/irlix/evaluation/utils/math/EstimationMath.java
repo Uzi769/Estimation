@@ -1,6 +1,7 @@
-package ru.irlix.evaluation.utils.report.math;
+package ru.irlix.evaluation.utils.math;
 
 import org.springframework.stereotype.Component;
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
@@ -8,7 +9,7 @@ import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import java.util.List;
 
 @Component
-public class ReportMath {
+public class EstimationMath {
 
     private static final PertMath pertMath = new PertMath();
     private static final RangeMath rangeMath = new RangeMath();
@@ -31,6 +32,20 @@ public class ReportMath {
     public static double calcTaskMaxCost(Task task, ReportRequest request) {
         Calculable math = request.isPert() ? pertMath : rangeMath;
         return math.calcTaskMaxCost(task, request);
+    }
+
+    public static double calcEstimationMinHours(Estimation estimation) {
+        ReportRequest reportRequest = new ReportRequest();
+        return estimation.getPhases().stream()
+                .mapToDouble(p -> calcListSummaryMinHours(p.getTasks(), reportRequest))
+                .sum();
+    }
+
+    public static double calcEstimationMaxHours(Estimation estimation) {
+        ReportRequest reportRequest = new ReportRequest();
+        return estimation.getPhases().stream()
+                .mapToDouble(p -> calcListSummaryMaxHours(p.getTasks(), reportRequest))
+                .sum();
     }
 
     public static double calcListSummaryMinHours(List<Task> tasks, ReportRequest request) {

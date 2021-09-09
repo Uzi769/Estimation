@@ -1,13 +1,13 @@
-package ru.irlix.evaluation.utils.report.math;
+package ru.irlix.evaluation.utils.math;
 
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 
-public class PertMath extends Calculable {
+public class RangeMath extends Calculable {
 
     @Override
     public double calcTaskMinHours(Task task) {
-        return round(calcTaskMinHoursWithoutPercents(task) * getPercentAddition(task));
+        return round(task.getHoursMin() * getRepeatCount(task) * getPercentAddition(task));
     }
 
     @Override
@@ -17,7 +17,7 @@ public class PertMath extends Calculable {
 
     @Override
     public double calcTaskMaxHours(Task task) {
-        return round(calcTaskMaxHoursWithoutPercents(task) * getPercentAddition(task));
+        return round(task.getHoursMax() * getRepeatCount(task) * getPercentAddition(task));
     }
 
     @Override
@@ -25,26 +25,10 @@ public class PertMath extends Calculable {
         return round(calcTaskMaxHours(task) * getRoleCost(task, request));
     }
 
-    private double calcTaskMinHoursWithoutPercents(Task task) {
-        return calcTaskMinHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
-    }
-
-    private double calcTaskMaxHoursWithoutPercents(Task task) {
-        return calcTaskMaxHoursPertWithoutRepeatCount(task) * getRepeatCount(task);
-    }
-
-    private static double calcTaskMinHoursPertWithoutRepeatCount(Task task) {
-        return calcTaskMaxHoursPertWithoutRepeatCount(task) - (task.getHoursMax() - task.getHoursMin()) / 6;
-    }
-
-    private static double calcTaskMaxHoursPertWithoutRepeatCount(Task task) {
-        return (task.getHoursMin() + task.getHoursMax() + 2 * (task.getHoursMin() + task.getHoursMax())) / 6;
-    }
-
     public double calcQaMinHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(calcTaskMinHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = round(task.getHoursMin() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
         }
 
         return qaHours;
@@ -62,7 +46,7 @@ public class PertMath extends Calculable {
     public double calcQaMaxHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(calcTaskMaxHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = round(task.getHoursMax() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
         }
 
         return qaHours;
@@ -80,7 +64,7 @@ public class PertMath extends Calculable {
     public double calcPmMinHours(Task task) {
         double pmHours = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmHours = round(calcTaskMinHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task));
+            pmHours = round(task.getHoursMin() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task));
         }
 
         return pmHours;
@@ -98,7 +82,7 @@ public class PertMath extends Calculable {
     public double calcPmMaxHours(Task task) {
         double pmHours = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmHours = round(calcTaskMaxHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task));
+            pmHours = round(task.getHoursMax() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task));
         }
 
         return pmHours;
