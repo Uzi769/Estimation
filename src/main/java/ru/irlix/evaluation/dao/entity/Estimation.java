@@ -53,12 +53,6 @@ public class Estimation {
     @ManyToMany(mappedBy = "estimations")
     private List<User> users;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_estimation",
-            joinColumns = @JoinColumn(name = "estimation_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Role role;
-
     @PrePersist
     public void prePersist() {
         if (risk == null) {

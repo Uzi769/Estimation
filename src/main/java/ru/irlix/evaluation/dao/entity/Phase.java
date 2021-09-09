@@ -29,10 +29,6 @@ public class Phase {
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column(name = "sort_order")
     private Integer sortOrder;
 
