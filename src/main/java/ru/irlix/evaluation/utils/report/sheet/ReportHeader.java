@@ -14,7 +14,7 @@ import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
-import ru.irlix.evaluation.utils.report.math.ReportMath;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -201,11 +201,11 @@ public class ReportHeader {
                 .map(Role::getDisplayValue)
                 .collect(Collectors.toList());
 
-        if (ReportMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
+        if (EstimationMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
             rolesStrings.add(messageBundle.getString("cellName.tester"));
         }
 
-        if (ReportMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
+        if (EstimationMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
             rolesStrings.add(messageBundle.getString("cellName.projectManager"));
         }
 

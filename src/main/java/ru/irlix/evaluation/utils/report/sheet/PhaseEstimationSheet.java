@@ -5,7 +5,7 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
-import ru.irlix.evaluation.utils.report.math.ReportMath;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 
 public class PhaseEstimationSheet extends EstimationReportSheet {
 
@@ -52,11 +52,11 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
 
         helper.setCell(row, phase.getName(), 0);
 
-        double sumHoursMax = ReportMath.calcListSummaryMaxHours(phase.getTasks(), request);
+        double sumHoursMax = EstimationMath.calcListSummaryMaxHours(phase.getTasks(), request);
         hoursMaxSummary += sumHoursMax;
         helper.setCell(row, sumHoursMax, 4);
 
-        double sumCostMax = ReportMath.calcListSummaryMaxCost(phase.getTasks(), request);
+        double sumCostMax = EstimationMath.calcListSummaryMaxCost(phase.getTasks(), request);
         costMaxSummary += sumCostMax;
         helper.setCell(row, sumCostMax, 7);
 

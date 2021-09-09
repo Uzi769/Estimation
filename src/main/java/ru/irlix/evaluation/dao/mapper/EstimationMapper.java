@@ -12,6 +12,7 @@ import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.mapper.helper.StatusHelper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public abstract class EstimationMapper {
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
 
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "hoursMin", ignore = true)
+    @Mapping(target = "hoursMax", ignore = true)
     public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
     public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimation);
@@ -45,5 +48,8 @@ public abstract class EstimationMapper {
         if (estimation.getStatus() != null) {
             response.setStatus(estimation.getStatus().getId());
         }
+
+        response.setHoursMin(EstimationMath.calcEstimationMinHours(estimation));
+        response.setHoursMax(EstimationMath.calcEstimationMaxHours(estimation));
     }
 }
