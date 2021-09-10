@@ -20,9 +20,6 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "user")
-    private List<Phase> phases;
-
     @ManyToMany
     @JoinTable(
             name = "user_estimation",

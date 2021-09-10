@@ -2,6 +2,7 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
@@ -26,6 +27,7 @@ public class PhaseController {
 
     private final PhaseService phaseService;
 
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @PostMapping
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
@@ -33,12 +35,14 @@ public class PhaseController {
         return phaseService.createPhase(phaseRequest);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<PhaseResponse> createPhases(@RequestBody @Valid List<PhaseRequest> phaseRequests) {
         return phaseService.createPhases(phaseRequests);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @PutMapping("/{id}")
     @Validated(OnUpdate.class)
     public PhaseResponse updatePhase(@PathVariable @Positive(message = "{id.positive}") Long id,
@@ -47,6 +51,7 @@ public class PhaseController {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @PutMapping("/list")
     @Validated(OnUpdate.class)
     public List<PhaseResponse> updatePhases(@RequestBody @Valid List<PhaseUpdateRequest> phaseRequests) {
@@ -54,12 +59,14 @@ public class PhaseController {
         return phaseService.updatePhases(phaseRequests);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public PhaseResponse findPhaseById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return phaseService.findPhaseResponseById(id);
     }
 
+    @PreAuthorize("hasAuthority('ROLE_SALES')")
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
