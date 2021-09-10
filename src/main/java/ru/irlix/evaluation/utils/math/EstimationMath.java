@@ -36,6 +36,11 @@ public class EstimationMath {
 
     public static double calcEstimationMinHours(Estimation estimation) {
         ReportRequest reportRequest = new ReportRequest();
+
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
+
         return estimation.getPhases().stream()
                 .mapToDouble(p -> calcListSummaryMinHours(p.getTasks(), reportRequest))
                 .sum();
@@ -43,6 +48,11 @@ public class EstimationMath {
 
     public static double calcEstimationMaxHours(Estimation estimation) {
         ReportRequest reportRequest = new ReportRequest();
+
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
+
         return estimation.getPhases().stream()
                 .mapToDouble(p -> calcListSummaryMaxHours(p.getTasks(), reportRequest))
                 .sum();
