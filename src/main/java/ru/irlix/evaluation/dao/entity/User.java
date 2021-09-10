@@ -27,13 +27,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "estimation_id"))
     private List<Estimation> estimations;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_estimation",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Role role;
-
     @Column(name = "deleted")
     private Boolean deleted;
 
