@@ -40,7 +40,23 @@ public abstract class Calculable {
     }
 
     protected static double round(double digit) {
-        return Math.round(digit * 10) / 10.0;
+        long mathRound = Math.round(digit * 10); //округление умноженного числа на 10
+        long longTenDiv = mathRound / 10; // целое число, без остатка полсе запятой
+        double doubleTenDiv =  mathRound / 10.0; // double число с 1 знаком после запятой
+        double ost = mathRound % 10; // остаток после запятой
+
+        double total = doubleTenDiv;
+
+        if((ost!= 0.0) && (ost!=5.0)) {
+            //если после запятой 1-4:
+            if((ost>0) && (ost<5))
+                total = longTenDiv + 0.5;
+            //если после запятой 6-9:
+            if((ost>5) && (ost<=9))
+                total = longTenDiv + 1;
+        }
+        return total;
+
     }
 
     protected static double getRoleCost(Task task, ReportRequest request) {
@@ -99,7 +115,7 @@ public abstract class Calculable {
     protected static double getQaPercent(Task task) {
         double qaPercent = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaPercent = round(task.getQaReserve() / 100.0);
+            qaPercent = (task.getQaReserve() / 100.0);
         }
 
         return qaPercent;
@@ -108,7 +124,7 @@ public abstract class Calculable {
     protected static double getPmPercent(Task task) {
         double pmPercent = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmPercent = round(task.getManagementReserve() / 100.0);
+            pmPercent = (task.getManagementReserve() / 100.0);
         }
 
         return pmPercent;
