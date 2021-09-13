@@ -60,8 +60,14 @@ public class ReportHeader {
         sheet.mergeCells(descriptionFirstRow + 3, descriptionFirstRow + 3, 0, lastColumn);
         sheet.mergeCells(descriptionFirstRow + 4, descriptionFirstRow + 4, 0, lastColumn);
         sheet.mergeCells(descriptionFirstRow + 5, descriptionFirstRow + 5, 0, lastColumn);
-        sheet.mergeCells(15, descriptionFirstRow - 2, 3, 3);
-        sheet.mergeCells(15, descriptionFirstRow - 2, 7, lastColumn);
+
+        if (descriptionFirstRow != 17) {
+            sheet.mergeCells(15, descriptionFirstRow - 2, 3, 3);
+        }
+
+        if (descriptionFirstRow != 17 && lastColumn != 7) {
+            sheet.mergeCells(15, descriptionFirstRow - 2, 7, lastColumn);
+        }
     }
 
     private void setImage(int lastColumn) {
