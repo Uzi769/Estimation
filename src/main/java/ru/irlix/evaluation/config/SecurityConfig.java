@@ -29,7 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITELIST = {
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/swagger-ui.html/**"
+            "/swagger-ui/index.html/**",
+            "/api/v1/keycloak/**"
     };
 
     @Override

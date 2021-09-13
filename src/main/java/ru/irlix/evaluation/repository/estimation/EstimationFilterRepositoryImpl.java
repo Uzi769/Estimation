@@ -7,15 +7,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +25,17 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     private CriteriaBuilder builder;
     private CriteriaQuery<Estimation> query;
     private Root<Estimation> root;
+    private Join<Estimation, User> joinUser;
 
     @Override
     public Page<Estimation> filter(EstimationFilterRequest request) {
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
+
+        joinUser = root.join("estimation_id", JoinType.LEFT)
+                .join("user_id", JoinType.LEFT);
+
         return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
     }
 
@@ -89,6 +92,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
+        filterPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
+
         return builder.and(filterPredicates.toArray(new Predicate[0]));
     }
 
@@ -113,6 +118,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         if (request.getEndDate() != null) {
             otherPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
+
+        otherPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
 
         return builder.and(
                 textPredicates.isEmpty() ? builder.and() : builder.or(textPredicates.toArray(new Predicate[0])),

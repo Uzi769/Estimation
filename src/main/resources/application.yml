@@ -35,12 +35,12 @@ keycloak:
   auth-server-url: ${KEYCLOAK_URL}
   realm: ${KEYCLOAK_REALM}
 
-  credentials:
-    client-id: ${CLIENT_ID}
-    secret: ${CLIENT_SECRET}
+  server-url: ${KEYCLOAK_AUTH_URL}
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
 
-    username: ${KEYCLOAK_USERNAME}
-    password: ${KEYCLOAK_PWD}
+  username: ${KEYCLOAK_USERNAME}
+  password: ${KEYCLOAK_PWD}
 
   public-client: true
 

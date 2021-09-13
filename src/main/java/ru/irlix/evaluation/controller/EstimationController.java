@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -59,6 +60,7 @@ public class EstimationController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request) {
+        System.out.println("getAuthorities = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         log.info(UrlConstants.RECEIVED_FILTER + request);
         return estimationService.findAllEstimations(request);
     }
