@@ -64,7 +64,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         return keycloak.realm(keycloakRealm).users().search(null, 0, KEYCLOAK_FETCH_MAX_VALUE).parallelStream()
                 .map(user -> {
                     String userId = user.getId();
-                    return new UserKeycloakDto(UUID.fromString(userId), user.getFirstName());
+                    return new UserKeycloakDto(UUID.fromString(userId), user.getFirstName(), user.getLastName());
                 }).collect(Collectors.toList());
     }
 }

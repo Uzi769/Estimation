@@ -21,4 +21,10 @@ public class KeycloakController {
         System.out.println("getJwt: " + keycloakService.getJwt());
 //        System.out.println("getRoles(): " + keycloakService.getRoles());
     }
+
+    @GetMapping("/users")
+    public void getUsers() {
+        keycloakService.getAllUsers().forEach(user -> System.out.println("getAllUsers: имя: " + user.getFirstName() + " " + user.getLastName()));
+    }
+
 }
