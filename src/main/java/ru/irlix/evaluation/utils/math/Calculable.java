@@ -44,7 +44,7 @@ public abstract class Calculable {
         double remainder = Math.round(digit * 10) % 10;
         if ((remainder > 0) && (remainder < 5))
             return valueWithoutRemainder + 0.5;
-        if ((remainder > 5) && (remainder <= 9))
+        if ((remainder > 5) && (remainder < 10))
             return valueWithoutRemainder + 1;
         return Math.round(digit * 10) / 10.0;
     }
