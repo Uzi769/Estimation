@@ -40,6 +40,12 @@ public abstract class Calculable {
     }
 
     protected static double round(double digit) {
+        long valueWithoutRemainder = Math.round(digit * 10) / 10;
+        double remainder = Math.round(digit * 10) % 10;
+        if ((remainder > 0) && (remainder < 5))
+            return valueWithoutRemainder + 0.5;
+        if ((remainder > 5) && (remainder < 10))
+            return valueWithoutRemainder + 1;
         return Math.round(digit * 10) / 10.0;
     }
 
@@ -99,7 +105,7 @@ public abstract class Calculable {
     protected static double getQaPercent(Task task) {
         double qaPercent = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaPercent = round(task.getQaReserve() / 100.0);
+            qaPercent = (task.getQaReserve() / 100.0);
         }
 
         return qaPercent;
@@ -108,7 +114,7 @@ public abstract class Calculable {
     protected static double getPmPercent(Task task) {
         double pmPercent = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmPercent = round(task.getManagementReserve() / 100.0);
+            pmPercent = (task.getManagementReserve() / 100.0);
         }
 
         return pmPercent;
