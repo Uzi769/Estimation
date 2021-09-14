@@ -40,23 +40,13 @@ public abstract class Calculable {
     }
 
     protected static double round(double digit) {
-        long mathRound = Math.round(digit * 10); //округление умноженного числа на 10
-        long longTenDiv = mathRound / 10; // целое число, без остатка полсе запятой
-        double doubleTenDiv =  mathRound / 10.0; // double число с 1 знаком после запятой
-        double ost = mathRound % 10; // остаток после запятой
-
-        double total = doubleTenDiv;
-
-        if((ost!= 0.0) && (ost!=5.0)) {
-            //если после запятой 1-4:
-            if((ost>0) && (ost<5))
-                total = longTenDiv + 0.5;
-            //если после запятой 6-9:
-            if((ost>5) && (ost<=9))
-                total = longTenDiv + 1;
-        }
-        return total;
-
+        long valueWithoutRemainder = Math.round(digit * 10) / 10;
+        double remainder = Math.round(digit * 10) % 10;
+        if ((remainder > 0) && (remainder < 5))
+            return valueWithoutRemainder + 0.5;
+        if ((remainder > 5) && (remainder <= 9))
+            return valueWithoutRemainder + 1;
+        return Math.round(digit * 10) / 10.0;
     }
 
     protected static double getRoleCost(Task task, ReportRequest request) {
