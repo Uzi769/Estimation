@@ -12,10 +12,7 @@ import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +30,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
+        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request), request.getNameSortField(), request.getSortAsc());
     }
 
     @Override
@@ -41,15 +38,15 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
+        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request), request.getNameSortField(), request.getSortAsc());
     }
 
-    private Page<Estimation> findPageableEstimations(Integer page, Integer size, Predicate predicate) {
+    private Page<Estimation> findPageableEstimations(Integer page, Integer size, Predicate predicate, String nameSortField, Boolean sortAsc) {
         int offset = page * size;
 
         query.select(root)
                 .where(predicate)
-                .orderBy(builder.desc(root.get("createDate")));
+                .orderBy(getOrder(nameSortField, sortAsc));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
@@ -60,6 +57,14 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                 PageRequest.of(page, size),
                 getTotalCount(predicate)
         );
+    }
+
+    private Order getOrder(String nameSortField, Boolean sortAsc) {
+        if (nameSortField != null && sortAsc != null) {
+            return sortAsc ? builder.asc(root.get(nameSortField))
+                    : builder.desc(root.get(nameSortField));
+        } else
+            return builder.desc(root.get("createDate"));
     }
 
     private Predicate getPredicate(EstimationFilterRequest request) {
