@@ -35,20 +35,18 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillTableHeader(messageBundle.getString("columnName.phases"), false);
 
         for (Phase phase : estimation.getPhases()) {
-            if (phase.getDone()) {
-                List<Task> features = phase.getTasks().stream()
-                        .filter(this::isFeature)
-                        .collect(Collectors.toList());
+            List<Task> features = phase.getTasks().stream()
+                    .filter(this::isFeature)
+                    .collect(Collectors.toList());
 
-                if (features.isEmpty()) {
-                    continue;
-                }
+            if (features.isEmpty()) {
+                continue;
+            }
 
-                fillPhaseRow(phase, request, features, false);
+            fillPhaseRow(phase, request, features, false);
 
-                for (Task task : features) {
-                    fillFeatureRow(task, request);
-                }
+            for (Task task : features) {
+                fillFeatureRow(task, request);
             }
         }
 
@@ -58,20 +56,18 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillTableHeader(messageBundle.getString("columnName.tasks"), true);
 
         for (Phase phase : estimation.getPhases()) {
-            if (phase.getDone()) {
-                List<Task> tasks = phase.getTasks().stream()
-                        .filter(t -> !isFeature(t))
-                        .collect(Collectors.toList());
+            List<Task> tasks = phase.getTasks().stream()
+                    .filter(t -> !isFeature(t))
+                    .collect(Collectors.toList());
 
-                if (tasks.isEmpty()) {
-                    continue;
-                }
+            if (tasks.isEmpty()) {
+                continue;
+            }
 
-                fillPhaseRow(phase, request, tasks, true);
+            fillPhaseRow(phase, request, tasks, true);
 
-                for (Task task : tasks) {
-                    fillTaskRow(task, request);
-                }
+            for (Task task : tasks) {
+                fillTaskRow(task, request);
             }
         }
 
