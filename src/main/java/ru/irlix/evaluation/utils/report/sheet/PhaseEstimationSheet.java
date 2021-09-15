@@ -23,7 +23,8 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         fillTableHeader();
 
         for (Phase phase : estimation.getPhases()) {
-            fillPhaseRow(phase, request);
+            if (phase.getDone())
+                fillPhaseRow(phase, request);
         }
 
         fillSummary();

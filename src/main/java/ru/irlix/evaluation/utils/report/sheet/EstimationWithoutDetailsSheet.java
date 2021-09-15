@@ -28,18 +28,20 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         fillTableHeader();
 
         for (Phase phase : estimation.getPhases()) {
-            fillPhaseRow(phase, request);
+            if (phase.getDone()) {
+                fillPhaseRow(phase, request);
 
-            List<Task> notNestedTasks = new ArrayList<>();
-            for (Task task : phase.getTasks()) {
-                if (EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId())) {
-                    fillFeatureRowWithNestedTasks(task, request);
-                } else if (EntitiesIdConstants.TASK_ID.equals(task.getType().getId())) {
-                    notNestedTasks.add(task);
+                List<Task> notNestedTasks = new ArrayList<>();
+                for (Task task : phase.getTasks()) {
+                    if (EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId())) {
+                        fillFeatureRowWithNestedTasks(task, request);
+                    } else if (EntitiesIdConstants.TASK_ID.equals(task.getType().getId())) {
+                        notNestedTasks.add(task);
+                    }
                 }
-            }
 
-            notNestedTasks.forEach(task -> fillTaskRow(task, request, 1));
+                notNestedTasks.forEach(task -> fillTaskRow(task, request, 1));
+            }
         }
 
         fillSummary();
