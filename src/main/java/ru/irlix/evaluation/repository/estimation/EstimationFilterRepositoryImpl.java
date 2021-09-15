@@ -2,9 +2,7 @@ package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -30,7 +28,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request), request.getNameSortField(), request.getSortAsc());
+        return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
     @Override
@@ -38,31 +36,53 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request), request.getNameSortField(), request.getSortAsc());
+        return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
-    private Page<Estimation> findPageableEstimations(Integer page, Integer size, Predicate predicate, String nameSortField, Boolean sortAsc) {
-        int offset = page * size;
+    private Pageable getPageable(EstimationFilterRequest request) {
+        if (request.getNameSortField() != null && request.getSortAsc() != null) {
+            return PageRequest.of(request.getPage(),
+                    request.getSize(),
+                    request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
+                    request.getNameSortField());
+        } else
+            return PageRequest.of(request.getPage(), request.getSize());
+    }
+
+    private Pageable getPageable(EstimationFindAnyRequest request) {
+        if (request.getNameSortField() != null && request.getSortAsc() != null) {
+            return PageRequest.of(request.getPage(),
+                    request.getSize(),
+                    request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
+                    request.getNameSortField());
+        } else
+            return PageRequest.of(request.getPage(), request.getSize());
+    }
+
+    private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
 
         query.select(root)
                 .where(predicate)
-                .orderBy(getOrder(nameSortField, sortAsc));
+                .orderBy(getOrder(pageable));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
-        typedQuery.setMaxResults(size);
+        typedQuery.setMaxResults(pageable.getPageSize());
 
         return new PageImpl<>(
                 typedQuery.getResultList(),
-                PageRequest.of(page, size),
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
                 getTotalCount(predicate)
         );
     }
 
-    private Order getOrder(String nameSortField, Boolean sortAsc) {
-        if (nameSortField != null && sortAsc != null) {
-            return sortAsc ? builder.asc(root.get(nameSortField))
-                    : builder.desc(root.get(nameSortField));
+    private Order getOrder(Pageable pageable) {
+        Sort.Order order = pageable.getSort().stream().findAny().orElse(null);
+        if (order != null) {
+            Sort.Direction direction = order.getDirection();
+            String fieldName = order.getProperty();
+            return direction.isAscending() ? builder.asc(root.get(fieldName)) : builder.desc(root.get(fieldName));
         } else
             return builder.desc(root.get("createDate"));
     }
