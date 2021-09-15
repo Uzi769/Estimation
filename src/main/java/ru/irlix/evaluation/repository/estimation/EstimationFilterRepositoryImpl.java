@@ -2,20 +2,17 @@ package ru.irlix.evaluation.repository.estimation;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
+import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +30,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
+        return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
     @Override
@@ -41,23 +38,33 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
+        return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
-    private Page<Estimation> findPageableEstimations(Integer page, Integer size, Predicate predicate) {
-        int offset = page * size;
+    private Pageable getPageable(EstimationPageRequest request) {
+        if (request.getNameSortField() != null && request.getSortAsc() != null) {
+            return PageRequest.of(request.getPage(),
+                    request.getSize(),
+                    request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
+                    request.getNameSortField());
+        } else
+            return PageRequest.of(request.getPage(), request.getSize(), Sort.Direction.DESC, "createDate");
+    }
+
+    private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
 
         query.select(root)
                 .where(predicate)
-                .orderBy(builder.desc(root.get("createDate")));
+                .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
-        typedQuery.setMaxResults(size);
+        typedQuery.setMaxResults(pageable.getPageSize());
 
         return new PageImpl<>(
                 typedQuery.getResultList(),
-                PageRequest.of(page, size),
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
                 getTotalCount(predicate)
         );
     }
