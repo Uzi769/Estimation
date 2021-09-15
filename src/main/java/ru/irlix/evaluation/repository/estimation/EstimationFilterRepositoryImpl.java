@@ -3,10 +3,12 @@ package ru.irlix.evaluation.repository.estimation;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
+import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -39,24 +41,14 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
-    private Pageable getPageable(EstimationFilterRequest request) {
+    private Pageable getPageable(EstimationPageRequest request) {
         if (request.getNameSortField() != null && request.getSortAsc() != null) {
             return PageRequest.of(request.getPage(),
                     request.getSize(),
                     request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
                     request.getNameSortField());
         } else
-            return PageRequest.of(request.getPage(), request.getSize());
-    }
-
-    private Pageable getPageable(EstimationFindAnyRequest request) {
-        if (request.getNameSortField() != null && request.getSortAsc() != null) {
-            return PageRequest.of(request.getPage(),
-                    request.getSize(),
-                    request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
-                    request.getNameSortField());
-        } else
-            return PageRequest.of(request.getPage(), request.getSize());
+            return PageRequest.of(request.getPage(), request.getSize(), Sort.Direction.DESC, "createDate");
     }
 
     private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
@@ -64,7 +56,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
         query.select(root)
                 .where(predicate)
-                .orderBy(getOrder(pageable));
+                .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
         typedQuery.setFirstResult(offset);
@@ -75,16 +67,6 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
                 getTotalCount(predicate)
         );
-    }
-
-    private Order getOrder(Pageable pageable) {
-        Sort.Order order = pageable.getSort().stream().findAny().orElse(null);
-        if (order != null) {
-            Sort.Direction direction = order.getDirection();
-            String fieldName = order.getProperty();
-            return direction.isAscending() ? builder.asc(root.get(fieldName)) : builder.desc(root.get(fieldName));
-        } else
-            return builder.desc(root.get("createDate"));
     }
 
     private Predicate getPredicate(EstimationFilterRequest request) {
