@@ -17,9 +17,9 @@ public class ReportRequest {
 
     private double analystCost;
 
-    private double devCost;
+    private double developerCost;
 
     private double pmCost;
     
-    private double designCost;
+    private double designerCost;
 }
