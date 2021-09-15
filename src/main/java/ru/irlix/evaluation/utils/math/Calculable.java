@@ -44,7 +44,7 @@ public abstract class Calculable {
         double remainder = Math.round(digit * 10) % 10;
         if ((remainder > 0) && (remainder < 5))
             return valueWithoutRemainder + 0.5;
-        if ((remainder > 5) && (remainder < 10))
+        if (remainder > 5)
             return valueWithoutRemainder + 1;
         return Math.round(digit * 10) / 10.0;
     }
@@ -58,9 +58,9 @@ public abstract class Calculable {
             case ANALYST:
                 return request.getAnalystCost();
             case DEVELOPER:
-                return request.getDevCost();
+                return request.getDeveloperCost();
             case DESIGNER:
-                return request.getDesignCost();
+                return request.getDesignerCost();
             case TESTER:
                 return request.getQaCost();
             default:
