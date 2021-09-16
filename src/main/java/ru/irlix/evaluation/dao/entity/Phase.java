@@ -63,4 +63,14 @@ public class Phase {
 
     @Column(name = "risk_reserve_on")
     private Boolean riskReserveOn;
+
+    @PrePersist
+    public void prePersist() {
+        if (riskReserve == null) {
+            riskReserve = 0;
+        }
+        if (riskReserveOn == null) {
+            riskReserveOn = false;
+        }
+    }
 }
