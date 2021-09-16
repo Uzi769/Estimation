@@ -28,5 +28,6 @@
     <include file="alter-phase-delete-user-column-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-rename-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-user-estimation-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

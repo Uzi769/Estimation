@@ -23,6 +23,7 @@ import ru.irlix.evaluation.utils.constant.UrlConstants;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -37,9 +38,9 @@ public class EstimationController {
 
     @PreAuthorize("hasAuthority('ROLE_SALES')")
     @PostMapping
-    public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
+    public EstimationResponse createEstimation(@RequestBody EstimationRequest request, Principal principal) {
         log.info(UrlConstants.RECEIVED_ENTITY);
-        return estimationService.createEstimation(request);
+        return estimationService.createEstimation(request, principal.getName());
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")

@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
@@ -23,7 +24,9 @@ import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.report.ReportHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Log4j2
 @Service
@@ -35,13 +38,26 @@ public class EstimationServiceImpl implements EstimationService {
     private EstimationMapper estimationMapper;
     private PhaseMapper phaseMapper;
     private ReportHelper reportHelper;
+    private final UserServiceImpl userService;
 
     @Override
     @Transactional
-    public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
+    public EstimationResponse createEstimation(EstimationRequest estimationRequest, String keycloakId) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
+        User user = userService.findByKeycloakId(UUID.fromString(keycloakId));
+
+        if (user != null) {
+            if (estimation.getUsers() != null)
+                estimation.getUsers().add(user);
+            else {
+                List<User> users = new ArrayList<>();
+                users.add(user);
+                estimation.setUsers(users);
+                user.getEstimations().add(estimation);
+            }
+        }
         log.info("Estimation with id " + savedEstimation.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
