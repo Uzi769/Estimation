@@ -25,7 +25,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     private CriteriaBuilder builder;
     private CriteriaQuery<Estimation> query;
     private Root<Estimation> root;
-    private Join<Estimation, User> joinUser;
+//    private Join<Estimation, User> joinUser;
 
     @Override
     public Page<Estimation> filter(EstimationFilterRequest request) {
@@ -33,8 +33,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
 
-        joinUser = root.join("estimation_id", JoinType.LEFT)
-                .join("user_id", JoinType.LEFT);
+//        joinUser = root.join("estimation_id", JoinType.LEFT)
+//                .join("user_id", JoinType.LEFT);
 
         return findPageableEstimations(request.getPage(), request.getSize(), getPredicate(request));
     }
