@@ -34,8 +34,8 @@ public class KeycloakServiceImpl implements KeycloakService {
     private final KeycloakProperties keycloakProperties;
     private final Keycloak keycloak;
 
-//    private final String MY_ID = "c8bb7c49-1370-4a2e-a675-aac702817fcf";
-//    private final String ADMIN_ID = "3a508839-8bb3-418a-b8a5-cc449004ced6";
+    private final String MY_ID = "c8bb7c49-1370-4a2e-a675-aac702817fcf";
+    private final String ADMIN_ID = "3a508839-8bb3-418a-b8a5-cc449004ced6";
 
     public final Integer KEYCLOAK_FETCH_MAX_VALUE = 1000;
 

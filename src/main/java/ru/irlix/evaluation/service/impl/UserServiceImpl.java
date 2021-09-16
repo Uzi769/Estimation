@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User findByKeycloakId(UUID id) {
-        return userRepository.findByKeycloakId(id)
-                .orElseThrow(() -> new NotFoundException("User with id " + id + " not found"));
+        return userRepository.findByKeycloakId(id);
     }
 }
