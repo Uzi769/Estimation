@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include file="create-status-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-role-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-estimation-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-phase-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-type-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-task-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-phase-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-relations-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-phase-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-task-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-data-to-status-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-data-to-role-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="reserve-fix-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="hours-to-double-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-user-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-user-estimation-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-phase-add-column-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-deleted-to-user-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-phase-delete-user-column-changelog.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
