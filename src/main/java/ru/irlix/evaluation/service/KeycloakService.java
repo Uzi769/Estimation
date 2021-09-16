@@ -9,4 +9,5 @@ public interface KeycloakService {
     String getJwt();
 //    List<RoleRepresentation> getRoles();
     List<UserKeycloakDto> getAllUsers();
+    void update();
 }

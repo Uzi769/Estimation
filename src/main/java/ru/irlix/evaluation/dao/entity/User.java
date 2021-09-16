@@ -1,15 +1,18 @@
 package ru.irlix.evaluation.dao.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -29,6 +32,9 @@ public class User {
 
     @Column(name = "deleted")
     private Boolean deleted;
+
+    @Column(name = "keycloak_id")
+    private UUID keycloakId;
 
     @PrePersist
     public void prePersist() {

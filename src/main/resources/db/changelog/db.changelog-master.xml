@@ -26,5 +26,6 @@
     <include file="alter-phase-add-column-changelog.xml" relativeToChangelogFile="true"/>
     <include file="add-deleted-to-user-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-phase-delete-user-column-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-user-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

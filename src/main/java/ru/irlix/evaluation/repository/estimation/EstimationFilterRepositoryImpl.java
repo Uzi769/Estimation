@@ -92,7 +92,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-        filterPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
+//        filterPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
 
         return builder.and(filterPredicates.toArray(new Predicate[0]));
     }
@@ -119,7 +119,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             otherPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-        otherPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
+//        otherPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
 
         return builder.and(
                 textPredicates.isEmpty() ? builder.and() : builder.or(textPredicates.toArray(new Predicate[0])),
