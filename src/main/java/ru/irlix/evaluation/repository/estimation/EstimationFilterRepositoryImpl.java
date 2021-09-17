@@ -6,7 +6,6 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
@@ -35,6 +34,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
 //        joinUser = root.join("estimation_id", JoinType.LEFT)
 //                .join("user_id", JoinType.LEFT);
+
+//                joinUser = root.join("user_id", JoinType.LEFT);
 
         return findPageableEstimations(getPageable(request), getPredicate(request));
     }
@@ -102,7 +103,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-//        filterPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
+//        filterPredicates.add(builder.equal(joinUser.get("user_id"), request.getUserId()));
 
         return builder.and(filterPredicates.toArray(new Predicate[0]));
     }

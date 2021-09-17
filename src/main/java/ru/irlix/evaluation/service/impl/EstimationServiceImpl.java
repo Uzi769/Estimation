@@ -83,7 +83,9 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request, String keycloakId) {
+        Long userId = userService.findByKeycloakId(UUID.fromString(keycloakId)).getId();
+        request.setUserId(userId);
         Page<Estimation> estimationList = estimationRepository.filter(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);

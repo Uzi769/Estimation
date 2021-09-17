@@ -20,7 +20,7 @@ public interface EstimationService {
 
     void deleteEstimation(Long id);
 
-    Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request);
+    Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request, String keycloakId);
 
     Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request);
 

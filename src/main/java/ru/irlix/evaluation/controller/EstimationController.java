@@ -60,10 +60,10 @@ public class EstimationController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
     @GetMapping
-    public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request) {
+    public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request, Principal principal) {
         System.out.println("getAuthorities = " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         log.info(UrlConstants.RECEIVED_FILTER + request);
-        return estimationService.findAllEstimations(request);
+        return estimationService.findAllEstimations(request, principal.getName());
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")

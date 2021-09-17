@@ -22,4 +22,6 @@ public class EstimationFilterRequest extends EstimationPageRequest {
     private Instant endDate;
 
     private String creator;
+
+    private Long userId;
 }
