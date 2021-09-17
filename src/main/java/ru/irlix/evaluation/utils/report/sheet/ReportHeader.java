@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.utils.report.sheet;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFShape;
 import org.apache.poi.ss.usermodel.ClientAnchor;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RequiredArgsConstructor
+@Log4j2
 public class ReportHeader {
 
     private final EstimationReportSheet sheet;
@@ -72,7 +74,7 @@ public class ReportHeader {
 
     private void setImage(int lastColumn) {
         try {
-            InputStream inputStream = new FileInputStream("src/main/resources/static/logo.png");
+            InputStream inputStream = new FileInputStream("src/main/resources/static/irlixLogo.png");
             byte[] bytes = IOUtils.toByteArray(inputStream);
             int pictureIdx = sheet.getHelper().getWorkbook().addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             inputStream.close();
@@ -86,6 +88,7 @@ public class ReportHeader {
 
             drawing.createPicture(anchor, pictureIdx);
         } catch (IOException e) {
+            log.error(e.getMessage());
             e.printStackTrace();
         }
     }
