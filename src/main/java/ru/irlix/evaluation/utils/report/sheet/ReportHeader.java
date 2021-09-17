@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.core.io.ClassPathResource;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
@@ -17,7 +18,6 @@ import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -74,7 +74,7 @@ public class ReportHeader {
 
     private void setImage(int lastColumn) {
         try {
-            InputStream inputStream = new FileInputStream("src/main/resources/static/irlixLogo.png");
+            InputStream inputStream = getClass().getResourceAsStream("/static/irlixLogo.png");
             byte[] bytes = IOUtils.toByteArray(inputStream);
             int pictureIdx = sheet.getHelper().getWorkbook().addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             inputStream.close();
