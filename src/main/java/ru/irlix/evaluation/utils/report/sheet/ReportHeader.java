@@ -74,8 +74,7 @@ public class ReportHeader {
 
     private void setImage(int lastColumn) {
         try {
-            ClassPathResource classPathResource = new ClassPathResource("static/irlixLogo.png");
-            InputStream inputStream = classPathResource.getInputStream();
+            InputStream inputStream = getClass().getResourceAsStream("/static/irlixLogo.png");
             byte[] bytes = IOUtils.toByteArray(inputStream);
             int pictureIdx = sheet.getHelper().getWorkbook().addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             inputStream.close();
