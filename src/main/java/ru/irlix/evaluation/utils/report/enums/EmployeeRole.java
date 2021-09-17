@@ -4,5 +4,5 @@ public enum EmployeeRole {
     ANALYST,
     DEVELOPER,
     DESIGNER,
-    TESTER
+    DEVOPS
 }
