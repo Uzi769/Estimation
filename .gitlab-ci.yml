@@ -32,6 +32,7 @@ docker:
     - echo "$CI_COMMIT_BRANCH"
   only:
     - develop
+    - master
 
 git:
   stage: pull configurations
@@ -49,6 +50,7 @@ git:
       - ansible
   only:
     - develop
+    - master
 
 deploy:
   stage: push image
@@ -62,4 +64,5 @@ deploy:
     - ansible-playbook -i deployment/ansible/hosts deployment/ansible/deploy_app.yml -e "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH LOCATION=$LOCATION"
   only:
     - develop
+    - master
 
