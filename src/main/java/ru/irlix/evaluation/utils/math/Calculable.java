@@ -61,8 +61,8 @@ public abstract class Calculable {
                 return request.getDeveloperCost();
             case DESIGNER:
                 return request.getDesignerCost();
-            case TESTER:
-                return request.getQaCost();
+            case DEVOPS:
+                return request.getDevopsCost();
             default:
                 throw new NotFoundException("Role with value " + task.getRole().getValue() + " not found");
         }
