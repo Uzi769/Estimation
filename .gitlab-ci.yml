@@ -31,7 +31,7 @@ docker:
     - docker push $CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH:latest
     - echo "$CI_COMMIT_BRANCH"
   only:
-    - develop
+    - master
 
 git:
   stage: pull configurations
@@ -48,7 +48,7 @@ git:
     paths:
       - ansible
   only:
-    - develop
+    - master
 
 deploy:
   stage: push image
@@ -61,5 +61,5 @@ deploy:
     - pip3 install docker-compose
     - ansible-playbook -i deployment/ansible/hosts deployment/ansible/deploy_app.yml -e "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH LOCATION=$LOCATION"
   only:
-    - develop
+    - master
 
