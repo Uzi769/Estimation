@@ -42,8 +42,9 @@ public class ReportHelper {
 
         sheets.forEach(s -> s.getSheet(estimation, request));
 
-        String filePath = Paths.get(path,
-                messageBundle.getString("estimation.string") + " " + estimation.getClient() + " " + estimation.getName() + ".xls").toString();
+        String fileName = messageBundle.getString("estimation.string")
+                + " " + estimation.getClient() + " " + estimation.getName() + ".xls";
+        String filePath = Paths.get(path, fileName).toString();
         return excelWorkbook.save(filePath);
     }
 }
