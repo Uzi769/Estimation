@@ -26,7 +26,6 @@ public class TaskTypeController {
     @PostMapping
     public TaskTypeResponse createTaskType(@RequestBody @Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
-        System.out.println("controller: request.getValue()request = " + request.getValue());
         return taskTypeService.createTaskType(request);
     }
 
