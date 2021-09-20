@@ -24,14 +24,15 @@ public class TaskTypeController {
     private final TaskTypeService taskTypeService;
 
     @PostMapping
-    public TaskTypeResponse createTaskType(@Valid TaskTypeRequest request) {
+    public TaskTypeResponse createTaskType(@RequestBody @Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
+        System.out.println("controller: request.getValue()request = " + request.getValue());
         return taskTypeService.createTaskType(request);
     }
 
     @PutMapping("/{id}")
     public TaskTypeResponse updateTaskType(@PathVariable @Positive(message = "{id.positive}") Long id,
-                                           @Valid TaskTypeRequest request) {
+                                           @RequestBody @Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return taskTypeService.updateTaskType(id, request);
     }
