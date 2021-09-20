@@ -37,7 +37,7 @@ public class ReportHelper {
 
         sheets.forEach(s -> s.getSheet(estimation, request));
 
-        String nameFile = messageBundle.getString("estimation.string") + "_" + estimation.getClient() + "_" + estimation.getName() + ".xls";
+        String nameFile = messageBundle.getString("estimation.string") + " " + estimation.getClient() + " " + estimation.getName() + ".xls";
         return excelWorkbook.save(nameFile);
     }
 }
