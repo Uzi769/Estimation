@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.irlix.evaluation.dao.entity.User;
-import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -24,7 +26,6 @@ import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.report.ReportHelper;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,22 +43,13 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional
-    public EstimationResponse createEstimation(EstimationRequest estimationRequest, String keycloakId) {
+    public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
-        Estimation savedEstimation = estimationRepository.save(estimation);
-
         User user = userService.findByKeycloakId(UUID.fromString(keycloakId));
 
-        if (user != null) {
-            if (estimation.getUsers() != null)
-                estimation.getUsers().add(user);
-            else {
-                List<User> users = new ArrayList<>();
-                users.add(user);
-                estimation.setUsers(users);
-                user.getEstimations().add(estimation);
-            }
-        }
+
+        Estimation savedEstimation = estimationRepository.save(estimation);
+
         log.info("Estimation with id " + savedEstimation.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
@@ -83,8 +75,9 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request, String keycloakId) {
+    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         Long userId = userService.findByKeycloakId(UUID.fromString(keycloakId)).getId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         request.setUserId(userId);
         Page<Estimation> estimationList = estimationRepository.filter(request);
         log.info("Estimations filtered and found");

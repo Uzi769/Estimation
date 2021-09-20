@@ -46,14 +46,14 @@ public class TaskTypeController {
         taskTypeService.deleteTaskType(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public List<TaskTypeResponse> findAllTaskTypes() {
         log.info(UrlConstants.RECEIVED_NO_ARGS);
         return taskTypeService.findAllTaskTypes();
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public TaskTypeResponse findTaskTypeById(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

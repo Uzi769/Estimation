@@ -43,14 +43,14 @@ public class RoleController {
         roleService.deleteRole(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public RoleResponse findRoleById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return roleService.findRoleResponseById(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public List<RoleResponse> findAllRoles() {
         log.info(UrlConstants.RECEIVED_NO_ARGS);

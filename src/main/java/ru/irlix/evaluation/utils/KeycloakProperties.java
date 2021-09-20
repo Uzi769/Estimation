@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @Setter
 public class KeycloakProperties {
+
     private String serverUrl;
     private String realm;
     private String clientId;

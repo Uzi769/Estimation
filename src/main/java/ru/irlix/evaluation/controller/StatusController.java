@@ -45,14 +45,14 @@ public class StatusController {
         statusService.deleteStatus(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public StatusResponse findStatusById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return statusService.findStatusResponseById(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public List<StatusResponse> findAllStatuses() {
         log.info(UrlConstants.RECEIVED_NO_ARGS);

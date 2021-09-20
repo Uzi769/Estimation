@@ -18,8 +18,6 @@ public class KeycloakController {
     @GetMapping()
     public ResponseEntity<String> getJwt() {
         String jwt = keycloakService.getJwt();
-        System.out.println("getJwt: " + jwt);
-//        System.out.println("getRoles(): " + keycloakService.getRoles());
         return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 

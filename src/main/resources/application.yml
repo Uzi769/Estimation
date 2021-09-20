@@ -32,10 +32,9 @@ logging:
     file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID} --- [%t] %-40.40logger{39} %M{20} : %m%n}'
 
 keycloak:
-  auth-server-url: ${KEYCLOAK_URL}
   realm: ${KEYCLOAK_REALM}
+  server-url: ${KEYCLOAK_URL}
 
-  server-url: ${KEYCLOAK_AUTH_URL}
   client-id: ${CLIENT_ID}
   client-secret: ${CLIENT_SECRET}
 
