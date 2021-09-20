@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
 
 @Getter
@@ -18,6 +19,7 @@ public class EstimationRequest {
 
     private String client;
 
+    @Max(value = 5000, message = "{description.max}")
     private String description;
 
     private Integer risk;
