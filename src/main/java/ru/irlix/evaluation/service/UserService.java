@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.UserKeycloakDto;
 
@@ -12,4 +13,6 @@ public interface UserService {
 
     User findByKeycloakId(UUID keycloakId);
 
+    @Transactional(readOnly = true)
+    boolean contains(UUID keycloakId);
 }

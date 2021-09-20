@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.report.ReportHelper;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Log4j2
@@ -48,7 +50,10 @@ public class EstimationServiceImpl implements EstimationService {
         User user = userHelper.findUserByKeycloakId(keycloakId);
 
         Estimation savedEstimation = estimationRepository.save(estimation);
+
+        savedEstimation.setUsers(new ArrayList<>());
         savedEstimation.getUsers().add(user);
+
         Estimation savedEstimationWithUser = estimationRepository.save(estimation);
 
         log.info("Estimation with id " + savedEstimationWithUser.getId() + " saved");
@@ -78,7 +83,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional(readOnly = true)
     public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userHelper.findUserByKeycloakId(keycloakId).getId();
+        Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();
         request.setUserId(userId);
 
         Page<Estimation> estimationList = estimationRepository.filter(request);
@@ -89,6 +94,10 @@ public class EstimationServiceImpl implements EstimationService {
     @Override
     @Transactional(readOnly = true)
     public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
+        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();
+        request.setUserId(userId);
+
         Page<Estimation> estimationList = estimationRepository.findAny(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
@@ -111,8 +120,17 @@ public class EstimationServiceImpl implements EstimationService {
     }
 
     private Estimation findEstimationById(Long id) {
-        return estimationRepository.findById(id)
+        Estimation estimation = estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
+
+        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userHelper.findUserByKeycloakId(keycloakId);
+
+        if (!estimation.getUsers().contains(user)) {
+            throw new AccessDeniedException("User with id " + keycloakId + " cant get access to estimation");
+        }
+
+        return estimation;
     }
 
     private void checkAndUpdateFields(Estimation estimation, EstimationRequest request) {

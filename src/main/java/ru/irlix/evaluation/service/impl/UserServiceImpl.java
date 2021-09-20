@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(user);
-        log.info("User with id " + savedUser.getId() + " saved");
+        log.info("User with id " + savedUser.getUserId() + " saved");
     }
 
     @Override
@@ -39,13 +39,19 @@ public class UserServiceImpl implements UserService {
         }
         user.setDeleted(false);
         userRepository.save(user);
-        log.info("User with id " + user.getId() + " updated");
+        log.info("User with id " + user.getUserId() + " updated");
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public User findByKeycloakId(UUID keycloakId) {
         return userRepository.findByKeycloakId(keycloakId)
                 .orElseThrow(() -> new NotFoundException("User with id " + keycloakId + " not found"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean contains(UUID keycloakId) {
+        return userRepository.existsByKeycloakId(keycloakId);
     }
 }

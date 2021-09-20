@@ -3,6 +3,7 @@ package ru.irlix.evaluation.exception;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -40,6 +41,13 @@ public class AppExceptionHandler {
         ApiError apiError = new ApiError(e.getMessage());
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({AccessDeniedException.class})
+    protected ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException e) {
+        ApiError apiError = new ApiError(e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BindException.class)

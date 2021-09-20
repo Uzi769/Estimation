@@ -34,18 +34,20 @@ public class KeycloakServiceImpl implements KeycloakService {
         return keycloak.realm(keycloakProperties.getRealm()).users().search(null, 0, KEYCLOAK_FETCH_MAX_VALUE)
                 .parallelStream()
                 .map(user -> new UserKeycloakDto(UUID.fromString(user.getId()), user.getFirstName(), user.getLastName()))
-                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
     }
 
     @Override
     public void update() {
         List<UserKeycloakDto> list = getAllUsers();
         list.forEach(userKeycloakDto -> {
-            User user = userService.findByKeycloakId(userKeycloakDto.getId());
-            if (user == null)
+            boolean isExist = userService.contains(userKeycloakDto.getId());
+            if (!isExist) {
                 userService.createUser(userKeycloakDto);
-            else
+            } else {
+                User user = userService.findByKeycloakId(userKeycloakDto.getId());
                 userService.updateUser(user, userKeycloakDto);
+            }
         });
     }
 }

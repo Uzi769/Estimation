@@ -25,7 +25,6 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     private CriteriaBuilder builder;
     private CriteriaQuery<Estimation> query;
     private Root<Estimation> root;
-//    private Join<Estimation, User> joinUser;
 
     @Override
     public Page<Estimation> filter(EstimationFilterRequest request) {
@@ -41,6 +40,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
+
         return findPageableEstimations(getPageable(request), getPredicate(request));
     }
 
@@ -50,8 +50,9 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                     request.getSize(),
                     request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
                     request.getNameSortField());
-        } else
+        } else {
             return PageRequest.of(request.getPage(), request.getSize(), Sort.Direction.DESC, "createDate");
+        }
     }
 
     private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
@@ -100,8 +101,9 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
 
         if (request.getUserId() != null) {
-            Join<Estimation, User> userJoin = root.join("users");
-            query.where(builder.equal(userJoin.get("id"), request.getUserId()));
+            Fetch<Estimation, User> usersFetch = root.fetch("users", JoinType.LEFT);
+            Join<Estimation, User> usersJoin = (Join<Estimation, User>) usersFetch;
+            filterPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
         }
 
         return builder.and(filterPredicates.toArray(new Predicate[0]));
@@ -129,7 +131,11 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             otherPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
-//        otherPredicates.add(builder.equal(joinUser.get("user_id"), joinUser.get("estimation_id")));
+        if (request.getUserId() != null) {
+            Fetch<Estimation, User> usersFetch = root.fetch("users", JoinType.LEFT);
+            Join<Estimation, User> usersJoin = (Join<Estimation, User>) usersFetch;
+            otherPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
+        }
 
         return builder.and(
                 textPredicates.isEmpty() ? builder.and() : builder.or(textPredicates.toArray(new Predicate[0])),
@@ -139,7 +145,9 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
     private Long getTotalCount(Predicate filterPredicate) {
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        countQuery.select(builder.count(countQuery.from(Estimation.class)));
+        root = countQuery.from(Estimation.class);
+        root.fetch("users");
+        countQuery.select(builder.count(root));
         countQuery.where(filterPredicate);
 
         return manager.createQuery(countQuery).getSingleResult();

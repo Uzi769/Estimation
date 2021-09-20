@@ -50,7 +50,11 @@ public class Estimation {
     @OrderBy("sortOrder ASC")
     private List<Phase> phases;
 
-    @ManyToMany(mappedBy = "estimations")
+    @ManyToMany
+    @JoinTable(
+            name = "user_estimation",
+            joinColumns = @JoinColumn(name = "estimation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
     @PrePersist
