@@ -5,6 +5,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +17,7 @@ import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
-import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
-import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.request.ReportRequest;
+import ru.irlix.evaluation.dto.request.*;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -81,30 +80,6 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
-        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();
-        request.setUserId(userId);
-
-        Page<Estimation> estimationList = estimationRepository.filter(request);
-        log.info("Estimations filtered and found");
-        return estimationMapper.estimationToEstimationResponse(estimationList);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
-        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();
-        request.setUserId(userId);
-
-        Page<Estimation> estimationList = estimationRepository.findAny(request);
-        log.info("Estimations filtered and found");
-        return estimationMapper.estimationToEstimationResponse(estimationList);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
         Estimation estimation = findEstimationById(id);
         log.info("Estimation with id " + estimation.getId() + " found");
@@ -117,6 +92,38 @@ public class EstimationServiceImpl implements EstimationService {
         Estimation estimation = findEstimationById(id);
         log.info("Phases of estimation with id " + estimation.getId() + " found");
         return phaseMapper.phaseToPhaseResponse(estimation.getPhases());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+        addUserIdToRequestIfRequired(request);
+        Page<Estimation> estimationList = estimationRepository.filter(request);
+        log.info("Estimations filtered and found");
+        return estimationMapper.estimationToEstimationResponse(estimationList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
+        addUserIdToRequestIfRequired(request);
+        Page<Estimation> estimationList = estimationRepository.findAny(request);
+        log.info("Estimations filtered and found");
+        return estimationMapper.estimationToEstimationResponse(estimationList);
+    }
+
+    private void addUserIdToRequestIfRequired(EstimationPageRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        boolean hasAccessToAllEstimations = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("ROLE_ADMIN") || a.equals("ROLE_SALES"));
+
+        if (!hasAccessToAllEstimations) {
+            String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+            Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();
+            request.setUserId(userId);
+        }
     }
 
     private Estimation findEstimationById(Long id) {

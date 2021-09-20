@@ -145,9 +145,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
 
     private Long getTotalCount(Predicate filterPredicate) {
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        root = countQuery.from(Estimation.class);
-        root.fetch("users");
-        countQuery.select(builder.count(root));
+        countQuery.select(builder.count(countQuery.from(Estimation.class)));
         countQuery.where(filterPredicate);
 
         return manager.createQuery(countQuery).getSingleResult();

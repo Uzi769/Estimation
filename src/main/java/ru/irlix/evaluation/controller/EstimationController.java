@@ -56,28 +56,24 @@ public class EstimationController {
         estimationService.deleteEstimation(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request) {
         log.info(UrlConstants.RECEIVED_FILTER + request);
         return estimationService.findAllEstimations(request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/match")
     public Page<EstimationResponse> findAllEstimations(@Valid EstimationFindAnyRequest request) {
         log.info(UrlConstants.RECEIVED_FILTER + request);
         return estimationService.findAnyEstimations(request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public EstimationResponse findEstimationById(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return estimationService.findEstimationResponseById(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}/phases")
     public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
