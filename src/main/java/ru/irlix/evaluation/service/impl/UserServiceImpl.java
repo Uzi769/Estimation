@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
                 .keycloakId(userKeycloakDto.getId())
                 .name(userKeycloakDto.getLastName())
                 .build();
+
         User savedUser = userRepository.save(user);
         log.info("User with id " + savedUser.getId() + " saved");
     }
@@ -43,7 +44,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User findByKeycloakId(UUID id) {
-        return userRepository.findByKeycloakId(id);
+    public User findByKeycloakId(UUID keycloakId) {
+        return userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(() -> new NotFoundException("User with id " + keycloakId + " not found"));
     }
 }

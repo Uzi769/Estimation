@@ -10,6 +10,6 @@ public interface UserService {
 
     void updateUser(User user, UserKeycloakDto userKeycloakDto);
 
-    User findByKeycloakId(UUID id);
+    User findByKeycloakId(UUID keycloakId);
 
 }

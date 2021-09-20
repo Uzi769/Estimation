@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.dao.mapper.helper;
+package ru.irlix.evaluation.dao.helper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
-import ru.irlix.evaluation.dao.mapper.helper.EstimationHelper;
+import ru.irlix.evaluation.dao.helper.EstimationHelper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
