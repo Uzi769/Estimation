@@ -17,7 +17,7 @@ import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
-import ru.irlix.evaluation.utils.report.encoding.Encode;
+import ru.irlix.evaluation.utils.report.encoding.UTFEncoder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -81,7 +81,7 @@ public class EstimationController {
     public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, ReportRequest request) throws IOException {
         Resource resource = estimationService.getEstimationsReport(id, request);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + Encode.getEncode(resource.getFilename()) + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + UTFEncoder.encodeToUTF8(resource.getFilename()) + "\"")
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(resource);

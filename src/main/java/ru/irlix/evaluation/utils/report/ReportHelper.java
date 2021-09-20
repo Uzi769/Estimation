@@ -1,5 +1,6 @@
 package ru.irlix.evaluation.utils.report;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.config.UTF8Control;
@@ -13,12 +14,16 @@ import ru.irlix.evaluation.utils.report.sheet.EstimationReportSheet;
 import ru.irlix.evaluation.utils.report.sheet.TasksByRolesSheet;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 @Component
 public class ReportHelper {
+
+    @Value("${document-path}")
+    private String path;
 
     private final ResourceBundle messageBundle = ResourceBundle.getBundle(
             "messages",
@@ -37,7 +42,8 @@ public class ReportHelper {
 
         sheets.forEach(s -> s.getSheet(estimation, request));
 
-        String nameFile = messageBundle.getString("estimation.string") + " " + estimation.getClient() + " " + estimation.getName() + ".xls";
-        return excelWorkbook.save(nameFile);
+        String filePath = Paths.get(path,
+                messageBundle.getString("estimation.string") + " " + estimation.getClient() + " " + estimation.getName() + ".xls").toString();
+        return excelWorkbook.save(filePath);
     }
 }

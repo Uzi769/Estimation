@@ -7,9 +7,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 @Log4j2
-public class Encode {
+public class UTFEncoder {
 
-    public static String getEncode(String fileName) {
+    public static String encodeToUTF8(String fileName) {
 
         String encodedFileName = fileName;
         try {
