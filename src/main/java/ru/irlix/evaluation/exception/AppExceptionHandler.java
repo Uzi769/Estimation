@@ -7,12 +7,10 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ru.irlix.evaluation.config.UTF8Control;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.localization.MessageBundle;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -20,8 +18,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class AppExceptionHandler {
 
-    private final Locale locale = LocaleConstants.DEFAULT_LOCALE;
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages", locale, new UTF8Control());
+    private final ResourceBundle messageBundle = MessageBundle.getMessageBundle();
     private final String errorMessage = messageBundle.getString("validation.error");
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -40,6 +37,13 @@ public class AppExceptionHandler {
         ApiError apiError = new ApiError(e.getMessage());
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    protected ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        ApiError apiError = new ApiError(e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(BindException.class)
