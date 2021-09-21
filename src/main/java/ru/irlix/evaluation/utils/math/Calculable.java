@@ -4,6 +4,7 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.exception.NotFoundException;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
 import ru.irlix.evaluation.utils.localization.MessageBundle;
 
 import java.util.Map;
@@ -52,7 +53,7 @@ public abstract class Calculable {
     }
 
     protected static double getRoleCost(Task task, Map<String, String> request) {
-        String roleCost = task.getRole().getValue() + "Cost";
+        String roleCost = task.getRole().getValue() + ReportConstants.COST;
         if (!request.containsKey(roleCost)) {
             throw new NotFoundException(roleCost + messageBundle.getString("error.notFound"));
         }

@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.utils.math;
 
 import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
 
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class RangeMath extends Calculable {
     public double calcQaMinCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaCost = calcQaMinHours(task) * Double.parseDouble(request.get("qaCost"));
+            qaCost = calcQaMinHours(task) * Double.parseDouble(request.get(ReportConstants.QA_COST));
         }
 
         return qaCost;
@@ -56,7 +57,7 @@ public class RangeMath extends Calculable {
     public double calcQaMaxCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaCost = calcQaMaxHours(task) * Double.parseDouble(request.get("qaCost"));
+            qaCost = calcQaMaxHours(task) * Double.parseDouble(request.get(ReportConstants.QA_COST));
         }
 
         return qaCost;
@@ -74,7 +75,7 @@ public class RangeMath extends Calculable {
     public double calcPmMinCost(Task task, Map<String, String> request) {
         double pmCost = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmCost = calcPmMinHours(task) * Double.parseDouble(request.get("pmCost"));
+            pmCost = calcPmMinHours(task) * Double.parseDouble(request.get(ReportConstants.PM_COST));
         }
 
         return pmCost;
@@ -92,7 +93,7 @@ public class RangeMath extends Calculable {
     public double calcPmMaxCost(Task task, Map<String, String> request) {
         double pmCost = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmCost = calcPmMaxHours(task) * Double.parseDouble(request.get("pmCost"));
+            pmCost = calcPmMaxHours(task) * Double.parseDouble(request.get(ReportConstants.PM_COST));
         }
 
         return pmCost;
