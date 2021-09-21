@@ -2,18 +2,23 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
+import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.EstimationHelper;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.PhaseRepository;
-import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.PhaseService;
+import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,15 +29,17 @@ import java.util.stream.Collectors;
 public class PhaseServiceImpl implements PhaseService {
 
     private final PhaseRepository phaseRepository;
-    private final EstimationRepository estimationRepository;
+    private final EstimationHelper estimationHelper;
+    private final UserHelper userHelper;
     private final PhaseMapper mapper;
 
     @Override
     @Transactional
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
-        Phase savedPhase = phaseRepository.save(phase);
+        checkAccessToEstimation(phase);
 
+        Phase savedPhase = phaseRepository.save(phase);
         log.info("Phase with id " + savedPhase.getId() + " saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
@@ -43,6 +50,7 @@ public class PhaseServiceImpl implements PhaseService {
         List<Phase> phases = mapper.phaseRequestToPhase(phaseRequests);
         List<Phase> savedPhases = phaseRepository.saveAll(phases);
 
+        log.info("Phase list saved");
         return mapper.phaseToPhaseResponse(savedPhases);
     }
 
@@ -50,6 +58,8 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
         Phase phase = updatePhaseById(id, phaseRequest);
+
+
         Phase savedPhase = phaseRepository.save(phase);
 
         log.info("Phase with id " + savedPhase.getId() + " updated");
@@ -81,7 +91,7 @@ public class PhaseServiceImpl implements PhaseService {
         }
 
         if (phaseRequest.getEstimationId() != null) {
-            Estimation estimation = findEstimationById(phaseRequest.getEstimationId());
+            Estimation estimation = estimationHelper.findEstimationById(phaseRequest.getEstimationId());
             phase.setEstimation(estimation);
         }
 
@@ -142,12 +152,19 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     private Phase findPhaseById(Long id) {
-        return phaseRepository.findById(id)
+        Phase phase = phaseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
+
+        checkAccessToEstimation(phase);
+        return phase;
     }
 
-    private Estimation findEstimationById(Long id) {
-        return estimationRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
+    private void checkAccessToEstimation(Phase phase) {
+        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userHelper.findUserByKeycloakId(keycloakId);
+
+        if (!SecurityUtils.hasAccessToAllEstimations() && !phase.getEstimation().getUsers().contains(user)) {
+            throw new AccessDeniedException("User with id " + keycloakId + " cant get access to estimation");
+        }
     }
 }

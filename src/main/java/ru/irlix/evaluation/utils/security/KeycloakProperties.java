@@ -1,4 +1,4 @@
-package ru.irlix.evaluation.utils;
+package ru.irlix.evaluation.utils.security;
 
 import lombok.Getter;
 import lombok.Setter;

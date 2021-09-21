@@ -24,14 +24,14 @@ public class TaskTypeController {
 
     private final TaskTypeService taskTypeService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public TaskTypeResponse createTaskType(@Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return taskTypeService.createTaskType(request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public TaskTypeResponse updateTaskType(@PathVariable @Positive(message = "{id.positive}") Long id,
                                            @Valid TaskTypeRequest request) {
@@ -39,21 +39,19 @@ public class TaskTypeController {
         return taskTypeService.updateTaskType(id, request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteTaskType(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         taskTypeService.deleteTaskType(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public List<TaskTypeResponse> findAllTaskTypes() {
         log.info(UrlConstants.RECEIVED_NO_ARGS);
         return taskTypeService.findAllTaskTypes();
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public TaskTypeResponse findTaskTypeById(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

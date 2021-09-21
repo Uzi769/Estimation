@@ -2,13 +2,12 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.UserKeycloakDto;
 import ru.irlix.evaluation.service.KeycloakService;
 import ru.irlix.evaluation.service.UserService;
-import ru.irlix.evaluation.utils.KeycloakProperties;
+import ru.irlix.evaluation.utils.security.KeycloakProperties;
 
 import java.util.List;
 import java.util.UUID;

@@ -21,14 +21,14 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public RoleResponse createRole(@RequestBody RoleRequest roleRequest) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return roleService.createRole(roleRequest);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public RoleResponse updateRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id,
                                    @RequestBody RoleRequest roleRequest) {
@@ -36,21 +36,19 @@ public class RoleController {
         return roleService.updateRole(id, roleRequest);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         roleService.deleteRole(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public RoleResponse findRoleById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return roleService.findRoleResponseById(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
     @GetMapping
     public List<RoleResponse> findAllRoles() {
         log.info(UrlConstants.RECEIVED_NO_ARGS);

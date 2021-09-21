@@ -27,7 +27,7 @@ public class PhaseController {
 
     private final PhaseService phaseService;
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
@@ -35,14 +35,14 @@ public class PhaseController {
         return phaseService.createPhase(phaseRequest);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<PhaseResponse> createPhases(@RequestBody @Valid List<PhaseRequest> phaseRequests) {
         return phaseService.createPhases(phaseRequests);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Validated(OnUpdate.class)
     public PhaseResponse updatePhase(@PathVariable @Positive(message = "{id.positive}") Long id,
@@ -51,7 +51,7 @@ public class PhaseController {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/list")
     @Validated(OnUpdate.class)
     public List<PhaseResponse> updatePhases(@RequestBody @Valid List<PhaseUpdateRequest> phaseRequests) {
@@ -59,14 +59,13 @@ public class PhaseController {
         return phaseService.updatePhases(phaseRequests);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
     @GetMapping("/{id}")
     public PhaseResponse findPhaseById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return phaseService.findPhaseResponseById(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

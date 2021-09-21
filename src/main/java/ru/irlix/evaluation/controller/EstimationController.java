@@ -34,14 +34,14 @@ public class EstimationController {
 
     private final EstimationService estimationService;
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasRole('ROLE_SALES')")
     @PostMapping
     public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return estimationService.createEstimation(request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     public EstimationResponse updateEstimation(@PathVariable @Positive(message = "{id.positive}") Long id,
                                                @RequestBody EstimationRequest request) {
@@ -49,7 +49,7 @@ public class EstimationController {
         return estimationService.updateEstimation(id, request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEstimation(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
@@ -80,7 +80,7 @@ public class EstimationController {
         return estimationService.findPhaseResponsesByEstimationId(id);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_SALES')")
+    @PreAuthorize("hasRole('ROLE_SALES')")
     @GetMapping("/{id}/report")
     public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, ReportRequest request) throws IOException {
         Resource resource = estimationService.getEstimationsReport(id, request);
