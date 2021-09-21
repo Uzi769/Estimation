@@ -3,9 +3,8 @@ package ru.irlix.evaluation.utils.report;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
-import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.localization.MessageBundle;
 import ru.irlix.evaluation.utils.report.sheet.*;
 
 import java.io.IOException;
@@ -21,11 +20,7 @@ public class ReportHelper {
     @Value("${document-path}")
     private String path;
 
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle(
-            "messages",
-            LocaleConstants.DEFAULT_LOCALE,
-            new UTF8Control()
-    );
+    private final ResourceBundle messageBundle = MessageBundle.getMessageBundle();
 
     public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
         List<String> roleCosts = EstimationReportSheet.getRoleCosts(estimation, request);

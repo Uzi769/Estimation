@@ -14,6 +14,7 @@ import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.localization.MessageBundle;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.io.IOException;
@@ -32,9 +33,7 @@ public class ReportHeader {
 
     private final int DEFAULT_ROWS_COUNT = 16;
 
-    private final ResourceBundle messageBundle = ResourceBundle.getBundle("messages",
-            LocaleConstants.DEFAULT_LOCALE,
-            new UTF8Control());
+    private final ResourceBundle messageBundle = MessageBundle.getMessageBundle();
 
     public void fillHeader(Estimation estimation, Map<String, String> request, int lastColumn) {
         int ENDING_ROWS_COUNT = 7;

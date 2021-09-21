@@ -4,10 +4,14 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.exception.NotFoundException;
+import ru.irlix.evaluation.utils.localization.MessageBundle;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public abstract class Calculable {
+
+    private static final ResourceBundle messageBundle = MessageBundle.getMessageBundle();
 
     public abstract double calcTaskMinHours(Task task);
 
@@ -48,9 +52,9 @@ public abstract class Calculable {
     }
 
     protected static double getRoleCost(Task task, Map<String, String> request) {
-        String roleCost = task.getRole().getDisplayValue() + "Cost";
+        String roleCost = task.getRole().getValue() + "Cost";
         if (!request.containsKey(roleCost)) {
-            throw new NotFoundException(roleCost + " not found");
+            throw new NotFoundException(roleCost + messageBundle.getString("error.notFound"));
         }
 
         return Double.parseDouble(request.get(roleCost));
