@@ -10,6 +10,7 @@ import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.UserRepository;
 import ru.irlix.evaluation.service.UserService;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Log4j2
@@ -34,8 +35,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, UserKeycloakDto userKeycloakDto) {
-        if (!user.getName().equals(userKeycloakDto.getLastName()) && userKeycloakDto.getLastName() != null) {
-            user.setName(userKeycloakDto.getLastName());
+        if (!Objects.equals(user.getName(), userKeycloakDto.getLastName()) && userKeycloakDto.getLastName() != null) {
+            user.setName(userKeycloakDto.getLastName() + " " + userKeycloakDto.getFirstName());
         }
         user.setDeleted(false);
         userRepository.save(user);

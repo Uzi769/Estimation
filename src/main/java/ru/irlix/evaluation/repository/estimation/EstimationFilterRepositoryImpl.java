@@ -32,7 +32,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
 
-        return findPageableEstimations(getPageable(request), getPredicate(request));
+        return findPageableEstimations(request);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
 
-        return findPageableEstimations(getPageable(request), getPredicate(request));
+        return findPageableEstimations(request);
     }
 
     private Pageable getPageable(EstimationPageRequest request) {
@@ -55,11 +55,12 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
     }
 
-    private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
+    private Page<Estimation> findPageableEstimations(EstimationFilterRequest request) {
+        Pageable pageable = getPageable(request);
         int offset = pageable.getPageNumber() * pageable.getPageSize();
 
         query.select(root)
-                .where(predicate)
+                .where(getPredicate(request))
                 .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
@@ -69,7 +70,26 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         return new PageImpl<>(
                 typedQuery.getResultList(),
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
-                getTotalCount(predicate)
+                getTotalCount(request)
+        );
+    }
+
+    private Page<Estimation> findPageableEstimations(EstimationFindAnyRequest request) {
+        Pageable pageable = getPageable(request);
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+
+        query.select(root)
+                .where(getPredicate(request))
+                .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
+
+        TypedQuery<Estimation> typedQuery = manager.createQuery(query);
+        typedQuery.setFirstResult(offset);
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        return new PageImpl<>(
+                typedQuery.getResultList(),
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
+                getTotalCount(request)
         );
     }
 
@@ -101,8 +121,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
 
         if (request.getUserId() != null) {
-            Fetch<Estimation, User> usersFetch = root.fetch("users", JoinType.LEFT);
-            Join<Estimation, User> usersJoin = (Join<Estimation, User>) usersFetch;
+            Join<Estimation, User> usersJoin = root.join("users", JoinType.LEFT);
             filterPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
         }
 
@@ -132,8 +151,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         }
 
         if (request.getUserId() != null) {
-            Fetch<Estimation, User> usersFetch = root.fetch("users", JoinType.LEFT);
-            Join<Estimation, User> usersJoin = (Join<Estimation, User>) usersFetch;
+            Join<Estimation, User> usersJoin = root.join("users", JoinType.LEFT);
             otherPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
         }
 
@@ -143,10 +161,20 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         );
     }
 
-    private Long getTotalCount(Predicate filterPredicate) {
+    private Long getTotalCount(EstimationFilterRequest request) {
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        countQuery.select(builder.count(countQuery.from(Estimation.class)));
-        countQuery.where(filterPredicate);
+        root = countQuery.from(Estimation.class);
+        countQuery.select(builder.count(root));
+        countQuery.where(getPredicate(request));
+
+        return manager.createQuery(countQuery).getSingleResult();
+    }
+
+    private Long getTotalCount(EstimationFindAnyRequest request) {
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        root = countQuery.from(Estimation.class);
+        countQuery.select(builder.count(root));
+        countQuery.where(getPredicate(request));
 
         return manager.createQuery(countQuery).getSingleResult();
     }
