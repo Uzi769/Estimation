@@ -3,6 +3,7 @@ package ru.irlix.evaluation.utils.math;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.exception.NotFoundException;
 
 import java.util.Map;
 
@@ -48,11 +49,11 @@ public abstract class Calculable {
 
     protected static double getRoleCost(Task task, Map<String, String> request) {
         String roleCost = task.getRole().getDisplayValue() + "Cost";
-        if (request.containsKey(roleCost)) {
-            return Double.parseDouble(request.get(roleCost));
+        if (!request.containsKey(roleCost)) {
+            throw new NotFoundException(roleCost + " not found");
         }
 
-        return 0D;
+        return Double.parseDouble(request.get(roleCost));
     }
 
     protected static double getRepeatCount(Task task) {

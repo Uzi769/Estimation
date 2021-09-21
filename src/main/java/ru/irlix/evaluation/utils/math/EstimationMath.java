@@ -16,22 +16,22 @@ public class EstimationMath {
     private static final RangeMath rangeMath = new RangeMath();
 
     public static double calcTaskMinHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcTaskMinHours(task);
     }
 
     public static double calcTaskMinCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcTaskMinCost(task, request);
     }
 
     public static double calcTaskMaxHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcTaskMaxHours(task);
     }
 
     public static double calcTaskMaxCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcTaskMaxCost(task, request);
     }
 
@@ -170,42 +170,42 @@ public class EstimationMath {
     }
 
     public static double calcQaMinHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcQaMinHours(task);
     }
 
     public static double calcQaMinCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcQaMinCost(task, request);
     }
 
     public static double calcQaMaxHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcQaMaxHours(task);
     }
 
     public static double calcQaMaxCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcQaMaxCost(task, request);
     }
 
     public static double calcPmMinHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcPmMinHours(task);
     }
 
     public static double calcPmMinCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcPmMinCost(task, request);
     }
 
     public static double calcPmMaxHours(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcPmMaxHours(task);
     }
 
     public static double calcPmMaxCost(Task task, Map<String, String> request) {
-        Calculable math = Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+        Calculable math = getMath(request);
         return math.calcPmMaxCost(task, request);
     }
 
@@ -279,5 +279,9 @@ public class EstimationMath {
         return calcTaskMaxCost(task, request)
                 + calcQaMaxCost(task, request)
                 + calcPmMaxCost(task, request);
+    }
+
+    private static Calculable getMath(Map<String, String> request) {
+        return Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
     }
 }
