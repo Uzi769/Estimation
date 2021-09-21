@@ -58,8 +58,6 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
         Phase phase = updatePhaseById(id, phaseRequest);
-
-
         Phase savedPhase = phaseRepository.save(phase);
 
         log.info("Phase with id " + savedPhase.getId() + " updated");

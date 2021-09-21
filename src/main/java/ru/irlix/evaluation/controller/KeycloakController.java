@@ -21,11 +21,6 @@ public class KeycloakController {
         return new ResponseEntity<>(jwt, HttpStatus.OK);
     }
 
-    @GetMapping("/users")
-    public void getUsers() {
-        keycloakService.getAllUsers().forEach(user -> System.out.println("getAllUsers: имя: " + user.getFirstName() + " " + user.getLastName()));
-    }
-
     @PutMapping("/update")
     public void updateUsers() {
         keycloakService.update();
