@@ -5,7 +5,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithDetailsSheet;
 import ru.irlix.evaluation.utils.report.sheet.EstimationWithoutDetailsSheet;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 @Component
@@ -31,7 +31,7 @@ public class ReportHelper {
             new UTF8Control()
     );
 
-    public Resource getEstimationReportResource(Estimation estimation, ReportRequest request) throws IOException {
+    public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
         List<EstimationReportSheet> sheets = new ArrayList<>();

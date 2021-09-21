@@ -3,9 +3,10 @@ package ru.irlix.evaluation.utils.report.sheet;
 import org.apache.poi.ss.usermodel.Row;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.math.EstimationMath;
+
+import java.util.Map;
 
 public class PhaseEstimationSheet extends EstimationReportSheet {
 
@@ -14,7 +15,7 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
     }
 
     @Override
-    public void getSheet(Estimation estimation, ReportRequest request) {
+    public void getSheet(Estimation estimation, Map<String, String> request) {
         sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.phaseEstimation"));
         configureColumns();
 
@@ -45,7 +46,7 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         helper.setHeaderCell(row, null, 6);
     }
 
-    private void fillPhaseRow(Phase phase, ReportRequest request) {
+    private void fillPhaseRow(Phase phase, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);

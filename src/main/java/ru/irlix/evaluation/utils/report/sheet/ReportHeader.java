@@ -8,13 +8,11 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.core.io.ClassPathResource;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 
@@ -38,7 +36,7 @@ public class ReportHeader {
             LocaleConstants.DEFAULT_LOCALE,
             new UTF8Control());
 
-    public void fillHeader(Estimation estimation, ReportRequest request, int lastColumn) {
+    public void fillHeader(Estimation estimation, Map<String, String> request, int lastColumn) {
         int ENDING_ROWS_COUNT = 7;
 
         IntStream.range(0, DEFAULT_ROWS_COUNT).forEach(i -> sheet.createRow(sheet.ROW_HEIGHT));
@@ -139,7 +137,7 @@ public class ReportHeader {
         sheet.mergeCells(startRow + 1, startRow + 2, 0, lastColumn);
     }
 
-    private void fillRoleTable(Estimation estimation, ReportRequest request) {
+    private void fillRoleTable(Estimation estimation, Map<String, String> request) {
         List<String> roles = getRoles(estimation, request);
 
         sheet.getHelper().setNonBorderMarkedCell(sheet.getSheet().getRow(15),
@@ -190,7 +188,7 @@ public class ReportHeader {
         }
     }
 
-    private List<String> getRoles(Estimation estimation, ReportRequest request) {
+    private List<String> getRoles(Estimation estimation, Map<String, String> request) {
         List<Task> allTasks = new ArrayList<>();
         estimation.getPhases()
                 .forEach(p -> p.getTasks()

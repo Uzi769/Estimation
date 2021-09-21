@@ -13,7 +13,6 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -24,6 +23,7 @@ import ru.irlix.evaluation.utils.report.ReportHelper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -132,7 +132,7 @@ public class EstimationServiceImpl implements EstimationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Resource getEstimationsReport(Long id, ReportRequest request) throws IOException {
+    public Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException {
         Estimation estimation = findEstimationById(id);
         Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
 

@@ -5,7 +5,6 @@ import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.report.enums.TableType;
 import ru.irlix.evaluation.utils.math.EstimationMath;
@@ -26,7 +25,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
     }
 
     @Override
-    public void getSheet(Estimation estimation, ReportRequest request) {
+    public void getSheet(Estimation estimation, Map<String, String> request) {
         sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.featureEstimation"));
         configureColumns();
 
@@ -104,7 +103,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillPhaseRow(Phase phase, ReportRequest request, List<Task> tasks, boolean isLight) {
+    private void fillPhaseRow(Phase phase, Map<String, String> request, List<Task> tasks, boolean isLight) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
@@ -146,7 +145,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillFeatureRow(Task feature, ReportRequest request) {
+    private void fillFeatureRow(Task feature, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
 
@@ -162,7 +161,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillRoleRow(feature.getTasks(), request);
     }
 
-    private void fillTaskRow(Task task, ReportRequest request) {
+    private void fillTaskRow(Task task, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
 
@@ -179,7 +178,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         fillRoleRow(task, request);
     }
 
-    private void fillRoleRow(Task task, ReportRequest request) {
+    private void fillRoleRow(Task task, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
 
         helper.setCell(row, task.getRole().getDisplayValue(), 2);
@@ -221,7 +220,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillRoleRow(List<Task> tasks, ReportRequest request) {
+    private void fillRoleRow(List<Task> tasks, Map<String, String> request) {
         Map<Role, List<Task>> tasksByRole = tasks.stream().collect(Collectors.groupingBy(Task::getRole));
 
         for (Role role : tasksByRole.keySet()) {

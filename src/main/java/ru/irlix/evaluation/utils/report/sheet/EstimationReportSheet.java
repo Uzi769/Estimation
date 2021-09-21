@@ -7,16 +7,16 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
+import java.util.Map;
 import java.util.ResourceBundle;
 
 @Getter
 public abstract class EstimationReportSheet {
-    public abstract void getSheet(Estimation estimation, ReportRequest request);
+    public abstract void getSheet(Estimation estimation, Map<String, String> request);
 
     protected final ResourceBundle messageBundle = ResourceBundle.getBundle(
             "messages",
@@ -58,7 +58,7 @@ public abstract class EstimationReportSheet {
         return EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId());
     }
 
-    protected void fillReportHeader(Estimation estimation, ReportRequest request, int lastColumn) {
+    protected void fillReportHeader(Estimation estimation, Map<String, String> request, int lastColumn) {
         ReportHeader header = new ReportHeader(this);
         header.fillHeader(estimation, request, lastColumn);
     }
