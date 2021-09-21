@@ -73,6 +73,7 @@ public class ReportHeader {
     private void setImage(int lastColumn) {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/static/irlixLogo.png");
+            assert inputStream != null;
             byte[] bytes = IOUtils.toByteArray(inputStream);
             int pictureIdx = sheet.getHelper().getWorkbook().addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
             inputStream.close();
@@ -193,7 +194,7 @@ public class ReportHeader {
         estimation.getPhases()
                 .forEach(p -> p.getTasks()
                         .forEach(t -> {
-                            if (sheet.isFeature(t)) {
+                            if (EstimationReportSheet.isFeature(t)) {
                                 allTasks.addAll(t.getTasks());
                             } else {
                                 allTasks.add(t);

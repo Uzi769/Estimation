@@ -78,7 +78,7 @@ public class EstimationController {
     }
 
     @GetMapping("/{id}/report")
-    public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, Map<String, String> params) throws IOException {
+    public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, @RequestParam Map<String, String> params) throws IOException {
         Resource resource = estimationService.getEstimationsReport(id, params);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + UTFEncoder.encodeToUTF8(resource.getFilename()) + "\"")

@@ -42,6 +42,13 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    protected ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
+        ApiError apiError = new ApiError(e.getMessage());
+        log.error(e.getMessage());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<Object> handleBindException(BindException ex) {
         ApiError apiError = new ApiError(errorMessage);

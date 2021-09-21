@@ -3,6 +3,7 @@ package ru.irlix.evaluation.utils.report;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
@@ -32,6 +33,11 @@ public class ReportHelper {
     );
 
     public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
+        List<String> roleCosts = EstimationReportSheet.getRoleCosts(estimation, request);
+        if (!request.keySet().containsAll(roleCosts)) {
+            throw new IllegalArgumentException("Costs are not shown for all roles.");
+        }
+
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
         List<EstimationReportSheet> sheets = new ArrayList<>();

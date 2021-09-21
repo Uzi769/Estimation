@@ -90,7 +90,7 @@ public class PertMath extends Calculable {
     public double calcPmMinCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            qaCost = calcPmMinHours(task) * Double.parseDouble(request.get("qaCost"));
+            qaCost = calcPmMinHours(task) * Double.parseDouble(request.get("pmCost"));
         }
 
         return qaCost;

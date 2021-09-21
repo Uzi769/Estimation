@@ -35,7 +35,7 @@ public class TasksByRolesSheet extends EstimationReportSheet {
 
         for (Phase phase : estimation.getPhases()) {
             List<Task> features = phase.getTasks().stream()
-                    .filter(this::isFeature)
+                    .filter(EstimationReportSheet::isFeature)
                     .collect(Collectors.toList());
 
             if (features.isEmpty()) {
