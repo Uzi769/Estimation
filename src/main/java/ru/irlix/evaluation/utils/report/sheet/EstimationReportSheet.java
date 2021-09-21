@@ -10,6 +10,7 @@ import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
@@ -71,15 +72,15 @@ public abstract class EstimationReportSheet {
                 .keySet();
 
         List<String> rolesStrings = roles.stream()
-                .map(r -> r.getValue() + "Cost")
+                .map(r -> r.getValue() + ReportConstants.COST)
                 .collect(Collectors.toList());
 
         if (EstimationMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
-            rolesStrings.add("qaCost");
+            rolesStrings.add(ReportConstants.QA_COST);
         }
 
         if (EstimationMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
-            rolesStrings.add("pmCost");
+            rolesStrings.add(ReportConstants.PM_COST);
         }
 
         return rolesStrings;
