@@ -35,54 +35,88 @@ public class EstimationMath {
         return math.calcTaskMaxCost(task, request);
     }
 
-    public static double calcEstimationMinHours(Estimation estimation) {
-        Map<String, String> request = new HashMap<>();
-        request.put("pert", "false");
+    public static double calcEstimationMinHours(Estimation estimation, Map<String, String> request) {
+        if (request == null) {
+            request = new HashMap<>();
+            request.put("pert", "false");
+        }
 
         if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
             return 0;
         }
 
+        Map<String, String> finalRequest = request;
         return estimation.getPhases().stream()
-                .mapToDouble(p -> calcListSummaryMinHours(p.getTasks(), request))
+                .mapToDouble(p -> calcListSummaryMinHours(p.getTasks(), finalRequest))
                 .sum();
     }
 
-    public static double calcEstimationMaxHours(Estimation estimation) {
-        Map<String, String> request = new HashMap<>();
-        request.put("pert", "false");
-
+    public static double calcEstimationMinCost(Estimation estimation, Map<String, String> request) {
         if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
             return 0;
         }
 
         return estimation.getPhases().stream()
-                .mapToDouble(p -> calcListSummaryMaxHours(p.getTasks(), request))
+                .mapToDouble(p -> calcListSummaryMinCost(p.getTasks(), request))
+                .sum();
+    }
+
+    public static double calcEstimationMaxHours(Estimation estimation, Map<String, String> request) {
+        if (request == null) {
+            request = new HashMap<>();
+            request.put("pert", "false");
+        }
+
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
+
+        Map<String, String> finalRequest = request;
+        return estimation.getPhases().stream()
+                .mapToDouble(p -> calcListSummaryMaxHours(p.getTasks(), finalRequest))
+                .sum();
+    }
+
+    public static double calcEstimationMaxCost(Estimation estimation, Map<String, String> request) {
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
+
+        return estimation.getPhases().stream()
+                .mapToDouble(p -> calcListSummaryMaxCost(p.getTasks(), request))
                 .sum();
     }
 
     public static double calcListSummaryMinHours(List<Task> tasks, Map<String, String> request) {
-        return calcListSummaryMinHoursWithoutQaAndPm(tasks, request)
+        double minHours = calcListSummaryMinHoursWithoutQaAndPm(tasks, request)
                 + calcQaSummaryMinHours(tasks, request)
                 + calcPmSummaryMinHours(tasks, request);
+
+        return roundToHalf(minHours);
     }
 
     public static double calcListSummaryMinCost(List<Task> tasks, Map<String, String> request) {
-        return calcListSummaryMinCostWithoutQaAndPm(tasks, request)
+        double minCost = calcListSummaryMinCostWithoutQaAndPm(tasks, request)
                 + calcQaSummaryMinCost(tasks, request)
                 + calcPmSummaryMinCost(tasks, request);
+
+        return roundToHalf(minCost);
     }
 
     public static double calcListSummaryMaxHours(List<Task> tasks, Map<String, String> request) {
-        return calcListSummaryMaxHoursWithoutQaAndPm(tasks, request)
+        double maxHours = calcListSummaryMaxHoursWithoutQaAndPm(tasks, request)
                 + calcQaSummaryMaxHours(tasks, request)
                 + calcPmSummaryMaxHours(tasks, request);
+
+        return roundToHalf(maxHours);
     }
 
     public static double calcListSummaryMaxCost(List<Task> tasks, Map<String, String> request) {
-        return calcListSummaryMaxCostWithoutQaAndPm(tasks, request)
+        double maxCost = calcListSummaryMaxCostWithoutQaAndPm(tasks, request)
                 + calcQaSummaryMaxCost(tasks, request)
                 + calcPmSummaryMaxCost(tasks, request);
+
+        return roundToHalf(maxCost);
     }
 
     public static double calcFeatureMinHoursWithoutQaAndPm(Task feature, Map<String, String> request) {
@@ -210,78 +244,106 @@ public class EstimationMath {
     }
 
     public static double calcQaSummaryMinHours(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double minHours = tasks.stream()
                 .mapToDouble(t -> calcQaMinHours(t, request))
                 .sum();
+
+        return Calculable.round(minHours);
     }
 
     public static double calcQaSummaryMinCost(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double minCost = tasks.stream()
                 .mapToDouble(t -> calcQaMinCost(t, request))
                 .sum();
+
+        return Calculable.round(minCost);
     }
 
     public static double calcQaSummaryMaxHours(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double maxHours = tasks.stream()
                 .mapToDouble(t -> calcQaMaxHours(t, request))
                 .sum();
+
+        return Calculable.round(maxHours);
     }
 
     public static double calcQaSummaryMaxCost(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double maxCost = tasks.stream()
                 .mapToDouble(t -> calcQaMaxCost(t, request))
                 .sum();
+
+        return Calculable.round(maxCost);
     }
 
     public static double calcPmSummaryMinHours(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double minHours = tasks.stream()
                 .mapToDouble(t -> calcPmMinHours(t, request))
                 .sum();
+
+        return Calculable.round(minHours);
     }
 
     public static double calcPmSummaryMinCost(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double minCost = tasks.stream()
                 .mapToDouble(t -> calcPmMinCost(t, request))
                 .sum();
+
+        return Calculable.round(minCost);
     }
 
     public static double calcPmSummaryMaxHours(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double maxHours = tasks.stream()
                 .mapToDouble(t -> calcPmMaxHours(t, request))
                 .sum();
+
+        return Calculable.round(maxHours);
     }
 
     public static double calcPmSummaryMaxCost(List<Task> tasks, Map<String, String> request) {
-        return tasks.stream()
+        double maxCost = tasks.stream()
                 .mapToDouble(t -> calcPmMaxCost(t, request))
                 .sum();
+
+        return Calculable.round(maxCost);
     }
 
     public static double calcTaskMinHoursWithQaAndPm(Task task, Map<String, String> request) {
-        return calcTaskMinHours(task, request)
+        double minHours = calcTaskMinHours(task, request)
                 + calcQaMinHours(task, request)
                 + calcPmMinHours(task, request);
+
+        return Calculable.round(minHours);
     }
 
     public static double calcTaskMinCostWithQaAndPm(Task task, Map<String, String> request) {
-        return calcTaskMinCost(task, request)
+        double minCost = calcTaskMinCost(task, request)
                 + calcQaMinCost(task, request)
                 + calcPmMinCost(task, request);
+
+        return Calculable.round(minCost);
     }
 
     public static double calcTaskMaxHoursWithQaAndPm(Task task, Map<String, String> request) {
-        return calcTaskMaxHours(task, request)
+        double maxHours = calcTaskMaxHours(task, request)
                 + calcQaMaxHours(task, request)
                 + calcPmMaxHours(task, request);
+
+        return Calculable.round(maxHours);
     }
 
     public static double calcTaskMaxCostWithQaAndPm(Task task, Map<String, String> request) {
-        return calcTaskMaxCost(task, request)
+        double maxCost = calcTaskMaxCost(task, request)
                 + calcQaMaxCost(task, request)
                 + calcPmMaxCost(task, request);
+
+        return Calculable.round(maxCost);
     }
 
     private static Calculable getMath(Map<String, String> request) {
         return Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+    }
+
+    private static double roundToHalf(double value) {
+        return Math.ceil(value * 2) / 2.0;
     }
 }

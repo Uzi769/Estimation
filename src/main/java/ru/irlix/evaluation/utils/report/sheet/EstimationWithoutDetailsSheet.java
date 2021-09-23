@@ -42,7 +42,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
             notNestedTasks.forEach(task -> fillTaskRow(task, request, 1));
         }
 
-        fillSummary();
+        fillSummary(estimation, request);
     }
 
     private void fillTableHeader() {
@@ -67,19 +67,15 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setMarkedCell(row, phase.getName(), 0);
 
         double sumHoursMin = EstimationMath.calcListSummaryMinHours(phase.getTasks(), request);
-        hoursMinSummary += sumHoursMin;
         helper.setMarkedCell(row, sumHoursMin, 3);
 
         double sumCostMin = EstimationMath.calcListSummaryMinCost(phase.getTasks(), request);
-        costMinSummary += sumCostMin;
         helper.setMarkedCell(row, sumCostMin, 4);
 
         double sumHoursMax = EstimationMath.calcListSummaryMaxHours(phase.getTasks(), request);
-        hoursMaxSummary += sumHoursMax;
         helper.setMarkedCell(row, sumHoursMax, 5);
 
         double sumCostMax = EstimationMath.calcListSummaryMaxCost(phase.getTasks(), request);
-        costMaxSummary += sumCostMax;
         helper.setMarkedCell(row, sumCostMax, 6);
 
         helper.setMarkedCell(row, null, 1);
@@ -168,15 +164,15 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setCell(row, null, 7);
     }
 
-    private void fillSummary() {
+    private void fillSummary(Estimation estimation, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
         helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
-        helper.setMarkedCell(row, hoursMinSummary, 3);
-        helper.setMarkedCell(row, costMinSummary, 4);
-        helper.setMarkedCell(row, hoursMaxSummary, 5);
-        helper.setMarkedCell(row, costMaxSummary, 6);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMinHours(estimation, request), 3);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMinCost(estimation, request), 4);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxHours(estimation, request), 5);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxCost(estimation, request), 6);
 
         helper.setMarkedCell(row, null, 1);
         helper.setMarkedCell(row, null, 2);
