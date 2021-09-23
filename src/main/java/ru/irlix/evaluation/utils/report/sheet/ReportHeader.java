@@ -91,9 +91,14 @@ public class ReportHeader {
 
     private void setInfo(Estimation estimation, int lastColumn) {
         Row row = sheet.getSheet().getRow(7);
-        String client = (estimation.getClient() == null) ? messageBundle.getString("string.client") : estimation.getClient();
-        sheet.getHelper().setNonBorderHeaderCell(row, messageBundle.getString("string.commercialOffer") +
-                " «" + client + "»", 0);
+
+        String client = estimation.getClient() == null
+                ? messageBundle.getString("string.client")
+                : estimation.getClient();
+
+        String commercialOffer = messageBundle.getString("string.commercialOffer") + " «" + client + "»";
+
+        sheet.getHelper().setNonBorderHeaderCell(row, commercialOffer, 0);
         sheet.mergeCells(7, 8, 0, lastColumn);
 
         row = sheet.getSheet().getRow(9);

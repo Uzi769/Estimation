@@ -43,8 +43,15 @@ public class ReportHelper {
     }
 
     private String getFileName(Estimation estimation) {
-        String client = estimation.getClient() == null ? messageBundle.getString("string.client") : estimation.getClient();
-        String name = estimation.getName() == null ? messageBundle.getString("string.name") : estimation.getName();
-        return String.join(" ", messageBundle.getString("string.estimation"), client, name, ".xls");
+        String client = estimation.getClient() == null
+                ? messageBundle.getString("string.client")
+                : estimation.getClient();
+
+        String name = estimation.getName() == null
+                ? messageBundle.getString("string.name")
+                : estimation.getName();
+
+        List<String> namePaths = List.of(messageBundle.getString("string.estimation"), client, name, ".xls");
+        return String.join(" ", namePaths);
     }
 }
