@@ -8,12 +8,10 @@ import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
-import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
 import ru.irlix.evaluation.utils.localization.MessageBundle;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 
@@ -93,8 +91,9 @@ public class ReportHeader {
 
     private void setInfo(Estimation estimation, int lastColumn) {
         Row row = sheet.getSheet().getRow(7);
+        String client = (estimation.getClient() == null) ? messageBundle.getString("string.client") : estimation.getClient();
         sheet.getHelper().setNonBorderHeaderCell(row, messageBundle.getString("string.commercialOffer") +
-                " «" + estimation.getClient() + "»", 0);
+                " «" + client + "»", 0);
         sheet.mergeCells(7, 8, 0, lastColumn);
 
         row = sheet.getSheet().getRow(9);
