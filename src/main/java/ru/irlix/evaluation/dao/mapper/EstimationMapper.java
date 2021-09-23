@@ -49,7 +49,7 @@ public abstract class EstimationMapper {
             response.setStatus(estimation.getStatus().getId());
         }
 
-        response.setHoursMin(EstimationMath.calcEstimationMinHours(estimation));
-        response.setHoursMax(EstimationMath.calcEstimationMaxHours(estimation));
+        response.setHoursMin(EstimationMath.calcEstimationMinHours(estimation, null));
+        response.setHoursMax(EstimationMath.calcEstimationMaxHours(estimation, null));
     }
 }

@@ -30,7 +30,7 @@ public class RangeMath extends Calculable {
     public double calcQaMinHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(task.getHoursMin() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = task.getHoursMin() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task);
         }
 
         return qaHours;
@@ -48,7 +48,7 @@ public class RangeMath extends Calculable {
     public double calcQaMaxHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(task.getHoursMax() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = task.getHoursMax() * getRepeatCount(task) * getQaPercent(task) * getRiskPercent(task);
         }
 
         return qaHours;
@@ -66,7 +66,7 @@ public class RangeMath extends Calculable {
     public double calcPmMinHours(Task task) {
         double pmHours = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmHours = round(task.getHoursMin() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task));
+            pmHours = task.getHoursMin() * getRepeatCount(task) * getPmPercent(task) * getRiskPercent(task);
         }
 
         return pmHours;

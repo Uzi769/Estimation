@@ -50,7 +50,7 @@ public class ExcelWorkbook {
     public ExcelWorkbook() {
         workbook = new HSSFWorkbook();
         createHelper = workbook.getCreationHelper();
-        formatter = new DecimalFormat("#.#");
+        formatter = new DecimalFormat("#.########");
     }
 
     public void setCell(Row row, String name, Integer column) {

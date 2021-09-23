@@ -27,7 +27,7 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
             fillPhaseRow(phase, request);
         }
 
-        fillSummary();
+        fillSummary(estimation, request);
     }
 
     private void fillTableHeader() {
@@ -54,11 +54,9 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         helper.setCell(row, phase.getName(), 0);
 
         double sumHoursMax = EstimationMath.calcListSummaryMaxHours(phase.getTasks(), request);
-        hoursMaxSummary += sumHoursMax;
         helper.setCell(row, sumHoursMax, 4);
 
         double sumCostMax = EstimationMath.calcListSummaryMaxCost(phase.getTasks(), request);
-        costMaxSummary += sumCostMax;
         helper.setCell(row, sumCostMax, 7);
 
         helper.setCell(row, null, 1);
@@ -68,14 +66,14 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         helper.setCell(row, null, 6);
     }
 
-    private void fillSummary() {
+    private void fillSummary(Estimation estimation, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 3);
         mergeCells(4, 6);
 
         helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
-        helper.setMarkedCell(row, hoursMaxSummary, 4);
-        helper.setMarkedCell(row, costMaxSummary, 7);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxHours(estimation, request), 4);
+        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxCost(estimation, request), 7);
 
         helper.setMarkedCell(row, null, 1);
         helper.setMarkedCell(row, null, 2);
