@@ -2,6 +2,7 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.TaskRequest;
@@ -25,6 +26,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping
     @Validated(OnCreate.class)
     public TaskResponse createTask(@RequestBody @Valid TaskRequest request) {
@@ -32,12 +34,14 @@ public class TaskController {
         return taskService.createTask(request);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<TaskResponse> createTasks(@RequestBody @Valid List<TaskRequest> requests) {
         return taskService.createTasks(requests);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public TaskResponse updateTask(@PathVariable @Positive(message = "{id.positive}") Long id,
                                    @RequestBody @Valid TaskRequest request) {
@@ -45,6 +49,7 @@ public class TaskController {
         return taskService.updateTask(id, request);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/list")
     public List<TaskResponse> updateTask(@RequestBody @Valid List<TaskUpdateRequest> request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
@@ -57,6 +62,7 @@ public class TaskController {
         return taskService.findTaskResponseById(id);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

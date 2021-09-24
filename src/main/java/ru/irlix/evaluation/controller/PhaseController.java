@@ -2,6 +2,7 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
@@ -26,6 +27,7 @@ public class PhaseController {
 
     private final PhaseService phaseService;
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
@@ -33,12 +35,14 @@ public class PhaseController {
         return phaseService.createPhase(phaseRequest);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<PhaseResponse> createPhases(@RequestBody @Valid List<PhaseRequest> phaseRequests) {
         return phaseService.createPhases(phaseRequests);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     @Validated(OnUpdate.class)
     public PhaseResponse updatePhase(@PathVariable @Positive(message = "{id.positive}") Long id,
@@ -47,6 +51,7 @@ public class PhaseController {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @PutMapping("/list")
     @Validated(OnUpdate.class)
     public List<PhaseResponse> updatePhases(@RequestBody @Valid List<PhaseUpdateRequest> phaseRequests) {
@@ -60,6 +65,7 @@ public class PhaseController {
         return phaseService.findPhaseResponseById(id);
     }
 
+    @PreAuthorize("!hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

@@ -22,6 +22,9 @@
 		<jackson.version>2.8.6</jackson.version>
 		<lombok.version>1.18.20</lombok.version>
 		<springdoc-openapi-ui.version>1.5.2</springdoc-openapi-ui.version>
+		<keycloak.version>15.0.2</keycloak.version>
+		<security.version>2.5.4</security.version>
+		<oauth2.version>5.3.11.RELEASE</oauth2.version>
 		<apache_poi.version>5.0.0</apache_poi.version>
 	</properties>
 
@@ -93,6 +96,30 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${apache_poi.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+			<version>${security.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-resource-server</artifactId>
+			<version>${oauth2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+			<version>${oauth2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.keycloak</groupId>
+			<artifactId>keycloak-admin-client</artifactId>
+			<version>${keycloak.version}</version>
 		</dependency>
 
 	</dependencies>
