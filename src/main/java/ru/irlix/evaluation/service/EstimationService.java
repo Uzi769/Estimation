@@ -5,12 +5,12 @@ import org.springframework.data.domain.Page;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface EstimationService {
 
@@ -28,5 +28,5 @@ public interface EstimationService {
 
     List<PhaseResponse> findPhaseResponsesByEstimationId(Long id);
 
-    Resource getEstimationsReport(Long id, ReportRequest request) throws IOException;
+    Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException;
 }

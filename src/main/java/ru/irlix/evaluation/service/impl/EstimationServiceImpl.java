@@ -15,7 +15,8 @@ import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
-import ru.irlix.evaluation.dto.request.*;
+import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
+import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -27,6 +28,7 @@ import ru.irlix.evaluation.utils.security.SecurityUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -109,16 +111,6 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Resource getEstimationsReport(Long id, ReportRequest request) throws IOException {
-        Estimation estimation = findEstimationById(id);
-        Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
-
-        log.info("Estimation report generated");
-        return estimationReport;
-    }
-
     private void addUserIdToRequestIfRequired(EstimationPageRequest request) {
         if (!SecurityUtils.hasAccessToAllEstimations()) {
             String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -166,5 +158,15 @@ public class EstimationServiceImpl implements EstimationService {
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException {
+        Estimation estimation = findEstimationById(id);
+        Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
+
+        log.info("Estimation report generated");
+        return estimationReport;
     }
 }

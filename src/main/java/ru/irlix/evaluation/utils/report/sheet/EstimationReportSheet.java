@@ -6,17 +6,20 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public abstract class EstimationReportSheet {
-    public abstract void getSheet(Estimation estimation, ReportRequest request);
+    public abstract void getSheet(Estimation estimation, Map<String, String> request);
 
     protected final ResourceBundle messageBundle = ResourceBundle.getBundle(
             "messages",
@@ -54,11 +57,44 @@ public abstract class EstimationReportSheet {
         sheet.addMergedRegion(new CellRangeAddress(startRow, endRow, startColumn, endColumn));
     }
 
-    protected boolean isFeature(Task task) {
+    public static boolean isFeature(Task task) {
         return EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId());
     }
 
-    protected void fillReportHeader(Estimation estimation, ReportRequest request, int lastColumn) {
+    public static List<String> getRoleCosts(Estimation estimation, Map<String, String> request) {
+        List<Task> allTasks = new ArrayList<>();
+        estimation.getPhases().stream()
+                .flatMap(p -> p.getTasks().stream())
+                .forEach(t -> addFeatureTasksIfExist(allTasks, t));
+
+        Set<Role> roles = allTasks.stream()
+                .collect(Collectors.groupingBy(Task::getRole))
+                .keySet();
+
+        List<String> rolesStrings = roles.stream()
+                .map(r -> r.getValue() + ReportConstants.COST)
+                .collect(Collectors.toList());
+
+        if (EstimationMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
+            rolesStrings.add(ReportConstants.QA_COST);
+        }
+
+        if (EstimationMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
+            rolesStrings.add(ReportConstants.PM_COST);
+        }
+
+        return rolesStrings;
+    }
+
+    private static void addFeatureTasksIfExist(List<Task> allTasks, Task t) {
+        if (isFeature(t)) {
+            allTasks.addAll(t.getTasks());
+        } else {
+            allTasks.add(t);
+        }
+    }
+
+    protected void fillReportHeader(Estimation estimation, Map<String, String> request, int lastColumn) {
         ReportHeader header = new ReportHeader(this);
         header.fillHeader(estimation, request, lastColumn);
     }

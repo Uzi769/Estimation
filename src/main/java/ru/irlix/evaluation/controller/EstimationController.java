@@ -13,16 +13,17 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
+import ru.irlix.evaluation.utils.report.encoding.UTFEncoder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(UrlConstants.BASE_URL + "/estimations")
@@ -82,10 +83,10 @@ public class EstimationController {
 
     @PreAuthorize("hasRole('ROLE_SALES')")
     @GetMapping("/{id}/report")
-    public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, ReportRequest request) throws IOException {
-        Resource resource = estimationService.getEstimationsReport(id, request);
+    public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, @RequestParam Map<String, String> params) throws IOException {
+        Resource resource = estimationService.getEstimationsReport(id, params);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + UTFEncoder.encodeToUTF8(resource.getFilename()) + "\"")
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(resource);

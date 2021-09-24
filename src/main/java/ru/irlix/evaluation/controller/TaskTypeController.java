@@ -26,7 +26,7 @@ public class TaskTypeController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public TaskTypeResponse createTaskType(@Valid TaskTypeRequest request) {
+    public TaskTypeResponse createTaskType(@RequestBody @Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return taskTypeService.createTaskType(request);
     }
@@ -34,7 +34,7 @@ public class TaskTypeController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public TaskTypeResponse updateTaskType(@PathVariable @Positive(message = "{id.positive}") Long id,
-                                           @Valid TaskTypeRequest request) {
+                                           @RequestBody @Valid TaskTypeRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return taskTypeService.updateTaskType(id, request);
     }

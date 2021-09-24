@@ -4,13 +4,13 @@ import org.apache.poi.ss.usermodel.Row;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
 
@@ -19,7 +19,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
     }
 
     @Override
-    public void getSheet(Estimation estimation, ReportRequest request) {
+    public void getSheet(Estimation estimation, Map<String, String> request) {
         sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.withoutDetails"));
         configureColumns();
 
@@ -60,7 +60,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setHeaderCell(row, null, 2);
     }
 
-    private void fillPhaseRow(Phase phase, ReportRequest request) {
+    private void fillPhaseRow(Phase phase, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
@@ -87,7 +87,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setMarkedCell(row, null, 7);
     }
 
-    private void fillTaskRow(Task task, ReportRequest request, int column) {
+    private void fillTaskRow(Task task, Map<String, String> request, int column) {
         Row row = createRow(ROW_HEIGHT);
 
         helper.setCell(row, null, 0);
@@ -112,7 +112,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
+    private void fillFeatureRowWithNestedTasks(Task feature, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
 
@@ -132,7 +132,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         fillQaAndPmRows(feature.getTasks(), request);
     }
 
-    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request) {
+    private void fillQaAndPmRows(List<Task> tasks, Map<String, String> request) {
         if (EstimationMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             fillQaRow(tasks, request);
         }
@@ -142,7 +142,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillQaRow(List<Task> tasks, ReportRequest request) {
+    private void fillQaRow(List<Task> tasks, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         helper.setCell(row, messageBundle.getString("cellName.testing"), 2);
         helper.setCell(row, EstimationMath.calcQaSummaryMinHours(tasks, request), 3);
@@ -155,7 +155,7 @@ public class EstimationWithoutDetailsSheet extends EstimationReportSheet {
         helper.setCell(row, null, 7);
     }
 
-    private void fillPmRow(List<Task> tasks, ReportRequest request) {
+    private void fillPmRow(List<Task> tasks, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         helper.setCell(row, messageBundle.getString("cellName.management"), 2);
         helper.setCell(row, EstimationMath.calcPmSummaryMinHours(tasks, request), 3);

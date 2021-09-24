@@ -1,7 +1,9 @@
 package ru.irlix.evaluation.utils.math;
 
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
+
+import java.util.Map;
 
 public class PertMath extends Calculable {
 
@@ -11,7 +13,7 @@ public class PertMath extends Calculable {
     }
 
     @Override
-    public double calcTaskMinCost(Task task, ReportRequest request) {
+    public double calcTaskMinCost(Task task, Map<String, String> request) {
         return round(calcTaskMinHours(task) * getRoleCost(task, request));
     }
 
@@ -21,7 +23,7 @@ public class PertMath extends Calculable {
     }
 
     @Override
-    public double calcTaskMaxCost(Task task, ReportRequest request) {
+    public double calcTaskMaxCost(Task task, Map<String, String> request) {
         return round(calcTaskMaxHours(task) * getRoleCost(task, request));
     }
 
@@ -50,10 +52,10 @@ public class PertMath extends Calculable {
         return qaHours;
     }
 
-    public double calcQaMinCost(Task task, ReportRequest request) {
+    public double calcQaMinCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaCost = calcQaMinHours(task) * request.getQaCost();
+            qaCost = calcQaMinHours(task) * Double.parseDouble(request.get(ReportConstants.QA_COST));
         }
 
         return qaCost;
@@ -68,10 +70,10 @@ public class PertMath extends Calculable {
         return qaHours;
     }
 
-    public double calcQaMaxCost(Task task, ReportRequest request) {
+    public double calcQaMaxCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaCost = calcQaMaxHours(task) * request.getQaCost();
+            qaCost = calcQaMaxHours(task) * Double.parseDouble(request.get(ReportConstants.QA_COST));
         }
 
         return qaCost;
@@ -86,10 +88,10 @@ public class PertMath extends Calculable {
         return pmHours;
     }
 
-    public double calcPmMinCost(Task task, ReportRequest request) {
+    public double calcPmMinCost(Task task, Map<String, String> request) {
         double qaCost = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            qaCost = calcPmMinHours(task) * request.getQaCost();
+            qaCost = calcPmMinHours(task) * Double.parseDouble(request.get(ReportConstants.PM_COST));
         }
 
         return qaCost;
@@ -104,10 +106,10 @@ public class PertMath extends Calculable {
         return pmHours;
     }
 
-    public double calcPmMaxCost(Task task, ReportRequest request) {
+    public double calcPmMaxCost(Task task, Map<String, String> request) {
         double pmCost = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmCost = calcPmMaxHours(task) * request.getPmCost();
+            pmCost = calcPmMaxHours(task) * Double.parseDouble(request.get(ReportConstants.PM_COST));
         }
 
         return pmCost;

@@ -4,13 +4,13 @@ import org.apache.poi.ss.usermodel.Row;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
-import ru.irlix.evaluation.dto.request.ReportRequest;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
-import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.math.EstimationMath;
+import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EstimationWithDetailsSheet extends EstimationReportSheet {
 
@@ -19,7 +19,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
     }
 
     @Override
-    public void getSheet(Estimation estimation, ReportRequest request) {
+    public void getSheet(Estimation estimation, Map<String, String> request) {
         sheet = helper.getWorkbook().createSheet(messageBundle.getString("sheetName.withDetails"));
         configureColumns();
 
@@ -62,7 +62,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         helper.setHeaderCell(row, null, 2);
     }
 
-    private void fillPhaseRow(Phase phase, ReportRequest request) {
+    private void fillPhaseRow(Phase phase, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(0, 2);
 
@@ -91,7 +91,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         helper.setMarkedCell(row, null, 8);
     }
 
-    private void fillTaskRow(Task task, ReportRequest request, int column) {
+    private void fillTaskRow(Task task, Map<String, String> request, int column) {
         Row row = createRow(ROW_HEIGHT);
         if (column == 1) {
             mergeCells(column, 2);
@@ -111,7 +111,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         helper.setCell(row, task.getComment(), 8);
     }
 
-    private void fillFeatureRowWithNestedTasks(Task feature, ReportRequest request) {
+    private void fillFeatureRowWithNestedTasks(Task feature, Map<String, String> request) {
         Row row = createRow(ROW_HEIGHT);
         mergeCells(1, 2);
 
@@ -131,7 +131,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         fillQaAndPmRows(feature.getTasks(), request, 2);
     }
 
-    private void fillQaAndPmRows(List<Task> tasks, ReportRequest request, int column) {
+    private void fillQaAndPmRows(List<Task> tasks, Map<String, String> request, int column) {
         if (EstimationMath.calcQaSummaryMaxHours(tasks, request) > 0) {
             fillQaRow(tasks, request, column);
         }
@@ -141,7 +141,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         }
     }
 
-    private void fillQaRow(List<Task> tasks, ReportRequest request, int column) {
+    private void fillQaRow(List<Task> tasks, Map<String, String> request, int column) {
         Row row = createRow(ROW_HEIGHT);
         if (column == 1) {
             mergeCells(column, 2);
@@ -160,7 +160,7 @@ public class EstimationWithDetailsSheet extends EstimationReportSheet {
         helper.setCell(row, null, 8);
     }
 
-    private void fillPmRow(List<Task> tasks, ReportRequest request, int column) {
+    private void fillPmRow(List<Task> tasks, Map<String, String> request, int column) {
         Row row = createRow(ROW_HEIGHT);
         if (column == 1) {
             mergeCells(column, 2);
