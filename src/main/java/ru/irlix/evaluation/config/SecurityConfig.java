@@ -18,7 +18,6 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -59,24 +58,34 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new Converter<Jwt, Collection<GrantedAuthority>>() {
             @Override
             public Collection<GrantedAuthority> convert(Jwt jwt) {
-                Collection<GrantedAuthority> grantedAuthorities = new LinkedHashSet<>();
 
-                if (jwt.getClaim("realm_access") == null) {
-                    return grantedAuthorities;
+                JSONArray roles = new JSONArray();
+
+                if (jwt.getClaim("realm_access") != null) {
+                    JSONObject realmAccess = jwt.getClaim("realm_access");
+
+                    if (realmAccess.get("roles") != null) {
+                        JSONArray estimationRoles = (JSONArray) realmAccess.get("roles");
+                        roles.addAll(estimationRoles);
+                    }
                 }
 
-                JSONObject realmAccess = jwt.getClaim("realm_access");
-                if (realmAccess.get("roles") == null) {
-                    return grantedAuthorities;
+                if (jwt.getClaim("resource_access") != null) {
+                    JSONObject clientAccess = jwt.getClaim("resource_access");
+
+                    if (clientAccess.get("estimation") != null) {
+                        clientAccess = (JSONObject) clientAccess.get("estimation");
+
+                        if (clientAccess.get("roles") != null) {
+                            JSONArray estimationRoles = (JSONArray) clientAccess.get("roles");
+                            roles.addAll(estimationRoles);
+                        }
+                    }
                 }
 
-                JSONArray roles = (JSONArray) realmAccess.get("roles");
-
-                final List<SimpleGrantedAuthority> keycloakAuthorities = roles.stream()
+                return roles.stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
-                        .collect(Collectors.toList());
-                grantedAuthorities.addAll(keycloakAuthorities);
-                return grantedAuthorities;
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
             }
         };
     }

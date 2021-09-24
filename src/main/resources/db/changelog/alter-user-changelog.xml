@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <changeSet author="ivan_kalachikov" id="drop_user_estimation_constraints">
+        <dropForeignKeyConstraint
+                baseTableName="user_estimation"
+                constraintName="fk_uses_on_role_dictionary" />
+
+        <dropPrimaryKey
+                tableName="user_estimation"
+                constraintName="pk_user_id"/>
+    </changeSet>
+
+    <changeSet author="ivan_kalachikov" id="drop_role_column">
+        <dropColumn
+                tableName="user_estimation"
+                columnName="role_id" />
+    </changeSet>
+
+    <changeSet author="ivan_kalachikov" id="rename_user_to_user_info">
+        <renameTable
+                newTableName="user_info"
+                oldTableName="user" />
+    </changeSet>
+
+    <changeSet author="ivan_kalachikov" id="add_keycloak_id_to_user_info">
+        <addColumn tableName="user_info">
+            <column
+                    name="keycloak_id"
+                    type="UUID"/>
+        </addColumn>
+    </changeSet>
+    
+    <changeSet author="ivan_kalachikov" id="user_estimation_primary_key">
+        <addPrimaryKey
+                tableName="user_estimation"
+                columnNames="user_id, estimation_id" />
+    </changeSet>
+
+</databaseChangeLog>
