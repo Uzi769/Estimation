@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
@@ -36,6 +37,7 @@ public class EstimationServiceImpl implements EstimationService {
     private PhaseMapper phaseMapper;
     private ReportHelper reportHelper;
 
+    @LogInfo
     @Override
     @Transactional
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
@@ -46,6 +48,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public EstimationResponse updateEstimation(Long id, EstimationRequest estimationRequest) {
@@ -57,6 +60,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public void deleteEstimation(Long id) {
@@ -65,6 +69,7 @@ public class EstimationServiceImpl implements EstimationService {
         log.info("Estimation with id " + estimationToDelete.getId() + " deleted");
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
@@ -73,6 +78,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
@@ -81,6 +87,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public EstimationResponse findEstimationResponseById(Long id) {
@@ -89,6 +96,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(estimation);
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public List<PhaseResponse> findPhaseResponsesByEstimationId(Long id) {
@@ -130,6 +138,7 @@ public class EstimationServiceImpl implements EstimationService {
         }
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException {

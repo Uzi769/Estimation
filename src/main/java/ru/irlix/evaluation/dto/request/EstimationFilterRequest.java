@@ -8,7 +8,6 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class EstimationFilterRequest extends EstimationPageRequest {
 
     private String name;
@@ -22,4 +21,20 @@ public class EstimationFilterRequest extends EstimationPageRequest {
     private Instant endDate;
 
     private String creator;
+
+    @Override
+    public String toString() {
+        return "EstimationFilterRequest(" +
+                "page=" + getPage() + ", " +
+                "size=" + getSize() + ", " +
+                "nameSortField=" + getNameSortField() + ", " +
+                "sortAsc=" + getSortAsc() + ", " +
+                "name=" + name + ", " +
+                "client=" + client + ", " +
+                "status=" + status + ", " +
+                "beginDate=" + beginDate + ", " +
+                "endDate=" + endDate + ", " +
+                "creator=" + creator +
+                ')';
+    }
 }

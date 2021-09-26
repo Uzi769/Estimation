@@ -1,9 +1,6 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.irlix.evaluation.utils.marker.OnCreate;
 
 import javax.validation.constraints.NotNull;
@@ -14,6 +11,7 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PhaseRequest {
 
     @NotNull(groups = OnCreate.class, message = "{name.notNull}")

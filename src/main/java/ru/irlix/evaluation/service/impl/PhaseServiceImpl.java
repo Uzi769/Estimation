@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
@@ -27,6 +28,7 @@ public class PhaseServiceImpl implements PhaseService {
     private final EstimationRepository estimationRepository;
     private final PhaseMapper mapper;
 
+    @LogInfo
     @Override
     @Transactional
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
@@ -37,6 +39,7 @@ public class PhaseServiceImpl implements PhaseService {
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public List<PhaseResponse> createPhases(List<PhaseRequest> phaseRequests) {
@@ -46,6 +49,7 @@ public class PhaseServiceImpl implements PhaseService {
         return mapper.phaseToPhaseResponse(savedPhases);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
@@ -56,6 +60,7 @@ public class PhaseServiceImpl implements PhaseService {
         return mapper.phaseToPhaseResponse(savedPhase);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public List<PhaseResponse> updatePhases(List<PhaseUpdateRequest> phaseRequests) {
@@ -125,6 +130,7 @@ public class PhaseServiceImpl implements PhaseService {
         }
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public PhaseResponse findPhaseResponseById(Long id) {
@@ -133,6 +139,7 @@ public class PhaseServiceImpl implements PhaseService {
         return mapper.phaseToPhaseResponse(phase);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public void deletePhase(Long id) {
