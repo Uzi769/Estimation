@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class TaskTypeRequest {
     @NotNull(message = "{value.notNull}")
     private String value;

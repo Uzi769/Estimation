@@ -1,9 +1,6 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import javax.validation.constraints.Max;
@@ -13,6 +10,7 @@ import javax.validation.constraints.Positive;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class EstimationRequest {
 
     private String name;

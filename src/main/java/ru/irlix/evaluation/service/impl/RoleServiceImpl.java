@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.mapper.RoleMapper;
@@ -22,6 +23,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final RoleMapper mapper;
 
+    @LogInfo
     @Override
     @Transactional
     public RoleResponse createRole(RoleRequest roleRequest) {
@@ -32,6 +34,7 @@ public class RoleServiceImpl implements RoleService {
         return mapper.roleToRoleResponse(savedRole);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public RoleResponse updateRole(Long id, RoleRequest roleRequest) {
@@ -43,6 +46,7 @@ public class RoleServiceImpl implements RoleService {
         return mapper.roleToRoleResponse(savedRole);
     }
 
+    @LogInfo
     @Override
     @Transactional
     public void deleteRole(Long id) {
@@ -51,6 +55,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Role with id " + role.getId() + " deleted");
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public RoleResponse findRoleResponseById(Long id) {
@@ -64,6 +69,7 @@ public class RoleServiceImpl implements RoleService {
                 .orElseThrow(() -> new NotFoundException("Role with id " + id + " not found"));
     }
 
+    @LogInfo
     @Override
     @Transactional(readOnly = true)
     public List<RoleResponse> findAllRoles() {

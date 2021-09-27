@@ -1,9 +1,6 @@
 package ru.irlix.evaluation.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -13,6 +10,7 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class EstimationPageRequest {
     @PositiveOrZero(message = "{page.positiveOrZero}")
     private Integer page = 0;

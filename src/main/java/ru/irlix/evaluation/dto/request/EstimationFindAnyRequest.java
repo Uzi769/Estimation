@@ -8,7 +8,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(callSuper = true)
 public class EstimationFindAnyRequest extends EstimationPageRequest {
 
     private String text;
@@ -18,4 +18,5 @@ public class EstimationFindAnyRequest extends EstimationPageRequest {
     private Instant beginDate;
 
     private Instant endDate;
+
 }
