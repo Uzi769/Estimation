@@ -8,6 +8,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(callSuper = true)
 public class EstimationFindAnyRequest extends EstimationPageRequest {
 
     private String text;
@@ -18,17 +19,4 @@ public class EstimationFindAnyRequest extends EstimationPageRequest {
 
     private Instant endDate;
 
-    @Override
-    public String toString() {
-        return "EstimationFindAnyRequest(" +
-                "page=" + getPage() + ", " +
-                "size=" + getSize() + ", " +
-                "nameSortField=" + getNameSortField() + ", " +
-                "sortAsc=" + getSortAsc() + ", " +
-                "text='" + text +
-                ", status=" + status +
-                ", beginDate=" + beginDate +
-                ", endDate=" + endDate +
-                ')';
-    }
 }
