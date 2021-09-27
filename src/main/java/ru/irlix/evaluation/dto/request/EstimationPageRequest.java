@@ -22,4 +22,6 @@ public class EstimationPageRequest {
     private String nameSortField;
 
     private Boolean sortAsc;
+
+    private Long userId;
 }

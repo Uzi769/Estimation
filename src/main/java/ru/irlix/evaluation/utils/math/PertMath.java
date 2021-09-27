@@ -46,7 +46,7 @@ public class PertMath extends Calculable {
     public double calcQaMinHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(calcTaskMinHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = calcTaskMinHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task);
         }
 
         return qaHours;
@@ -64,7 +64,7 @@ public class PertMath extends Calculable {
     public double calcQaMaxHours(Task task) {
         double qaHours = 0;
         if (task.getQaReserveOn() != null && task.getQaReserveOn() && task.getQaReserve() != null) {
-            qaHours = round(calcTaskMaxHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task));
+            qaHours = calcTaskMaxHoursWithoutPercents(task) * getQaPercent(task) * getRiskPercent(task);
         }
 
         return qaHours;
@@ -82,7 +82,7 @@ public class PertMath extends Calculable {
     public double calcPmMinHours(Task task) {
         double pmHours = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmHours = round(calcTaskMinHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task));
+            pmHours = calcTaskMinHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task);
         }
 
         return pmHours;
@@ -100,7 +100,7 @@ public class PertMath extends Calculable {
     public double calcPmMaxHours(Task task) {
         double pmHours = 0;
         if (task.getManagementReserveOn() != null && task.getManagementReserveOn() && task.getManagementReserve() != null) {
-            pmHours = round(calcTaskMaxHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task));
+            pmHours = calcTaskMaxHoursWithoutPercents(task) * getPmPercent(task) * getRiskPercent(task);
         }
 
         return pmHours;

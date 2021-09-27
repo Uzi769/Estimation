@@ -30,11 +30,6 @@ public abstract class EstimationReportSheet {
     protected ExcelWorkbook helper;
     protected HSSFSheet sheet;
 
-    protected double hoursMinSummary;
-    protected double hoursMaxSummary;
-    protected double costMinSummary;
-    protected double costMaxSummary;
-
     protected final short ROW_HEIGHT = 380;
     protected final short HEADER_ROW_HEIGHT = 1050;
 
@@ -86,12 +81,19 @@ public abstract class EstimationReportSheet {
         return rolesStrings;
     }
 
-    private static void addFeatureTasksIfExist(List<Task> allTasks, Task t) {
-        if (isFeature(t)) {
-            allTasks.addAll(t.getTasks());
-        } else {
-            allTasks.add(t);
+    private static void addFeatureTasksIfExist(List<Task> allTasks, Task task) {
+        if (isFeature(task)) {
+            List<Task> tasks = task.getTasks().stream()
+                    .filter(EstimationReportSheet::isRequiredTime)
+                    .collect(Collectors.toList());
+            allTasks.addAll(tasks);
+        } else if (isRequiredTime(task)) {
+            allTasks.add(task);
         }
+    }
+
+    private static boolean isRequiredTime(Task task) {
+        return task.getHoursMax() > 0;
     }
 
     protected void fillReportHeader(Estimation estimation, Map<String, String> request, int lastColumn) {

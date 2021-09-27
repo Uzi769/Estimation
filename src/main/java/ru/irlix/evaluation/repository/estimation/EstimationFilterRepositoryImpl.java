@@ -6,6 +6,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
@@ -30,7 +31,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(getPageable(request), getPredicate(request));
+
+        return findPageableEstimations(request);
     }
 
     @Override
@@ -38,7 +40,8 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         builder = manager.getCriteriaBuilder();
         query = builder.createQuery(Estimation.class);
         root = query.from(Estimation.class);
-        return findPageableEstimations(getPageable(request), getPredicate(request));
+
+        return findPageableEstimations(request);
     }
 
     private Pageable getPageable(EstimationPageRequest request) {
@@ -47,15 +50,17 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
                     request.getSize(),
                     request.getSortAsc() ? Sort.Direction.ASC : Sort.Direction.DESC,
                     request.getNameSortField());
-        } else
+        } else {
             return PageRequest.of(request.getPage(), request.getSize(), Sort.Direction.DESC, "createDate");
+        }
     }
 
-    private Page<Estimation> findPageableEstimations(Pageable pageable, Predicate predicate) {
+    private Page<Estimation> findPageableEstimations(EstimationFilterRequest request) {
+        Pageable pageable = getPageable(request);
         int offset = pageable.getPageNumber() * pageable.getPageSize();
 
         query.select(root)
-                .where(predicate)
+                .where(getPredicate(request))
                 .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
 
         TypedQuery<Estimation> typedQuery = manager.createQuery(query);
@@ -65,7 +70,26 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         return new PageImpl<>(
                 typedQuery.getResultList(),
                 PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
-                getTotalCount(predicate)
+                getTotalCount(request)
+        );
+    }
+
+    private Page<Estimation> findPageableEstimations(EstimationFindAnyRequest request) {
+        Pageable pageable = getPageable(request);
+        int offset = pageable.getPageNumber() * pageable.getPageSize();
+
+        query.select(root)
+                .where(getPredicate(request))
+                .orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
+
+        TypedQuery<Estimation> typedQuery = manager.createQuery(query);
+        typedQuery.setFirstResult(offset);
+        typedQuery.setMaxResults(pageable.getPageSize());
+
+        return new PageImpl<>(
+                typedQuery.getResultList(),
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()),
+                getTotalCount(request)
         );
     }
 
@@ -96,6 +120,11 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             filterPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
+        if (request.getUserId() != null) {
+            Join<Estimation, User> usersJoin = root.join("users", JoinType.LEFT);
+            filterPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
+        }
+
         return builder.and(filterPredicates.toArray(new Predicate[0]));
     }
 
@@ -121,16 +150,31 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
             otherPredicates.add(builder.lessThanOrEqualTo(root.get("createDate"), request.getEndDate()));
         }
 
+        if (request.getUserId() != null) {
+            Join<Estimation, User> usersJoin = root.join("users", JoinType.LEFT);
+            otherPredicates.add(builder.equal(usersJoin.get("userId"), request.getUserId()));
+        }
+
         return builder.and(
                 textPredicates.isEmpty() ? builder.and() : builder.or(textPredicates.toArray(new Predicate[0])),
                 builder.and(otherPredicates.toArray(new Predicate[0]))
         );
     }
 
-    private Long getTotalCount(Predicate filterPredicate) {
+    private Long getTotalCount(EstimationFilterRequest request) {
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        countQuery.select(builder.count(countQuery.from(Estimation.class)));
-        countQuery.where(filterPredicate);
+        root = countQuery.from(Estimation.class);
+        countQuery.select(builder.count(root));
+        countQuery.where(getPredicate(request));
+
+        return manager.createQuery(countQuery).getSingleResult();
+    }
+
+    private Long getTotalCount(EstimationFindAnyRequest request) {
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        root = countQuery.from(Estimation.class);
+        countQuery.select(builder.count(root));
+        countQuery.where(getPredicate(request));
 
         return manager.createQuery(countQuery).getSingleResult();
     }

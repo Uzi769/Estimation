@@ -2,6 +2,7 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.RoleRequest;
 import ru.irlix.evaluation.dto.response.RoleResponse;
@@ -20,12 +21,14 @@ public class RoleController {
 
     private final RoleService roleService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public RoleResponse createRole(@RequestBody RoleRequest roleRequest) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return roleService.createRole(roleRequest);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public RoleResponse updateRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id,
                                    @RequestBody RoleRequest roleRequest) {
@@ -33,6 +36,7 @@ public class RoleController {
         return roleService.updateRole(id, roleRequest);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteRole(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);

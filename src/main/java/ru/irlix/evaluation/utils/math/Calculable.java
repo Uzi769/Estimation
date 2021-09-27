@@ -42,13 +42,7 @@ public abstract class Calculable {
         return 1 + (digit / 100);
     }
 
-    protected static double round(double digit) {
-        long valueWithoutRemainder = Math.round(digit * 10) / 10;
-        double remainder = Math.round(digit * 10) % 10;
-        if ((remainder > 0) && (remainder < 5))
-            return valueWithoutRemainder + 0.5;
-        if (remainder > 5)
-            return valueWithoutRemainder + 1;
+    public static double round(double digit) {
         return Math.round(digit * 10) / 10.0;
     }
 

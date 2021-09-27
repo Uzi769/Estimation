@@ -12,6 +12,9 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
+  security.oauth2.resourceserver.jwt:
+    jwk-set-uri: ${JWK_SET_URI}
+    issuer-uri: ${JWT_ISSUER_URI}
 
   jackson:
     serialization:
@@ -28,4 +31,17 @@ logging:
     console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID}){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(%M{20}){magenta} %clr(:){faint} %m%n}}'
     file: '%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID} --- [%t] %-40.40logger{39} %M{20} : %m%n}'
 
-document-path: ${DOC_PATH:}
+keycloak:
+  realm: ${KEYCLOAK_REALM}
+  server-url: ${KEYCLOAK_URL}
+
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+
+  username: ${KEYCLOAK_USERNAME}
+  password: ${KEYCLOAK_PWD}
+
+  public-client: true
+
+document-path: ${DOC_PATH:report.xls}
+

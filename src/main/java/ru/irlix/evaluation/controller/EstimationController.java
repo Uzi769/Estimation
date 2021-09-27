@@ -3,10 +3,11 @@ package ru.irlix.evaluation.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
@@ -34,12 +35,14 @@ public class EstimationController {
 
     private final EstimationService estimationService;
 
+    @PreAuthorize("hasRole('ROLE_SALES')")
     @PostMapping
     public EstimationResponse createEstimation(@RequestBody EstimationRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
         return estimationService.createEstimation(request);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     public EstimationResponse updateEstimation(@PathVariable @Positive(message = "{id.positive}") Long id,
                                                @RequestBody EstimationRequest request) {
@@ -47,6 +50,7 @@ public class EstimationController {
         return estimationService.updateEstimation(id, request);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEstimation(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
@@ -77,6 +81,7 @@ public class EstimationController {
         return estimationService.findPhaseResponsesByEstimationId(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_SALES')")
     @GetMapping("/{id}/report")
     public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, @RequestParam Map<String, String> params) throws IOException {
         Resource resource = estimationService.getEstimationsReport(id, params);
