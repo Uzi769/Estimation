@@ -14,7 +14,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -29,12 +28,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui/index.html/**",
+            "/swagger-ui.html",
             "/api/v1/keycloak/**"
     };
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors().and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and()
@@ -53,8 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public Converter<Jwt, Collection<GrantedAuthority>> jwtGrantedAuthoritiesConverter() {
-        JwtGrantedAuthoritiesConverter delegate = new JwtGrantedAuthoritiesConverter();
-
         return new Converter<Jwt, Collection<GrantedAuthority>>() {
             @Override
             public Collection<GrantedAuthority> convert(Jwt jwt) {
