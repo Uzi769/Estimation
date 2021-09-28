@@ -29,7 +29,7 @@ import java.util.Map;
 @RequestMapping(UrlConstants.BASE_URL + "/estimations")
 @RequiredArgsConstructor
 @Validated
-@CrossOrigin
+@CrossOrigin(exposedHeaders = "Content-Disposition")
 @Log4j2
 public class EstimationController {
 
