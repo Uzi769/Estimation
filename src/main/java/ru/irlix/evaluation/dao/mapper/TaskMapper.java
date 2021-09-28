@@ -16,7 +16,7 @@ import ru.irlix.evaluation.dao.helper.TaskTypeHelper;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
-
+import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.util.List;
 
@@ -97,6 +97,22 @@ public abstract class TaskMapper {
 
         if (task.getTasks() != null) {
             response.setTasks(taskToResponse(task.getTasks()));
+
+            int tasksRepeatCount = task.getTasks().stream()
+                    .mapToInt(Task::getRepeatCount)
+                    .sum();
+
+            double taskHoursMin = task.getTasks().stream()
+                    .mapToDouble(Task::getHoursMin)
+                    .sum();
+
+            double tasksHoursMax = task.getTasks().stream()
+                    .mapToDouble(Task::getHoursMax)
+                    .sum();
+
+            response.setRepeatCount(tasksRepeatCount);
+            response.setHoursMin(EstimationMath.roundToHalf(taskHoursMin));
+            response.setHoursMax(EstimationMath.roundToHalf(tasksHoursMax));
         }
     }
 }

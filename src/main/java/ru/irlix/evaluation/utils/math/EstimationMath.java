@@ -343,7 +343,7 @@ public class EstimationMath {
         return Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
     }
 
-    private static double roundToHalf(double value) {
+    public static double roundToHalf(double value) {
         return Math.ceil(value * 2) / 2.0;
     }
 }
