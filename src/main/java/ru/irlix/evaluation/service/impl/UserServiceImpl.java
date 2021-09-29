@@ -5,11 +5,14 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.mapper.UserMapper;
 import ru.irlix.evaluation.dto.UserKeycloakDto;
+import ru.irlix.evaluation.dto.response.UserResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.UserRepository;
 import ru.irlix.evaluation.service.UserService;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper mapper;
 
     @Override
     @Transactional
@@ -54,5 +58,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public boolean contains(UUID keycloakId) {
         return userRepository.existsByKeycloakId(keycloakId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserResponse> findAllUsers() {
+        List<User> userList = userRepository.findAll();
+        log.info("All users found");
+        return mapper.usersToUserResponseList(userList);
     }
 }
