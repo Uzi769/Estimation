@@ -51,7 +51,6 @@ public class ReportHelper {
                 ? messageBundle.getString("string.name")
                 : estimation.getName();
 
-        List<String> namePaths = List.of(messageBundle.getString("string.estimation"), client, name, ".xls");
-        return String.join(" ", namePaths);
+        return messageBundle.getString("string.estimation") + " " + client + " " + name + ".xls";
     }
 }
