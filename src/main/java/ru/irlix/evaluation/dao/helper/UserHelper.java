@@ -27,4 +27,8 @@ public class UserHelper {
     public List<User> findByUserIdIn(List<Long> userIds) {
         return userRepository.findByUserIdIn(userIds);
     }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
 }

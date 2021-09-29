@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.UserMapper;
 import ru.irlix.evaluation.dto.UserKeycloakDto;
 import ru.irlix.evaluation.dto.response.UserResponse;
@@ -23,17 +24,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper mapper;
+    private final UserHelper userHelper;
 
     @Override
     @Transactional
     public void createUser(UserKeycloakDto userKeycloakDto) {
-        User user = User.builder()
-                .keycloakId(userKeycloakDto.getId())
-                .firstName(userKeycloakDto.getFirstName())
-                .lastName(userKeycloakDto.getLastName())
-                .build();
-
-        User savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(mapper.userKeycloakDtoToUser(userKeycloakDto));
         log.info("User with id " + savedUser.getUserId() + " saved");
     }
 
@@ -75,6 +71,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll() {
-        return userRepository.findAll();
+        return userHelper.findAllUsers();
     }
 }
