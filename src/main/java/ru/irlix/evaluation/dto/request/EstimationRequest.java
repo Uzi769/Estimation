@@ -5,6 +5,7 @@ import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,4 +27,7 @@ public class EstimationRequest {
     private Long status = EntitiesIdConstants.DEFAULT_STATUS_ID;
 
     private String creator;
+
+    private List<Long> userIdList;
+
 }
