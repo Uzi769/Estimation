@@ -56,7 +56,7 @@ public class EstimationServiceImpl implements EstimationService {
 
         savedEstimation.setUsers(new ArrayList<>());
         savedEstimation.getUsers().add(user);
-        Estimation savedEstimationWithUser = estimationRepository.save(estimation);
+        Estimation savedEstimationWithUser = estimationRepository.save(savedEstimation);
 
         log.info("Estimation with id " + savedEstimationWithUser.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimationWithUser);
@@ -167,6 +167,10 @@ public class EstimationServiceImpl implements EstimationService {
 
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
+        }
+
+        if (request.getUserIdList() != null) {
+            estimation.setUsers(userHelper.findByUserIdIn(request.getUserIdList()));
         }
     }
 

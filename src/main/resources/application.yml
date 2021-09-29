@@ -43,5 +43,5 @@ keycloak:
 
   public-client: true
 
-document-path: ${DOC_PATH:report.xls}
+document-path: ${DOC_PATH:}
 
