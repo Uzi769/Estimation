@@ -1,12 +1,11 @@
 package ru.irlix.evaluation.dao.mapper;
 
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
@@ -22,7 +21,8 @@ public abstract class EstimationMapper {
     @Autowired
     protected StatusHelper statusHelper;
 
-    @Mapping(target = "status", ignore = true)
+    @Mapping( target = "status", ignore = true)
+    @Mapping( target = "creator", ignore = true)
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
 
     @Mapping(target = "status", ignore = true)
@@ -41,6 +41,10 @@ public abstract class EstimationMapper {
     protected void map(@MappingTarget Estimation estimation, EstimationRequest req) {
         Status status = statusHelper.findStatusById(req.getStatus());
         estimation.setStatus(status);
+
+        Jwt principal = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String name = String.valueOf(principal.getClaims().get("name"));
+        estimation.setCreator(name);
     }
 
     @AfterMapping
