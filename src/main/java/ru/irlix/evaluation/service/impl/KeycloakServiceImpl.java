@@ -3,10 +3,11 @@ package ru.irlix.evaluation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dto.UserKeycloakDto;
 import ru.irlix.evaluation.service.KeycloakService;
-import ru.irlix.evaluation.service.UserService;
 import ru.irlix.evaluation.utils.security.KeycloakProperties;
 
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class KeycloakServiceImpl implements KeycloakService {
 
-    private final UserService userService;
     private final KeycloakProperties keycloakProperties;
     private final Keycloak keycloak;
+    private final UserHelper userHelper;
 
     public final Integer KEYCLOAK_FETCH_MAX_VALUE = 1000;
 
@@ -36,16 +37,17 @@ public class KeycloakServiceImpl implements KeycloakService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void update() {
         List<UserKeycloakDto> userList = getAllUsers();
         userList.forEach(userKeycloakDto -> {
-            boolean isExist = userService.contains(userKeycloakDto.getId());
+            boolean isExist = userHelper.contains(userKeycloakDto.getId());
             if (!isExist) {
-                userService.createUser(userKeycloakDto);
+                userHelper.createUser(userKeycloakDto);
             } else {
-                User user = userService.findByKeycloakId(userKeycloakDto.getId());
-                userService.updateUser(user, userKeycloakDto);
+                User user = userHelper.findUserByKeycloakId(userKeycloakDto.getId().toString());
+                userHelper.updateUser(user, userKeycloakDto);
             }
         });
 
@@ -53,8 +55,11 @@ public class KeycloakServiceImpl implements KeycloakService {
                 .map(UserKeycloakDto::getId)
                 .collect(Collectors.toList());
 
-        userService.findAll().stream()
-                .filter(user -> !userKeycloakIdList.contains(user.getKeycloakId()))
-                .forEach(user -> user.setDeleted(true));
+        userHelper.findAllUsers().stream()
+                .filter(u -> !userKeycloakIdList.contains(u.getKeycloakId()))
+                .forEach(u -> {
+                    u.setDeleted(true);
+                    userHelper.saveUser(u);
+                });
     }
 }
