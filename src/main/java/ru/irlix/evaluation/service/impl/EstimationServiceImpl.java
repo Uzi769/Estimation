@@ -70,11 +70,8 @@ public class EstimationServiceImpl implements EstimationService {
         checkAndUpdateFields(estimationToUpdate, estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimationToUpdate);
 
-        savedEstimation.setUsers(userHelper.findByUserIdIn(estimationRequest.getUserIdList()));
-        Estimation savedEstimationWithUsers = estimationRepository.save(savedEstimation);
-
-        log.info("Estimation with id " + savedEstimationWithUsers.getId() + " updated");
-        return estimationMapper.estimationToEstimationResponse(savedEstimationWithUsers);
+        log.info("Estimation with id " + savedEstimation.getId() + " updated");
+        return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
     @LogInfo
@@ -170,6 +167,10 @@ public class EstimationServiceImpl implements EstimationService {
 
         if (request.getCreator() != null) {
             estimation.setCreator(request.getCreator());
+        }
+
+        if (request.getUserIdList() != null) {
+            estimation.setUsers(userHelper.findByUserIdIn(request.getUserIdList()));
         }
     }
 
