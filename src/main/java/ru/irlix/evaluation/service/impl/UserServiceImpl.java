@@ -29,7 +29,8 @@ public class UserServiceImpl implements UserService {
     public void createUser(UserKeycloakDto userKeycloakDto) {
         User user = User.builder()
                 .keycloakId(userKeycloakDto.getId())
-                .name(userKeycloakDto.getLastName())
+                .firstName(userKeycloakDto.getFirstName())
+                .lastName(userKeycloakDto.getLastName())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -39,8 +40,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user, UserKeycloakDto userKeycloakDto) {
-        if (!Objects.equals(user.getName(), userKeycloakDto.getLastName()) && userKeycloakDto.getLastName() != null) {
-            user.setName(userKeycloakDto.getLastName() + " " + userKeycloakDto.getFirstName());
+        if (!Objects.equals(user.getFirstName(), userKeycloakDto.getFirstName()) && userKeycloakDto.getFirstName() != null) {
+            user.setFirstName(userKeycloakDto.getFirstName());
+        }
+        if (!Objects.equals(user.getLastName(), userKeycloakDto.getLastName()) && userKeycloakDto.getLastName() != null) {
+            user.setLastName(userKeycloakDto.getLastName());
         }
         user.setDeleted(false);
         userRepository.save(user);
@@ -66,5 +70,11 @@ public class UserServiceImpl implements UserService {
         List<User> userList = userRepository.findAll();
         log.info("All users found");
         return mapper.usersToUserResponseList(userList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

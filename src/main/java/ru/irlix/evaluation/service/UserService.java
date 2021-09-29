@@ -19,4 +19,6 @@ public interface UserService {
     boolean contains(UUID keycloakId);
 
     List<UserResponse> findAllUsers();
+
+    List<User> findAll();
 }

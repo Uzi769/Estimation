@@ -38,8 +38,8 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     @Override
     public void update() {
-        List<UserKeycloakDto> list = getAllUsers();
-        list.forEach(userKeycloakDto -> {
+        List<UserKeycloakDto> userList = getAllUsers();
+        userList.forEach(userKeycloakDto -> {
             boolean isExist = userService.contains(userKeycloakDto.getId());
             if (!isExist) {
                 userService.createUser(userKeycloakDto);
@@ -48,5 +48,13 @@ public class KeycloakServiceImpl implements KeycloakService {
                 userService.updateUser(user, userKeycloakDto);
             }
         });
+
+        List<UUID> userKeycloakIdList = userList.stream()
+                .map(UserKeycloakDto::getId)
+                .collect(Collectors.toList());
+
+        userService.findAll().stream()
+                .filter(user -> !userKeycloakIdList.contains(user.getKeycloakId()))
+                .forEach(user -> user.setDeleted(true));
     }
 }

@@ -9,5 +9,6 @@ import lombok.*;
 @ToString
 public class UserResponse {
     private Long userId;
-    private String name;
+    private String firstName;
+    private String lastName;
 }
