@@ -17,7 +17,6 @@ import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -104,19 +103,9 @@ public class EstimationServiceImpl implements EstimationService {
     @LogInfo
     @Override
     @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request) {
+    public Page<EstimationResponse> filterEstimations(EstimationFilterRequest request) {
         addUserIdToRequestIfRequired(request);
         Page<Estimation> estimationList = estimationRepository.filter(request);
-        log.info("Estimations filtered and found");
-        return estimationMapper.estimationToEstimationResponse(estimationList);
-    }
-
-    @LogInfo
-    @Override
-    @Transactional(readOnly = true)
-    public Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request) {
-        addUserIdToRequestIfRequired(request);
-        Page<Estimation> estimationList = estimationRepository.findAny(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }

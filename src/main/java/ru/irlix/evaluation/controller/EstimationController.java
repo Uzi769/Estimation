@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
@@ -58,15 +57,9 @@ public class EstimationController {
     }
 
     @GetMapping
-    public Page<EstimationResponse> findAllEstimations(@Valid EstimationFilterRequest request) {
+    public Page<EstimationResponse> filterEstimations(@Valid EstimationFilterRequest request) {
         log.info(UrlConstants.RECEIVED_FILTER + request);
-        return estimationService.findAllEstimations(request);
-    }
-
-    @GetMapping("/match")
-    public Page<EstimationResponse> findAllEstimations(@Valid EstimationFindAnyRequest request) {
-        log.info(UrlConstants.RECEIVED_FILTER + request);
-        return estimationService.findAnyEstimations(request);
+        return estimationService.filterEstimations(request);
     }
 
     @GetMapping("/{id}")

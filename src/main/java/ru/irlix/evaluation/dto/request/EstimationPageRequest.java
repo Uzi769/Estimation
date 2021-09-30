@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
@@ -23,5 +24,6 @@ public class EstimationPageRequest {
 
     private Boolean sortAsc;
 
+    @JsonIgnore
     private Long userId;
 }
