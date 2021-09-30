@@ -95,7 +95,7 @@ public abstract class TaskMapper {
             response.setRoleId(task.getRole().getId());
         }
 
-        if (task.getTasks() != null) {
+        if (EntitiesIdConstants.FEATURE_ID.equals(task.getType().getId()) && task.getTasks() != null) {
             response.setTasks(taskToResponse(task.getTasks()));
 
             int tasksRepeatCountSum = 0;
