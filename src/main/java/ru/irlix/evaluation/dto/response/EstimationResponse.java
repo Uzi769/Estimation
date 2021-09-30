@@ -33,4 +33,6 @@ public class EstimationResponse {
     private Double hoursMax;
 
     private List<PhaseResponse> phases;
+
+    private List<UserResponse> users;
 }
