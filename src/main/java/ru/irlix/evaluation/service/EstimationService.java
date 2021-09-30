@@ -3,7 +3,6 @@ package ru.irlix.evaluation.service;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationFindAnyRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
@@ -20,9 +19,7 @@ public interface EstimationService {
 
     void deleteEstimation(Long id);
 
-    Page<EstimationResponse> findAllEstimations(EstimationFilterRequest request);
-
-    Page<EstimationResponse> findAnyEstimations(EstimationFindAnyRequest request);
+    Page<EstimationResponse> filterEstimations(EstimationFilterRequest request);
 
     EstimationResponse findEstimationResponseById(Long id);
 

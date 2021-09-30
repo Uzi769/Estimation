@@ -11,16 +11,17 @@ import java.time.Instant;
 @ToString(callSuper = true)
 public class EstimationFilterRequest extends EstimationPageRequest {
 
+    private String text;
+
     private String name;
 
     private String client;
+
+    private String creator;
 
     private Long status;
 
     private Instant beginDate;
 
     private Instant endDate;
-
-    private String creator;
-
 }
