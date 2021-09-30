@@ -26,8 +26,6 @@ public class EstimationRequest {
     @Positive(message = "{status.positive}")
     private Long status = EntitiesIdConstants.DEFAULT_STATUS_ID;
 
-    private String creator;
-
     private List<Long> userIdList;
 
 }
