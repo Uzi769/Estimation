@@ -27,7 +27,7 @@ public class PhaseController {
 
     private final PhaseService phaseService;
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PostMapping
     @Validated(OnCreate.class)
     public PhaseResponse createPhase(@RequestBody @Valid PhaseRequest phaseRequest) {
@@ -35,14 +35,14 @@ public class PhaseController {
         return phaseService.createPhase(phaseRequest);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<PhaseResponse> createPhases(@RequestBody @Valid List<PhaseRequest> phaseRequests) {
         return phaseService.createPhases(phaseRequests);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     @Validated(OnUpdate.class)
     public PhaseResponse updatePhase(@PathVariable @Positive(message = "{id.positive}") Long id,
@@ -51,7 +51,7 @@ public class PhaseController {
         return phaseService.updatePhase(id, phaseRequest);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/list")
     @Validated(OnUpdate.class)
     public List<PhaseResponse> updatePhases(@RequestBody @Valid List<PhaseUpdateRequest> phaseRequests) {
@@ -65,7 +65,7 @@ public class PhaseController {
         return phaseService.findPhaseResponseById(id);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @DeleteMapping("/{id}")
     public void deletePhase(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
