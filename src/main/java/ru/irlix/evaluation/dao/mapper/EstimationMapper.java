@@ -24,7 +24,7 @@ public abstract class EstimationMapper {
     @Autowired
     protected StatusHelper statusHelper;
 
-    @Mapping( target = "status", ignore = true)
+    @Mapping(target = "status", ignore = true)
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
 
     @Mapping(target = "status", ignore = true)
