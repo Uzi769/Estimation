@@ -26,7 +26,7 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PostMapping
     @Validated(OnCreate.class)
     public TaskResponse createTask(@RequestBody @Valid TaskRequest request) {
@@ -34,14 +34,14 @@ public class TaskController {
         return taskService.createTask(request);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PostMapping("/list")
     @Validated(OnCreate.class)
     public List<TaskResponse> createTasks(@RequestBody @Valid List<TaskRequest> requests) {
         return taskService.createTasks(requests);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     public TaskResponse updateTask(@PathVariable @Positive(message = "{id.positive}") Long id,
                                    @RequestBody @Valid TaskRequest request) {
@@ -49,7 +49,7 @@ public class TaskController {
         return taskService.updateTask(id, request);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/list")
     public List<TaskResponse> updateTask(@RequestBody @Valid List<TaskUpdateRequest> request) {
         log.info(UrlConstants.RECEIVED_ENTITY);
@@ -62,7 +62,7 @@ public class TaskController {
         return taskService.findTaskResponseById(id);
     }
 
-    @PreAuthorize("!hasRole('ROLE_ADMIN')")
+    @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @DeleteMapping("/{id}")
     public void deleteTask(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
