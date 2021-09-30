@@ -98,21 +98,19 @@ public abstract class TaskMapper {
         if (task.getTasks() != null) {
             response.setTasks(taskToResponse(task.getTasks()));
 
-            int tasksRepeatCount = task.getTasks().stream()
-                    .mapToInt(Task::getRepeatCount)
-                    .sum();
+            int tasksRepeatCountSum = 0;
+            double tasksHoursMinSum = 0;
+            double tasksHoursMaxSum = 0;
 
-            double taskHoursMin = task.getTasks().stream()
-                    .mapToDouble(Task::getHoursMin)
-                    .sum();
+            for (Task nestedTask : task.getTasks()) {
+                tasksRepeatCountSum += nestedTask.getRepeatCount();
+                tasksHoursMinSum += nestedTask.getHoursMin();
+                tasksHoursMaxSum += nestedTask.getHoursMax();
+            }
 
-            double tasksHoursMax = task.getTasks().stream()
-                    .mapToDouble(Task::getHoursMax)
-                    .sum();
-
-            response.setRepeatCount(tasksRepeatCount);
-            response.setHoursMin(EstimationMath.roundToHalf(taskHoursMin));
-            response.setHoursMax(EstimationMath.roundToHalf(tasksHoursMax));
+            response.setRepeatCount(tasksRepeatCountSum);
+            response.setHoursMin(EstimationMath.roundToHalf(tasksHoursMinSum));
+            response.setHoursMax(EstimationMath.roundToHalf(tasksHoursMaxSum));
         }
     }
 }
