@@ -59,8 +59,8 @@ public class UserHelper {
         return userRepository.findAll();
     }
 
-    public void saveUser(User user) {
-        userRepository.save(user);
-        log.info("User with id " + user.getUserId() + " updated");
+    public void saveUsers(List<User> users) {
+        userRepository.saveAll(users);
+        users.forEach(user -> log.info("Users with id " + user.getUserId() + " updated"));
     }
 }

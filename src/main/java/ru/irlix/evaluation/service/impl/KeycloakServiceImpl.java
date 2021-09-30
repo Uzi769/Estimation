@@ -40,9 +40,16 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Transactional
     @Override
     public void update() {
-        List<UserKeycloakDto> userList = getAllUsers();
-        userList.forEach(userKeycloakDto -> {
-            boolean isExist = userHelper.contains(userKeycloakDto.getId());
+        List<UserKeycloakDto> keycloakUserList = getAllUsers();
+
+        List<User> userList = userHelper.findAllUsers();
+
+        List<UUID> userKeycloakIdList = userList.stream()
+                .map(User::getKeycloakId)
+                .collect(Collectors.toList());
+
+        keycloakUserList.forEach(userKeycloakDto -> {
+            boolean isExist = userKeycloakIdList.contains(userKeycloakDto.getId());
             if (!isExist) {
                 userHelper.createUser(userKeycloakDto);
             } else {
@@ -51,15 +58,9 @@ public class KeycloakServiceImpl implements KeycloakService {
             }
         });
 
-        List<UUID> userKeycloakIdList = userList.stream()
-                .map(UserKeycloakDto::getId)
-                .collect(Collectors.toList());
-
-        userHelper.findAllUsers().stream()
-                .filter(u -> !userKeycloakIdList.contains(u.getKeycloakId()))
-                .forEach(u -> {
-                    u.setDeleted(true);
-                    userHelper.saveUser(u);
-                });
+        userList.stream()
+                .filter(user -> !userKeycloakIdList.contains(user.getKeycloakId()))
+                .forEach(user -> user.setDeleted(true));
+        userHelper.saveUsers(userList);
     }
 }
