@@ -8,6 +8,7 @@ import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.UserRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -21,5 +22,9 @@ public class UserHelper {
         UUID keycloakUuid = UUID.fromString(keycloakId);
         return userRepository.findByKeycloakId(keycloakUuid)
                 .orElseThrow(() -> new NotFoundException("User with id " + keycloakId + " not found"));
+    }
+
+    public List<User> findByUserIdIn(List<Long> userIds) {
+        return userRepository.findByUserIdIn(userIds);
     }
 }
