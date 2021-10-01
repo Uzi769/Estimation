@@ -51,7 +51,8 @@ public class PhaseServiceImpl implements PhaseService {
     @Transactional
     public List<PhaseResponse> createPhases(List<PhaseRequest> phaseRequests) {
         List<Phase> phases = mapper.phaseRequestToPhase(phaseRequests);
-        List<Phase> savedPhases = phaseRepository.saveAll(phases);
+        List<Phase> phasesWithAccess = getPhasesWithAccess(phases);
+        List<Phase> savedPhases = phaseRepository.saveAll(phasesWithAccess);
 
         log.info("Phase list saved");
         return mapper.phaseToPhaseResponse(savedPhases);
@@ -76,7 +77,8 @@ public class PhaseServiceImpl implements PhaseService {
                 .map(request -> updatePhaseById(request.getId(), request))
                 .collect(Collectors.toList());
 
-        List<Phase> savedPhases = phaseRepository.saveAll(updatedPhases);
+        List<Phase> phaseWithAccess = getPhasesWithAccess(updatedPhases);
+        List<Phase> savedPhases = phaseRepository.saveAll(phaseWithAccess);
 
         log.info("Phase list updated");
         return mapper.phaseToPhaseResponse(savedPhases);
@@ -171,5 +173,18 @@ public class PhaseServiceImpl implements PhaseService {
         if (!SecurityUtils.hasAccessToAllEstimations() && !phase.getEstimation().getUsers().contains(user)) {
             throw new AccessDeniedException("User with id " + keycloakId + " cant get access to estimation");
         }
+    }
+
+    private List<Phase> getPhasesWithAccess(List<Phase> phases) {
+        if (SecurityUtils.hasAccessToAllEstimations()) {
+            return phases;
+        }
+
+        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userHelper.findUserByKeycloakId(keycloakId);
+
+        return phases.stream()
+                .filter(p -> !p.getEstimation().getUsers().contains(user))
+                .collect(Collectors.toList());
     }
 }
