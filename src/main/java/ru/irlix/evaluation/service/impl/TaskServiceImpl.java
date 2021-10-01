@@ -51,9 +51,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public List<TaskResponse> createTasks(List<TaskRequest> requests) {
         List<Task> tasks = mapper.taskRequestToTask(requests);
-        List<Task> taskWithAccess = getTaskWithAccess(tasks);
+        List<Task> taskWithAccess = getTasksWithAccess(tasks);
         List<Task> savedTasks = taskRepository.saveAll(taskWithAccess);
 
+        log.info("Task list saved");
         return mapper.taskToResponse(savedTasks);
     }
 
@@ -74,7 +75,8 @@ public class TaskServiceImpl implements TaskService {
                 .map(request -> updateTaskById(request.getId(), request))
                 .collect(Collectors.toList());
 
-        List<Task> savedTasks = taskRepository.saveAll(updatedTasks);
+        List<Task> tasksWithAccess = getTasksWithAccess(updatedTasks);
+        List<Task> savedTasks = taskRepository.saveAll(tasksWithAccess);
 
         log.info("Task list updated");
         return mapper.taskToResponse(savedTasks);
@@ -83,7 +85,6 @@ public class TaskServiceImpl implements TaskService {
     private Task updateTaskById(Long id, TaskRequest request) {
         Task taskToUpdate = findTaskById(id);
         checkAndUpdateFields(taskToUpdate, request);
-
         return taskToUpdate;
     }
 
@@ -128,7 +129,11 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    private List<Task> getTaskWithAccess(List<Task> tasks) {
+    private List<Task> getTasksWithAccess(List<Task> tasks) {
+        if (SecurityUtils.hasAccessToAllEstimations()) {
+            return tasks;
+        }
+
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userHelper.findUserByKeycloakId(keycloakId);
 
