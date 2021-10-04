@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ru.irlix.evaluation.utils.localization.MessageBundle;
@@ -57,10 +57,9 @@ public class AppExceptionHandler {
     @ExceptionHandler(BindException.class)
     protected ResponseEntity<Object> handleBindException(BindException ex) {
         ApiError apiError = new ApiError(errorMessage);
-        apiError.setErrors(ex.getBindingResult()
-                .getFieldErrors()
+        apiError.setErrors(ex.getAllErrors()
                 .stream()
-                .map(FieldError::getDefaultMessage)
+                .map(ObjectError::getDefaultMessage)
                 .collect(Collectors.toList()));
         log.error(apiError.getMessage() + " " + apiError.getErrors());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);

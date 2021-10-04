@@ -2,6 +2,7 @@ package ru.irlix.evaluation.dto.request;
 
 import lombok.*;
 import ru.irlix.evaluation.utils.marker.OnCreate;
+import ru.irlix.evaluation.validation.ValidTask;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@ValidTask
 public class TaskRequest {
 
     private String name;
@@ -25,7 +27,6 @@ public class TaskRequest {
     @Positive(message = "{type.positive}")
     private Long type;
 
-    @Positive(message = "{repeatCount.positive}")
     private Integer repeatCount;
 
     @Positive(message = "{roleId.positive}")
