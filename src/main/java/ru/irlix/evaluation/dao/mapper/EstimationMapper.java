@@ -7,11 +7,14 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.utils.math.EstimationMath;
@@ -23,6 +26,9 @@ public abstract class EstimationMapper {
 
     @Autowired
     protected StatusHelper statusHelper;
+
+    @Autowired
+    protected UserHelper userHelper;
 
     @Mapping(target = "status", ignore = true)
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
@@ -44,9 +50,15 @@ public abstract class EstimationMapper {
         Status status = statusHelper.findStatusById(req.getStatus());
         estimation.setStatus(status);
 
-        Jwt principal = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Jwt principal = (Jwt) authentication.getPrincipal();
         String name = String.valueOf(principal.getClaims().get("name"));
         estimation.setCreator(name);
+
+        String keycloakId = authentication.getName();
+        User user = userHelper.findUserByKeycloakId(keycloakId);
+        estimation.setUsers(List.of(user));
     }
 
     @AfterMapping

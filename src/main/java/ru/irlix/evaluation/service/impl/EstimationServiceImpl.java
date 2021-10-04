@@ -28,7 +28,6 @@ import ru.irlix.evaluation.utils.report.ReportHelper;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,16 +48,10 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
-        String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userHelper.findUserByKeycloakId(keycloakId);
         Estimation savedEstimation = estimationRepository.save(estimation);
 
-        savedEstimation.setUsers(new ArrayList<>());
-        savedEstimation.getUsers().add(user);
-        Estimation savedEstimationWithUser = estimationRepository.save(savedEstimation);
-
-        log.info("Estimation with id " + savedEstimationWithUser.getId() + " saved");
-        return estimationMapper.estimationToEstimationResponse(savedEstimationWithUser);
+        log.info("Estimation with id " + savedEstimation.getId() + " saved");
+        return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
     @LogInfo
