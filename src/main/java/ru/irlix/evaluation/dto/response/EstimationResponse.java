@@ -35,4 +35,6 @@ public class EstimationResponse {
     private List<PhaseResponse> phases;
 
     private List<UserResponse> users;
+
+    private String filePath;
 }

@@ -44,4 +44,5 @@ keycloak:
   public-client: true
 
 document-path: ${DOC_PATH:}
+file-path: ${FILE_PATH:}
 

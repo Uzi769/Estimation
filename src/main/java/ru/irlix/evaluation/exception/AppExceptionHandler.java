@@ -46,7 +46,7 @@ public class AppExceptionHandler {
         log.error(e.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.FORBIDDEN);
     }
-    
+
     @ExceptionHandler({IllegalArgumentException.class})
     protected ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException e) {
         ApiError apiError = new ApiError(e.getMessage());
@@ -62,6 +62,13 @@ public class AppExceptionHandler {
                 .map(ObjectError::getDefaultMessage)
                 .collect(Collectors.toList()));
         log.error(apiError.getMessage() + " " + apiError.getErrors());
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(StorageException.class)
+    protected ResponseEntity<Object> handleStorageException(StorageException ex) {
+        ApiError apiError = new ApiError(ex.getMessage());
+        log.error(ex.getMessage());
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
     }
 }

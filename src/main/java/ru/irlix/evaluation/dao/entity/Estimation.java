@@ -48,6 +48,9 @@ public class Estimation {
     @Column(name = "creator")
     private String creator;
 
+    @Column(name = "file_path")
+    private String filePath;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     @OrderBy("sortOrder ASC")
     private List<Phase> phases;
