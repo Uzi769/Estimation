@@ -1,6 +1,6 @@
 package ru.irlix.evaluation.dto.request;
 
-import  lombok.*;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
@@ -29,6 +29,6 @@ public class EstimationRequest {
 
     private List<Long> userIdList;
 
-    private MultipartFile file;
+    private List<MultipartFile> multipartFiles;
 
 }

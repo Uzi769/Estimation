@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -36,5 +37,5 @@ public class EstimationResponse {
 
     private List<UserResponse> users;
 
-    private String filePath;
+    private Map<Long, String> fileMap;
 }

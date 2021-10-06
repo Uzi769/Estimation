@@ -2,7 +2,6 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +12,7 @@ import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.FileStorageHelper;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
@@ -23,29 +23,19 @@ import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
-import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.report.ReportHelper;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
 public class EstimationServiceImpl implements EstimationService {
-
-    @Value("${file-path}")
-    private String filePath;
 
     private final EstimationRepository estimationRepository;
     private final StatusHelper statusHelper;
@@ -53,6 +43,7 @@ public class EstimationServiceImpl implements EstimationService {
     private final EstimationMapper estimationMapper;
     private final PhaseMapper phaseMapper;
     private final ReportHelper reportHelper;
+    private final FileStorageHelper fileStorageHelper;
 
     @LogInfo
     @Override
@@ -162,22 +153,8 @@ public class EstimationServiceImpl implements EstimationService {
             estimation.setUsers(userHelper.findByUserIdIn(request.getUserIdList()));
         }
 
-        if (request.getFile() != null) {
-            try {
-                Path rootLocation = Paths.get(filePath);
-                Path destinationFile = rootLocation.resolve(Paths.get(Objects.requireNonNull(request.getFile().getOriginalFilename())))
-                        .normalize().toAbsolutePath();
-
-                InputStream inputStream = request.getFile().getInputStream();
-                Files.copy(inputStream, destinationFile,
-                        StandardCopyOption.REPLACE_EXISTING);
-                estimation.setFilePath(destinationFile.toString());
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
-                throw new StorageException("Failed to store file.", e);
-            }
+        if (request.getMultipartFiles() != null) {
+            fileStorageHelper.storeFileList(request.getMultipartFiles(), estimation);
         }
     }
 

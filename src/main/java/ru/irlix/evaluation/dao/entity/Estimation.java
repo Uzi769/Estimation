@@ -48,9 +48,6 @@ public class Estimation {
     @Column(name = "creator")
     private String creator;
 
-    @Column(name = "file_path")
-    private String filePath;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     @OrderBy("sortOrder ASC")
     private List<Phase> phases;
@@ -61,6 +58,9 @@ public class Estimation {
             joinColumns = @JoinColumn(name = "estimation_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
+
+    @OneToMany(mappedBy = "estimation")
+    private List<FileStorage> fileStorages;
 
     @PrePersist
     public void prePersist() {
