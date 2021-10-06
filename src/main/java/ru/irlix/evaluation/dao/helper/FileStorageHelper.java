@@ -35,14 +35,15 @@ public class FileStorageHelper {
         List<FileStorage> fileStorageList = new ArrayList<>();
         multipartFileList
                 .forEach(file -> {
-                    Path destinationFile = rootLocation.resolve(Objects.requireNonNull(file.getOriginalFilename()))
-                            .normalize().toAbsolutePath();
+                    UUID uuid = UUID.randomUUID();
+                    String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
+                    Path destinationFile = rootLocation.resolve(uuid.toString() + extension).normalize().toAbsolutePath();
                     try {
                         InputStream inputStream = file.getInputStream();
                         Files.copy(inputStream, destinationFile,
                                 StandardCopyOption.REPLACE_EXISTING);
                         FileStorage fileStorage = FileStorage.builder()
-                                .uuid(UUID.randomUUID())
+                                .uuid(uuid)
                                 .fileName(file.getOriginalFilename()).docType(file.getContentType())
                                 .estimation(estimation).build();
                         fileStorageList.add(fileStorage);

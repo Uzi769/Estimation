@@ -33,7 +33,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     public Resource loadFileAsResource(Long id) {
         Path rootLocation = Paths.get(filePath);
         FileStorage fileStorage = findById(id);
-        Path filePath = rootLocation.resolve(fileStorage.getFileName()).normalize();
+        String extension = fileStorage.getFileName().substring(fileStorage.getFileName().lastIndexOf("."));
+        Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
         try {
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
