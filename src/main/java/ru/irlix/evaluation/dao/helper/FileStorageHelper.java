@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.dao.helper;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
+import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
 
 import java.io.IOException;
@@ -19,9 +21,11 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 
+@Log4j2
 @Component
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.MANDATORY)
+
 public class FileStorageHelper {
 
     @Value("${file-path}")
@@ -49,6 +53,8 @@ public class FileStorageHelper {
                         fileStorageList.add(fileStorage);
                     } catch (IOException e) {
                         e.printStackTrace();
+                        log.error(e.getMessage());
+                        throw new StorageException(e.getMessage());
                     }
                 });
         fileStorageRepository.saveAll(fileStorageList);
