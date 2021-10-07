@@ -59,7 +59,7 @@ public class Estimation {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
-    @OneToMany(mappedBy = "estimation")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     private List<FileStorage> fileStorages;
 
     @PrePersist

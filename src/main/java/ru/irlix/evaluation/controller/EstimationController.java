@@ -75,7 +75,7 @@ public class EstimationController {
     }
 
     @GetMapping("/{id}/files")
-    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable Long id) {
+    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return estimationService.findFileResponsesByEstimationId(id);
     }

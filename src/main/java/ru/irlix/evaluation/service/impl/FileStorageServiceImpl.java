@@ -18,13 +18,15 @@ import ru.irlix.evaluation.repository.FileStorageRepository;
 import ru.irlix.evaluation.service.FileStorageService;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class FileStorageServiceImpl implements FileStorageService {
 
     @Value("${file-path}")
@@ -34,8 +36,8 @@ public class FileStorageServiceImpl implements FileStorageService {
     private final UserHelper userHelper;
 
     @LogInfo
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public Resource loadFileAsResource(Long id) {
         Path rootLocation = Paths.get(filePath);
         FileStorage fileStorage = findById(id);
@@ -48,12 +50,34 @@ public class FileStorageServiceImpl implements FileStorageService {
             if (resource.exists())
                 return resource;
             else
-                throw new NotFoundException("File not found " + fileStorage.getFileName());
+                throw new NotFoundException("File " + fileStorage.getFileName() + "' with id " + id + " not found ");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw new NotFoundException("File not found " + fileStorage.getFileName());
+            throw new NotFoundException("File " + fileStorage.getFileName() + "' with id " + id + " not found ");
         }
+    }
+
+    @LogInfo
+    @Override
+    @Transactional
+    public void deleteFile(Long id) {
+        Path rootLocation = Paths.get(filePath);
+        FileStorage fileStorage = findById(id);
+        String fileName = fileStorage.getFileName();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
+        if (Files.exists(filePath))
+            try {
+                Files.delete(filePath);
+                fileStorageRepository.delete(fileStorage);
+                log.info("File with id " + id + " deleted");
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.error(e.getMessage());
+            }
+        else
+            throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + id + " not found");
     }
 
     private FileStorage findById(Long id) {
