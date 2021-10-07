@@ -29,8 +29,6 @@
     <include file="alter-estimation-description-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-info-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="alter-estimation-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-file-storage-changelog.xml" relativeToChangelogFile="true"/>
-    <include file="alter-estimation-file-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

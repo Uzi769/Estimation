@@ -38,27 +38,32 @@ public class FileStorageServiceImpl implements FileStorageService {
     public Resource loadFileAsResource(Long id) {
         Path rootLocation = Paths.get(filePath);
         FileStorage fileStorage = findById(id);
-        User currentUser = userHelper.findUserByKeycloakId(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (fileStorage.getEstimation().getUsers().contains(currentUser)) {
-            String extension = fileStorage.getFileName().substring(fileStorage.getFileName().lastIndexOf("."));
-            Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
-            try {
-                Resource resource = new UrlResource(filePath.toUri());
-                if (resource.exists()) {
-                    return resource;
-                } else
-                    throw new NotFoundException("File not found " + fileStorage.getFileName());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
+        checkAccessToFile(fileStorage);
+        String fileName = fileStorage.getFileName();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists())
+                return resource;
+            else
                 throw new NotFoundException("File not found " + fileStorage.getFileName());
-            }
-        } else
-            throw new AccessDeniedException("User with id " + currentUser.getKeycloakId() + " cant get access to file");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw new NotFoundException("File not found " + fileStorage.getFileName());
+        }
     }
 
     private FileStorage findById(Long id) {
         return fileStorageRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("File with id " + id + " not found"));
+    }
+
+    private void checkAccessToFile(FileStorage fileStorage) {
+        User currentUser = userHelper.findUserByKeycloakId(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if (!fileStorage.getEstimation().getUsers().contains(currentUser))
+            throw new AccessDeniedException("User with id " + currentUser.getKeycloakId() + " cant get access to file");
     }
 }

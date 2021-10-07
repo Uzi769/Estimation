@@ -2,6 +2,7 @@ package ru.irlix.evaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +44,7 @@ public class EstimationController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     public EstimationResponse updateEstimation(@PathVariable @Positive(message = "{id.positive}") Long id,
-                                               @ModelAttribute EstimationRequest request) {
+                                               @MultipartForm EstimationRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return estimationService.updateEstimation(id, request);
     }
