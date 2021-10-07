@@ -64,7 +64,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     private void checkAccessToFile(FileStorage fileStorage) {
         User currentUser = userHelper.findUserByKeycloakId(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if (!SecurityUtils.hasAccessToAllEstimations() || !fileStorage.getEstimation().getUsers().contains(currentUser))
+        if (!SecurityUtils.hasAccessToAllEstimations() && !fileStorage.getEstimation().getUsers().contains(currentUser))
             throw new AccessDeniedException("User with id " + currentUser.getKeycloakId() + " cant get access to file");
     }
 }
