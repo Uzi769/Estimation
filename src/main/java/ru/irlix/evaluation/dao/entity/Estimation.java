@@ -59,6 +59,9 @@ public class Estimation {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
+    @OneToMany(mappedBy = "estimation")
+    private List<FileStorage> fileStorages;
+
     @PrePersist
     public void prePersist() {
         if (risk == null) {

@@ -43,7 +43,7 @@ public class EstimationController {
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")
     @PutMapping("/{id}")
     public EstimationResponse updateEstimation(@PathVariable @Positive(message = "{id.positive}") Long id,
-                                               @RequestBody EstimationRequest request) {
+                                               @ModelAttribute EstimationRequest request) {
         log.info(UrlConstants.RECEIVED_ENTITY_ID + id);
         return estimationService.updateEstimation(id, request);
     }

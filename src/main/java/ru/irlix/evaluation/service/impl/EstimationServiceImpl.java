@@ -1,6 +1,6 @@
 package ru.irlix.evaluation.service.impl;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,7 @@ import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.FileStorageHelper;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
@@ -33,7 +34,7 @@ import java.util.Map;
 
 @Log4j2
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EstimationServiceImpl implements EstimationService {
 
     private final EstimationRepository estimationRepository;
@@ -42,6 +43,7 @@ public class EstimationServiceImpl implements EstimationService {
     private final EstimationMapper estimationMapper;
     private final PhaseMapper phaseMapper;
     private final ReportHelper reportHelper;
+    private final FileStorageHelper fileStorageHelper;
 
     @LogInfo
     @Override
@@ -149,6 +151,10 @@ public class EstimationServiceImpl implements EstimationService {
 
         if (request.getUserIdList() != null) {
             estimation.setUsers(userHelper.findByUserIdIn(request.getUserIdList()));
+        }
+
+        if (request.getMultipartFiles() != null) {
+            fileStorageHelper.storeFileList(request.getMultipartFiles(), estimation);
         }
     }
 

@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -35,4 +36,6 @@ public class EstimationResponse {
     private List<PhaseResponse> phases;
 
     private List<UserResponse> users;
+
+    private Map<Long, String> fileMap;
 }
