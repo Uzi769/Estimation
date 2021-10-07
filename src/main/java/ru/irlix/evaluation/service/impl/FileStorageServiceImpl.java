@@ -16,6 +16,7 @@ import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
 import ru.irlix.evaluation.service.FileStorageService;
+import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.net.MalformedURLException;
 import java.nio.file.Path;
@@ -63,7 +64,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     private void checkAccessToFile(FileStorage fileStorage) {
         User currentUser = userHelper.findUserByKeycloakId(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        if (!fileStorage.getEstimation().getUsers().contains(currentUser))
+        if (!SecurityUtils.hasAccessToAllEstimations() || !fileStorage.getEstimation().getUsers().contains(currentUser))
             throw new AccessDeniedException("User with id " + currentUser.getKeycloakId() + " cant get access to file");
     }
 }
