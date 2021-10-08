@@ -5,8 +5,10 @@ import lombok.Setter;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,6 +17,8 @@ import java.text.DecimalFormat;
 
 @Getter
 @Setter
+@Component
+@Scope("request")
 public class ExcelWorkbook {
 
     private HSSFWorkbook workbook;

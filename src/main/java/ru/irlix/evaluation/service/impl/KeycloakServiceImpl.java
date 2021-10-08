@@ -46,7 +46,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     @Override
     public void update() {
         List<UserKeycloakDto> keycloakUserList = getAllUsers();
-
         List<User> userList = userHelper.findAllUsers();
 
         List<UUID> userKeycloakIdList = userList.stream()
@@ -66,6 +65,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         userList.stream()
                 .filter(user -> !userKeycloakIdList.contains(user.getKeycloakId()))
                 .forEach(user -> user.setDeleted(true));
+
         userHelper.saveUsers(userList);
     }
 }

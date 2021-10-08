@@ -32,6 +32,9 @@ public abstract class EstimationMapper {
     protected UserHelper userHelper;
 
     @Autowired
+    protected EstimationMath math;
+
+    @Autowired
     protected FileStorageHelper fileStorageHelper;
 
     @Mapping(target = "status", ignore = true)
@@ -72,9 +75,8 @@ public abstract class EstimationMapper {
             response.setStatus(estimation.getStatus().getId());
         }
 
-        response.setHoursMin(EstimationMath.calcEstimationMinHours(estimation, null));
-        response.setHoursMax(EstimationMath.calcEstimationMaxHours(estimation, null));
-
+        response.setHoursMin(math.getEstimationMinHours(estimation, null));
+        response.setHoursMax(math.getEstimationMaxHours(estimation, null));
         response.setFileMap(fileStorageHelper.getFileMap(estimation));
     }
 }
