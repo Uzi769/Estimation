@@ -356,6 +356,10 @@ public class EstimationCalculator {
         Map<String, String> finalRequest = Optional.ofNullable(request).map(r -> request)
                 .orElse(rangeRequest);
 
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
+
         return estimation.getPhases().stream()
                 .mapToDouble(p -> getListMinHoursWithAdditions(p.getTasks(), finalRequest))
                 .sum();
@@ -364,6 +368,10 @@ public class EstimationCalculator {
     public double getEstimationMaxHoursWithAdditions(Estimation estimation, Map<String, String> request) {
         Map<String, String> finalRequest = Optional.ofNullable(request).map(r -> request)
                 .orElse(rangeRequest);
+
+        if (estimation.getPhases() == null || estimation.getPhases().isEmpty()) {
+            return 0;
+        }
 
         return estimation.getPhases().stream()
                 .mapToDouble(p -> getListMaxHoursWithAdditions(p.getTasks(), finalRequest))
