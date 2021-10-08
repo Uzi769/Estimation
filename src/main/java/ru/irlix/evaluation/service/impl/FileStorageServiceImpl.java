@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.FileStorage;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.FileStorageHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
@@ -22,9 +23,9 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
-@Log4j2
 public class FileStorageServiceImpl implements FileStorageService {
 
     @Value("${file-path}")
@@ -32,13 +33,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private final FileStorageRepository fileStorageRepository;
     private final UserHelper userHelper;
+    private final FileStorageHelper fileStorageHelper;
 
     @LogInfo
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public Resource loadFileAsResource(Long id) {
         Path rootLocation = Paths.get(filePath);
-        FileStorage fileStorage = findById(id);
+        FileStorage fileStorage = findFileStorageById(id);
         checkAccessToFile(fileStorage);
         String fileName = fileStorage.getFileName();
         String extension = fileName.substring(fileName.lastIndexOf("."));
@@ -48,15 +50,25 @@ public class FileStorageServiceImpl implements FileStorageService {
             if (resource.exists())
                 return resource;
             else
-                throw new NotFoundException("File not found " + fileStorage.getFileName());
+                throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + id + " not found ");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             log.error(e.getMessage());
-            throw new NotFoundException("File not found " + fileStorage.getFileName());
+            throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + id + " not found ");
         }
     }
 
-    private FileStorage findById(Long id) {
+    @LogInfo
+    @Override
+    @Transactional
+    public void deleteFile(Long id) {
+        FileStorage fileStorage = findFileStorageById(id);
+        checkAccessToFile(fileStorage);
+        fileStorageHelper.deleteFile(fileStorage);
+        fileStorageRepository.delete(fileStorage);
+    }
+
+    private FileStorage findFileStorageById(Long id) {
         return fileStorageRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("File with id " + id + " not found"));
     }

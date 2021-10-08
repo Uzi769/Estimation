@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
+import ru.irlix.evaluation.dto.response.FileStorageResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
@@ -71,6 +72,12 @@ public class EstimationController {
     public List<PhaseResponse> findPhasesByEstimationId(@PathVariable Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return estimationService.findPhaseResponsesByEstimationId(id);
+    }
+
+    @GetMapping("/{id}/files")
+    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable @Positive(message = "{id.positive}") Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return estimationService.findFileResponsesByEstimationId(id);
     }
 
     @PreAuthorize("hasRole('ROLE_SALES')")

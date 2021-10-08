@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
 
@@ -67,9 +68,31 @@ public class FileStorageHelper {
     public Map<Long, String> getFileMap(Estimation estimation) {
         Map<Long, String> fileMap = new HashMap<>();
         List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimation(estimation);
-        fileStorageList.forEach(file -> {
-            fileMap.put(file.getId(), file.getFileName());
-        });
+        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
         return fileMap;
+    }
+
+    @LogInfo
+    public void deleteFilesByEstimation(Estimation estimation) {
+        List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimation(estimation);
+        fileStorageList.forEach(this::deleteFile);
+    }
+
+    @LogInfo
+    public void deleteFile(FileStorage fileStorage) {
+        Path rootLocation = Paths.get(filePath);
+        String fileName = fileStorage.getFileName();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
+        if (Files.exists(filePath))
+            try {
+                Files.delete(filePath);
+                log.info("File with id " + fileStorage.getId() + " deleted");
+            } catch (IOException e) {
+                e.printStackTrace();
+                log.error(e.getMessage());
+            }
+        else
+            throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
     }
 }
