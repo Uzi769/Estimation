@@ -76,6 +76,7 @@ public class EstimationServiceImpl implements EstimationService {
     @Transactional
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
+        fileStorageHelper.deleteFilesByEstimation(estimationToDelete);
         estimationRepository.delete(estimationToDelete);
         log.info("Estimation with id " + estimationToDelete.getId() + " deleted");
     }
