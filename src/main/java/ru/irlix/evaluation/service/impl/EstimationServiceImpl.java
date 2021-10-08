@@ -21,12 +21,15 @@ import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.response.EstimationCostResponse;
+import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.FileStorageResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.report.ReportHelper;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
@@ -45,6 +48,7 @@ public class EstimationServiceImpl implements EstimationService {
     private final EstimationMapper estimationMapper;
     private final PhaseMapper phaseMapper;
     private final ReportHelper reportHelper;
+    private final EstimationMath estimationMath;
     private final FileStorageHelper fileStorageHelper;
     private final FileStorageMapper fileStorageMapper;
 
@@ -178,7 +182,29 @@ public class EstimationServiceImpl implements EstimationService {
         Estimation estimation = findEstimationById(id);
         Resource estimationReport = reportHelper.getEstimationReportResource(estimation, request);
 
-        log.info("Estimation report generated");
+        log.info("Estimation report by id " + id + " generated");
         return estimationReport;
+    }
+
+    @LogInfo
+    @Override
+    @Transactional(readOnly = true)
+    public List<EstimationStatsResponse> getEstimationStats(Long id) {
+        Estimation estimation = findEstimationById(id);
+        List<EstimationStatsResponse> estimationStats = estimationMath.getEstimationStats(estimation);
+
+        log.info("Estimation stats by id " + id + " calculated");
+        return estimationStats;
+    }
+
+    @LogInfo
+    @Override
+    @Transactional(readOnly = true)
+    public EstimationCostResponse getEstimationCost(Long id, Map<String, String> request) {
+        Estimation estimation = findEstimationById(id);
+        EstimationCostResponse estimationCost = estimationMath.getEstimationCost(estimation, request);
+
+        log.info("Estimation cost by id" + id + " calculated");
+        return estimationCost;
     }
 }

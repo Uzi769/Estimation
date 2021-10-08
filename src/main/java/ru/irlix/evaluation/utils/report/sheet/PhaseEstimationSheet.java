@@ -3,15 +3,15 @@ package ru.irlix.evaluation.utils.report.sheet;
 import org.apache.poi.ss.usermodel.Row;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
-import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 import ru.irlix.evaluation.utils.math.EstimationMath;
+import ru.irlix.evaluation.utils.report.ExcelWorkbook;
 
 import java.util.Map;
 
 public class PhaseEstimationSheet extends EstimationReportSheet {
 
-    public PhaseEstimationSheet(ExcelWorkbook excelWorkbook) {
-        helper = excelWorkbook;
+    public PhaseEstimationSheet(EstimationMath math, ExcelWorkbook helper) {
+        super(math, helper);
     }
 
     @Override
@@ -53,10 +53,10 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
 
         helper.setCell(row, phase.getName(), 0);
 
-        double sumHoursMax = EstimationMath.calcListSummaryMaxHours(phase.getTasks(), request);
+        double sumHoursMax = math.getListSummaryMaxHours(phase.getTasks(), request);
         helper.setCell(row, sumHoursMax, 4);
 
-        double sumCostMax = EstimationMath.calcListSummaryMaxCost(phase.getTasks(), request);
+        double sumCostMax = math.getListSummaryMaxCost(phase.getTasks(), request);
         helper.setCell(row, sumCostMax, 7);
 
         helper.setCell(row, null, 1);
@@ -72,8 +72,8 @@ public class PhaseEstimationSheet extends EstimationReportSheet {
         mergeCells(4, 6);
 
         helper.setTotalCell(row, messageBundle.getString("cellName.summary"), 0);
-        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxHours(estimation, request), 4);
-        helper.setMarkedCell(row, EstimationMath.calcEstimationMaxCost(estimation, request), 7);
+        helper.setMarkedCell(row, math.getEstimationMaxHours(estimation, request), 4);
+        helper.setMarkedCell(row, math.getEstimationMaxCost(estimation, request), 7);
 
         helper.setMarkedCell(row, null, 1);
         helper.setMarkedCell(row, null, 2);

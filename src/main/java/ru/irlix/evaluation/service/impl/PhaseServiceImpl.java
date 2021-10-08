@@ -15,10 +15,12 @@ import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
+import ru.irlix.evaluation.dto.response.PhaseStatsResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.service.PhaseService;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.util.List;
@@ -33,6 +35,7 @@ public class PhaseServiceImpl implements PhaseService {
     private final EstimationHelper estimationHelper;
     private final UserHelper userHelper;
     private final PhaseMapper mapper;
+    private final EstimationMath math;
 
     @LogInfo
     @Override
@@ -40,8 +43,8 @@ public class PhaseServiceImpl implements PhaseService {
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         checkAccessToEstimation(phase);
-
         Phase savedPhase = phaseRepository.save(phase);
+
         log.info("Phase with id " + savedPhase.getId() + " saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
@@ -156,6 +159,17 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
         log.info("Phase with id " + phase.getId() + " deleted");
+    }
+
+    @LogInfo
+    @Override
+    @Transactional
+    public List<PhaseStatsResponse> getPhaseStats(Long id) {
+        Phase phase = findPhaseById(id);
+        List<PhaseStatsResponse> phaseStats = math.getPhaseStats(phase);
+
+        log.info("Phase stats by id " + id + " calculated");
+        return phaseStats;
     }
 
     private Phase findPhaseById(Long id) {

@@ -35,6 +35,9 @@ public abstract class TaskMapper {
     @Autowired
     protected RoleHelper roleHelper;
 
+    @Autowired
+    protected EstimationMath math;
+
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "phase", ignore = true)
     @Mapping(target = "role", ignore = true)
@@ -109,8 +112,8 @@ public abstract class TaskMapper {
             }
 
             response.setRepeatCount(tasksRepeatCountSum);
-            response.setHoursMin(EstimationMath.roundToHalf(tasksHoursMinSum));
-            response.setHoursMax(EstimationMath.roundToHalf(tasksHoursMaxSum));
+            response.setHoursMin(math.roundToHalf(tasksHoursMinSum));
+            response.setHoursMax(math.roundToHalf(tasksHoursMaxSum));
         }
     }
 }

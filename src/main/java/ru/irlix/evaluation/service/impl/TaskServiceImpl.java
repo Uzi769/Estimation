@@ -41,8 +41,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse createTask(TaskRequest request) {
         Task task = mapper.taskRequestToTask(request);
         checkAccessToEstimation(task);
-
         Task savedTask = taskRepository.save(task);
+
         log.info("Task with id " + savedTask.getId() + " saved");
         return mapper.taskToResponse(savedTask);
     }

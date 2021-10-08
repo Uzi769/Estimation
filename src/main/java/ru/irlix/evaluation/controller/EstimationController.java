@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.response.EstimationCostResponse;
+import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.FileStorageResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
@@ -83,11 +85,24 @@ public class EstimationController {
     @PreAuthorize("hasRole('ROLE_SALES')")
     @GetMapping("/{id}/report")
     public ResponseEntity<Resource> getEstimationsReport(@PathVariable Long id, @RequestParam Map<String, String> params) throws IOException {
+        log.info(UrlConstants.RECEIVED_ID + id);
         Resource resource = estimationService.getEstimationsReport(id, params);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .contentLength(resource.contentLength())
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(resource);
+    }
+
+    @GetMapping("/{id}/stats")
+    public List<EstimationStatsResponse> getEstimationStats(@PathVariable Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return estimationService.getEstimationStats(id);
+    }
+
+    @GetMapping("/{id}/cost")
+    public EstimationCostResponse getEstimationCost(@PathVariable Long id, @RequestParam Map<String, String> params) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return estimationService.getEstimationCost(id, params);
     }
 }

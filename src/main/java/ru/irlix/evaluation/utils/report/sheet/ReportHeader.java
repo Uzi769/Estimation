@@ -13,7 +13,6 @@ import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.utils.localization.MessageBundle;
-import ru.irlix.evaluation.utils.math.EstimationMath;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -197,7 +196,7 @@ public class ReportHeader {
         estimation.getPhases()
                 .forEach(p -> p.getTasks()
                         .forEach(t -> {
-                            if (EstimationReportSheet.isFeature(t)) {
+                            if (sheet.math.isFeature(t)) {
                                 allTasks.addAll(t.getTasks());
                             } else {
                                 allTasks.add(t);
@@ -212,11 +211,11 @@ public class ReportHeader {
                 .map(Role::getDisplayValue)
                 .collect(Collectors.toList());
 
-        if (EstimationMath.calcQaSummaryMaxHours(allTasks, request) > 0) {
+        if (sheet.getMath().getQaSummaryMaxHours(allTasks, request) > 0) {
             rolesStrings.add(messageBundle.getString("cellName.tester"));
         }
 
-        if (EstimationMath.calcPmSummaryMaxHours(allTasks, request) > 0) {
+        if (sheet.getMath().getPmSummaryMaxHours(allTasks, request) > 0) {
             rolesStrings.add(messageBundle.getString("cellName.projectManager"));
         }
 
