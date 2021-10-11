@@ -76,10 +76,11 @@ public class EstimationController {
         return estimationService.findPhaseResponsesByEstimationId(id);
     }
 
-    @GetMapping("/{id}/files")
-    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable @Positive(message = "{id.positive}") Long id) {
-        log.info(UrlConstants.RECEIVED_ID + id);
-        return estimationService.findFileResponsesByEstimationId(id);
+    @GetMapping("/{ide}/files/folders/{idf}")
+    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable("ide") @Positive(message = "{id.positive}") Long estimationId,
+                                                             @PathVariable("idf") @Positive(message = "{id.positive}") Long folderId) {
+        log.info(UrlConstants.RECEIVED_ID + estimationId);
+        return estimationService.findFileResponsesByEstimationId(estimationId, folderId);
     }
 
     @PreAuthorize("hasRole('ROLE_SALES')")

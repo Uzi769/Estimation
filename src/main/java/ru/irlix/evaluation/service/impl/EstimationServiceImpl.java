@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.dao.entity.FileStorage;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dao.helper.FileStorageHelper;
@@ -21,11 +22,7 @@ import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.response.EstimationCostResponse;
-import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
-import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.dto.response.FileStorageResponse;
-import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.dto.response.*;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
@@ -169,10 +166,11 @@ public class EstimationServiceImpl implements EstimationService {
     @LogInfo
     @Override
     @Transactional(readOnly = true)
-    public List<FileStorageResponse> findFileResponsesByEstimationId(Long id) {
-        Estimation estimation = findEstimationById(id);
+    public List<FileStorageResponse> findFileResponsesByEstimationId(Long estimationId, Long folderId) {
+        Estimation estimation = findEstimationById(estimationId);
         log.info("Files of estimation with id " + estimation.getId() + " found");
-        return fileStorageMapper.fileStoragesToFileStorageList(estimation.getFileStorages());
+        List<FileStorage> fileStorageList = fileStorageHelper.findFilesByEstimationIdAndTypeId(estimation, folderId);
+        return fileStorageMapper.fileStoragesToFileStorageList(fileStorageList);
     }
 
     @LogInfo

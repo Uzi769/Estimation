@@ -31,4 +31,8 @@ public class FileStorage {
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder")
+    private Folder folder;
+
 }

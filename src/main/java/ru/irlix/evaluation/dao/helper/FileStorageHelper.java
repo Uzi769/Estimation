@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
+import ru.irlix.evaluation.dao.entity.Folder;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
@@ -33,6 +34,7 @@ public class FileStorageHelper {
     private String filePath;
 
     private final FileStorageRepository fileStorageRepository;
+    private final FolderHelper folderHelper;
 
     @LogInfo
     public void storeFileList(List<MultipartFile> multipartFileList, Estimation estimation) {
@@ -52,6 +54,7 @@ public class FileStorageHelper {
                                 .uuid(uuid)
                                 .fileName(file.getOriginalFilename())
                                 .docType(file.getContentType())
+                                .folder(folderHelper.getFolder(file.getOriginalFilename()))
                                 .estimation(estimation)
                                 .build();
                         fileStorageList.add(fileStorage);
@@ -95,4 +98,10 @@ public class FileStorageHelper {
         else
             throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
     }
+
+    public List<FileStorage> findFilesByEstimationIdAndTypeId(Estimation estimation, Long folderId) {
+        Folder folder = folderHelper.findRoleById(folderId);
+        return fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
+    }
+
 }
