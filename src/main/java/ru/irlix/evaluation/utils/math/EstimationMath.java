@@ -220,8 +220,8 @@ public class EstimationMath {
         stats.setMinHours(round(stats.getMinHours()));
         stats.setMaxHours(round(stats.getMaxHours()));
 
-        stats.setBugfixMinHours(round(stats.getBugfixMinHours()));
-        stats.setBugfixMaxHours(round(stats.getBugfixMaxHours()));
+        stats.setBugsMinHours(round(stats.getBugsMinHours()));
+        stats.setBugsMaxHours(round(stats.getBugsMaxHours()));
 
         stats.setQaMinHours(round(stats.getQaMinHours()));
         stats.setQaMaxHours(round(stats.getQaMaxHours()));

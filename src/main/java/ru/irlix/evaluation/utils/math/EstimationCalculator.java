@@ -415,8 +415,8 @@ public class EstimationCalculator {
                 minHoursSummary += phaseStat.getMinHours();
                 maxHoursSummary += phaseStat.getMaxHours();
 
-                bugfixMinHoursSummary += phaseStat.getBugfixMinHours();
-                bugfixMaxHoursSummary += phaseStat.getBugfixMaxHours();
+                bugfixMinHoursSummary += phaseStat.getBugsMinHours();
+                bugfixMaxHoursSummary += phaseStat.getBugsMaxHours();
 
                 qaMinHoursSummary += phaseStat.getQaMinHours();
                 qaMaxHoursSummary += phaseStat.getQaMaxHours();
@@ -459,17 +459,17 @@ public class EstimationCalculator {
         request.put("pert", "false");
 
         for (Task task : entry.getValue()) {
-            minHours += task.getHoursMin();
-            maxHours += task.getHoursMax();
+            minHours += task.getMinHours();
+            maxHours += task.getMaxHours();
 
-            bugfixMinHours += task.getHoursMin() * getBugfixPercent(task);
-            bugfixMaxHours += task.getHoursMax() * getBugfixPercent(task);
+            bugfixMinHours += task.getMinHours() * getBugfixPercent(task);
+            bugfixMaxHours += task.getMaxHours() * getBugfixPercent(task);
 
-            qaMinHours += task.getHoursMin() * getQaPercent(task, request);
-            qaMaxHours += task.getHoursMax() * getQaPercent(task, request);
+            qaMinHours += task.getMinHours() * getQaPercent(task, request);
+            qaMaxHours += task.getMaxHours() * getQaPercent(task, request);
 
-            pmMinHours += task.getHoursMin() * getPmPercent(task, request);
-            pmMaxHours += task.getHoursMax() * getPmPercent(task, request);
+            pmMinHours += task.getMinHours() * getPmPercent(task, request);
+            pmMaxHours += task.getMaxHours() * getPmPercent(task, request);
         }
 
         double minHoursSummary = minHours + qaMinHours + bugfixMinHours + pmMinHours;
@@ -564,9 +564,9 @@ public class EstimationCalculator {
     }
 
     private boolean hasBugfixAddition(Task task) {
-        return task.getBagsReserveOn() != null &&
-                task.getBagsReserve() != null &&
-                task.getBagsReserveOn();
+        return task.getBugsReserveOn() != null &&
+                task.getBugsReserve() != null &&
+                task.getBugsReserveOn();
     }
 
     private boolean hasRiskAddition(Phase phase) {
@@ -580,7 +580,7 @@ public class EstimationCalculator {
             return 0;
         }
 
-        return getPercent(task.getBagsReserve());
+        return getPercent(task.getBugsReserve());
     }
 
     public Map<Role, List<Task>> getRolesMap(Estimation estimation) {
@@ -605,7 +605,7 @@ public class EstimationCalculator {
     }
 
     private boolean isRequiredTime(Task task) {
-        return task.getHoursMax() > 0;
+        return task.getMaxHours() > 0;
     }
 
     private double getRiskOnPhase(Phase phase) {

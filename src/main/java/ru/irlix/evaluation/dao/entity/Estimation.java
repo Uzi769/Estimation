@@ -2,7 +2,6 @@ package ru.irlix.evaluation.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -13,7 +12,6 @@ import java.util.List;
 @Table(name="estimation")
 @Getter
 @Setter
-@ToString
 @NamedEntityGraph(
     name = "estimation.phases",
     attributeNodes = @NamedAttributeNode("phases")
@@ -66,6 +64,18 @@ public class Estimation {
     public void prePersist() {
         if (risk == null) {
             risk = 0;
+        }
+
+        if (name == null) {
+            name = "Новая оценка";
+        }
+
+        if (description == null) {
+            description = "";
+        }
+
+        if (client == null) {
+            client = "Клиент";
         }
     }
 }

@@ -54,4 +54,10 @@ public class RoleController {
         log.info(UrlConstants.RECEIVED_NO_ARGS);
         return roleService.findAllRoles();
     }
+
+    @GetMapping("/optional")
+    public List<RoleResponse> findAllOptionalRoles() {
+        log.info(UrlConstants.RECEIVED_NO_ARGS);
+        return roleService.findAllOptionalRoles();
+    }
 }

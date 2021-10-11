@@ -41,8 +41,8 @@ public abstract class EstimationMapper {
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
 
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "hoursMin", ignore = true)
-    @Mapping(target = "hoursMax", ignore = true)
+    @Mapping(target = "minHours", ignore = true)
+    @Mapping(target = "maxHours", ignore = true)
     @Mapping(target = "fileMap", ignore = true)
     public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
@@ -75,8 +75,8 @@ public abstract class EstimationMapper {
             response.setStatus(estimation.getStatus().getId());
         }
 
-        response.setHoursMin(math.getEstimationMinHours(estimation, null));
-        response.setHoursMax(math.getEstimationMaxHours(estimation, null));
+        response.setMinHours(math.getEstimationMinHours(estimation, null));
+        response.setMaxHours(math.getEstimationMaxHours(estimation, null));
         response.setFileMap(fileStorageHelper.getFileMap(estimation));
     }
 }

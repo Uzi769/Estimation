@@ -8,12 +8,12 @@ public class EstimationRangeCalculator extends Calculable {
 
     @Override
     public double calcTaskMinHours(Task task) {
-        return task.getHoursMin() * getRepeatCount(task);
+        return task.getMinHours() * getRepeatCount(task);
     }
 
     @Override
     public double calcTaskMaxHours(Task task) {
-        return task.getHoursMax() * getRepeatCount(task);
+        return task.getMaxHours() * getRepeatCount(task);
     }
 
     @Override

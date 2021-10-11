@@ -15,9 +15,9 @@ public class PhaseStatsResponse {
 
     private double maxHours;
 
-    private double bugfixMinHours;
+    private double bugsMinHours;
 
-    private double bugfixMaxHours;
+    private double bugsMaxHours;
 
     private double qaMinHours;
 

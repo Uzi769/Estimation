@@ -107,15 +107,15 @@ public abstract class Calculable {
     }
 
     protected boolean hasPmAddition(Task task) {
-        return task.getManagementReserveOn() != null &&
-                task.getManagementReserve() != null &&
-                task.getManagementReserveOn();
+        return task.getPmReserveOn() != null &&
+                task.getPmReserve() != null &&
+                task.getPmReserveOn();
     }
 
     protected double getPmPercent(Task task) {
         double pmPercent = 0;
         if (hasPmAddition(task)) {
-            pmPercent = (task.getManagementReserve() / 100.0);
+            pmPercent = (task.getPmReserve() / 100.0);
         }
 
         return pmPercent;

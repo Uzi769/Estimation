@@ -32,11 +32,11 @@ public class Phase {
     @Column(name = "sort_order")
     private Integer sortOrder;
 
-    @Column(name = "management_reserve")
-    private Integer managementReserve;
+    @Column(name = "pm_reserve")
+    private Integer pmReserve;
 
-    @Column(name = "bags_reserve")
-    private Integer bagsReserve;
+    @Column(name = "bugs_reserve")
+    private Integer bugsReserve;
 
     @Column(name = "qa_reserve")
     private Integer qaReserve;
@@ -52,14 +52,14 @@ public class Phase {
     @Column(name = "done")
     private Boolean done;
 
-    @Column(name = "bags_reserve_on")
-    private Boolean bagsReserveOn;
+    @Column(name = "bugs_reserve_on")
+    private Boolean bugsReserveOn;
 
     @Column(name = "qa_reserve_on")
     private Boolean qaReserveOn;
 
-    @Column(name = "management_reserve_on")
-    private Boolean managementReserveOn;
+    @Column(name = "pm_reserve_on")
+    private Boolean pmReserveOn;
 
     @Column(name = "risk_reserve_on")
     private Boolean riskReserveOn;
@@ -69,6 +69,7 @@ public class Phase {
         if (riskReserve == null) {
             riskReserve = 0;
         }
+
         if (riskReserveOn == null) {
             riskReserveOn = false;
         }

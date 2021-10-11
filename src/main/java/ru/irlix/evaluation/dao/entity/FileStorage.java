@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class FileStorage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,5 +31,4 @@ public class FileStorage {
     @ManyToOne
     @JoinColumn(name = "estimation")
     private Estimation estimation;
-
 }

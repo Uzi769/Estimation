@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.dao.entity.Role;
-import ru.irlix.evaluation.repository.RoleRepository;
+import ru.irlix.evaluation.repository.role.RoleRepository;
 
 @Component
 @RequiredArgsConstructor

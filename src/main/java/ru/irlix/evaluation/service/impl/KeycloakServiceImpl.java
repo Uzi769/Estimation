@@ -2,6 +2,7 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,17 +35,29 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     @Override
     public List<UserKeycloakDto> getAllUsers() {
-        return keycloak.realm(keycloakProperties.getRealm()).users().search(null, 0, KEYCLOAK_FETCH_MAX_VALUE)
-                .parallelStream()
-                .map(user -> new UserKeycloakDto(UUID.fromString(user.getId()), user.getFirstName(), user.getLastName()))
+        return loadUsersFromKeycloak().parallelStream()
+                .map(this::mapToUserKeycloakDto)
                 .collect(Collectors.toList());
     }
 
-    @EventListener(ApplicationReadyEvent.class)
-    @Scheduled(cron = "0 0 1 * * *")
-    @Transactional
+    private UserKeycloakDto mapToUserKeycloakDto(UserRepresentation user) {
+        return new UserKeycloakDto(
+                UUID.fromString(user.getId()),
+                user.getFirstName(),
+                user.getLastName()
+        );
+    }
+
+    private List<UserRepresentation> loadUsersFromKeycloak() {
+        return keycloak.realm(keycloakProperties.getRealm()).users()
+                .search(null, 0, KEYCLOAK_FETCH_MAX_VALUE);
+    }
+
     @Override
-    public void update() {
+    @Transactional
+    @Scheduled(cron = "0 0 1 * * *")
+    @EventListener(ApplicationReadyEvent.class)
+    public void updateUsers() {
         List<UserKeycloakDto> keycloakUserList = getAllUsers();
         List<User> userList = userHelper.findAllUsers();
 

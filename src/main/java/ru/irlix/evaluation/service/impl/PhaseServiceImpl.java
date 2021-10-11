@@ -107,16 +107,16 @@ public class PhaseServiceImpl implements PhaseService {
             phase.setSortOrder(phaseRequest.getSortOrder());
         }
 
-        if (phaseRequest.getManagementReserve() != null) {
-            phase.setManagementReserve(phaseRequest.getManagementReserve());
+        if (phaseRequest.getPmReserve() != null) {
+            phase.setPmReserve(phaseRequest.getPmReserve());
         }
 
         if (phaseRequest.getQaReserve() != null) {
             phase.setQaReserve(phaseRequest.getQaReserve());
         }
 
-        if (phaseRequest.getBagsReserve() != null) {
-            phase.setBagsReserve(phaseRequest.getBagsReserve());
+        if (phaseRequest.getBugsReserve() != null) {
+            phase.setBugsReserve(phaseRequest.getBugsReserve());
         }
 
         if (phaseRequest.getRiskReserve() != null) {
@@ -127,16 +127,16 @@ public class PhaseServiceImpl implements PhaseService {
             phase.setDone(phaseRequest.getDone());
         }
 
-        if (phaseRequest.getManagementReserveOn() != null) {
-            phase.setManagementReserveOn(phaseRequest.getManagementReserveOn());
+        if (phaseRequest.getPmReserveOn() != null) {
+            phase.setPmReserveOn(phaseRequest.getPmReserveOn());
         }
 
         if (phaseRequest.getQaReserveOn() != null) {
             phase.setQaReserveOn(phaseRequest.getQaReserveOn());
         }
 
-        if (phaseRequest.getBagsReserveOn() != null) {
-            phase.setBagsReserveOn(phaseRequest.getBagsReserveOn());
+        if (phaseRequest.getBugsReserveOn() != null) {
+            phase.setBugsReserveOn(phaseRequest.getBugsReserveOn());
         }
         if (phaseRequest.getRiskReserveOn() != null) {
             phase.setRiskReserveOn(phaseRequest.getRiskReserveOn());
