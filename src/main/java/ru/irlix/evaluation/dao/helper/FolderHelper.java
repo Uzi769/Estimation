@@ -19,12 +19,18 @@ public class FolderHelper {
 
     private final FolderRepository folderRepository;
 
-    private static final List<String> docList
-            = List.of("word", "docx", "doc", "txt", "pdf", "xls", "doc", "xml", "rtf", "zip", "7z", "rar");
-    private static final List<String> picList
-            = List.of("png", "jpeg", "jpg", "svg", "gif", "bmp");
-    private static final List<String> audioList
-            = List.of("mid", "mp3", "wav");
+    private static final List<String> docList;
+    private static final List<String> picList;
+    private static final List<String> audioList;
+    private static final List<String> videoList;
+
+    static {
+        docList = List.of("word", "docx", "doc", "txt", "pdf", "xls", "xlsx", "html", "doc", "xml",
+                "rtf", "ppt", "pptx", "epub", "odt");
+        picList = List.of("png", "jpeg", "jpg", "svg", "gif", "bmp");
+        audioList = List.of("mid", "mp3", "wav", "aif", "ac3", "aac");
+        videoList = List.of("avi", "mp4", "wmv", "mkv", "webm", "mov", "mpg", "mpeg");
+    }
 
     public Folder findRoleById(Long id) {
         return folderRepository.findById(id)
@@ -39,6 +45,8 @@ public class FolderHelper {
             return folderRepository.findByValue("pictures");
         if (audioList.contains(extension))
             return folderRepository.findByValue("audio");
+        if (videoList.contains(extension))
+            return folderRepository.findByValue("video");
         return folderRepository.findByValue("other");
     }
 

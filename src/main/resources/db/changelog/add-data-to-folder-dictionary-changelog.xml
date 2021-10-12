@@ -19,6 +19,10 @@
             <column name="display_value" value="Аудио"/>
         </insert>
         <insert tableName="folder_dictionary">
+            <column name="value" value="video"/>
+            <column name="display_value" value="Видео"/>
+        </insert>
+        <insert tableName="folder_dictionary">
             <column name="value" value="other"/>
             <column name="display_value" value="Другое"/>
         </insert>
