@@ -65,5 +65,17 @@ public class Estimation {
         if (risk == null) {
             risk = 0;
         }
+
+        if (name == null) {
+            name = "Новая оценка";
+        }
+
+        if (description == null) {
+            description = "";
+        }
+
+        if (client == null) {
+            client = "Клиент";
+        }
     }
 }

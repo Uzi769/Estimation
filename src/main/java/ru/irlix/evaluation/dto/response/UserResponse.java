@@ -8,7 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class UserResponse {
+
     private Long userId;
+
     private String firstName;
+
     private String lastName;
 }

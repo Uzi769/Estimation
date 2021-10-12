@@ -34,5 +34,4 @@ public class FileStorage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder")
     private Folder folder;
-
 }

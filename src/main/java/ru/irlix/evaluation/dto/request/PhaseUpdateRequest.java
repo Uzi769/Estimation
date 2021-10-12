@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class PhaseUpdateRequest extends PhaseRequest {
-    private Long id;
 
+    private Long id;
 }

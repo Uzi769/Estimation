@@ -23,7 +23,7 @@ public class KeycloakController {
 
     @PutMapping("/update")
     public void updateUsers() {
-        keycloakService.update();
+        keycloakService.updateUsers();
     }
 
 }

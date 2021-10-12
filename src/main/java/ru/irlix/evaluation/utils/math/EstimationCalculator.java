@@ -1,15 +1,19 @@
 package ru.irlix.evaluation.utils.math;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.irlix.evaluation.config.UTF8Control;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Role;
 import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.dao.helper.RoleHelper;
+import ru.irlix.evaluation.dao.mapper.RoleMapper;
 import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
 import ru.irlix.evaluation.dto.response.PhaseStatsResponse;
+import ru.irlix.evaluation.dto.response.RoleResponse;
+import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
-import ru.irlix.evaluation.utils.constant.LocaleConstants;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,27 +23,26 @@ public class EstimationCalculator {
 
     private final EstimationPertCalculator pertMath;
     private final EstimationRangeCalculator rangeMath;
+    private final RoleMapper roleMapper;
+    private final RoleHelper roleHelper;
 
     private final Map<String, String> rangeRequest;
     private final Map<String, String> pertRequest;
 
-    private final ResourceBundle messageBundle;
+    private List<Role> optionalRoles;
 
-    public EstimationCalculator() {
+    @Autowired
+    public EstimationCalculator(RoleMapper roleMapper, RoleHelper roleHelper) {
         pertMath = new EstimationPertCalculator();
         rangeMath = new EstimationRangeCalculator();
+        this.roleMapper = roleMapper;
+        this.roleHelper = roleHelper;
 
         rangeRequest = new HashMap<>();
         rangeRequest.put("pert", "false");
 
         pertRequest = new HashMap<>();
         pertRequest.put("pert", "true");
-
-        messageBundle = ResourceBundle.getBundle(
-                "messages",
-                LocaleConstants.DEFAULT_LOCALE,
-                new UTF8Control()
-        );
     }
 
     private double getTaskMinHours(Task task, Map<String, String> request) {
@@ -391,6 +394,7 @@ public class EstimationCalculator {
     }
 
     public List<PhaseStatsResponse> getPhaseStats(Phase phase) {
+        setOptionalRoles();
         List<Task> allTasks = new ArrayList<>();
         addPhaseTasksToList(phase, allTasks);
 
@@ -415,8 +419,8 @@ public class EstimationCalculator {
                 minHoursSummary += phaseStat.getMinHours();
                 maxHoursSummary += phaseStat.getMaxHours();
 
-                bugfixMinHoursSummary += phaseStat.getBugfixMinHours();
-                bugfixMaxHoursSummary += phaseStat.getBugfixMaxHours();
+                bugfixMinHoursSummary += phaseStat.getBugsMinHours();
+                bugfixMaxHoursSummary += phaseStat.getBugsMaxHours();
 
                 qaMinHoursSummary += phaseStat.getQaMinHours();
                 qaMaxHoursSummary += phaseStat.getQaMaxHours();
@@ -429,7 +433,7 @@ public class EstimationCalculator {
             double maxHoursResult = maxHoursSummary + qaMaxHoursSummary + bugfixMaxHoursSummary + pmMaxHoursSummary;
 
             stats.add(new PhaseStatsResponse(
-                    messageBundle.getString("cellName.summary"),
+                    getRole(ReportConstants.SUM_ROLE),
                     minHoursSummary, maxHoursSummary,
                     bugfixMinHoursSummary, bugfixMaxHoursSummary,
                     qaMinHoursSummary, qaMaxHoursSummary,
@@ -459,17 +463,17 @@ public class EstimationCalculator {
         request.put("pert", "false");
 
         for (Task task : entry.getValue()) {
-            minHours += task.getHoursMin();
-            maxHours += task.getHoursMax();
+            minHours += task.getMinHours();
+            maxHours += task.getMaxHours();
 
-            bugfixMinHours += task.getHoursMin() * getBugfixPercent(task);
-            bugfixMaxHours += task.getHoursMax() * getBugfixPercent(task);
+            bugfixMinHours += task.getMinHours() * getBugfixPercent(task);
+            bugfixMaxHours += task.getMaxHours() * getBugfixPercent(task);
 
-            qaMinHours += task.getHoursMin() * getQaPercent(task, request);
-            qaMaxHours += task.getHoursMax() * getQaPercent(task, request);
+            qaMinHours += task.getMinHours() * getQaPercent(task, request);
+            qaMaxHours += task.getMaxHours() * getQaPercent(task, request);
 
-            pmMinHours += task.getHoursMin() * getPmPercent(task, request);
-            pmMaxHours += task.getHoursMax() * getPmPercent(task, request);
+            pmMinHours += task.getMinHours() * getPmPercent(task, request);
+            pmMaxHours += task.getMaxHours() * getPmPercent(task, request);
         }
 
         double minHoursSummary = minHours + qaMinHours + bugfixMinHours + pmMinHours;
@@ -477,7 +481,7 @@ public class EstimationCalculator {
         Phase phase = entry.getValue().get(0).getPhase();
 
         return new PhaseStatsResponse(
-                entry.getKey().getDisplayValue(),
+                roleMapper.roleToRoleResponse(entry.getKey()),
                 minHours * getRiskOnPhase(phase),
                 maxHours * getRiskOnPhase(phase),
                 bugfixMinHours * getRiskOnPhase(phase),
@@ -492,6 +496,7 @@ public class EstimationCalculator {
     }
 
     public List<EstimationStatsResponse> getEstimationStats(Estimation estimation) {
+        setOptionalRoles();
         List<Task> allTasks = new ArrayList<>();
         estimation.getPhases().forEach(p -> addPhaseTasksToList(p, allTasks));
 
@@ -505,7 +510,7 @@ public class EstimationCalculator {
         double qaMaxHours = getQaMaxHoursSummaryWithRisk(allTasks, rangeRequest);
         if (qaMaxHours > 0) {
             stats.add(new EstimationStatsResponse(
-                    messageBundle.getString("cellName.tester"),
+                    getRole(ReportConstants.QA_ROLE),
                     getQaMinHoursSummaryWithRisk(allTasks, rangeRequest),
                     getQaMaxHoursSummaryWithRisk(allTasks, rangeRequest),
                     getQaMinHoursSummaryWithRisk(allTasks, pertRequest),
@@ -516,7 +521,7 @@ public class EstimationCalculator {
         double pmMaxHours = getPmMaxHoursSummaryWithRisk(allTasks, rangeRequest);
         if (pmMaxHours > 0) {
             stats.add(new EstimationStatsResponse(
-                    messageBundle.getString("cellName.projectManager"),
+                    getRole(ReportConstants.PM_ROLE),
                     getPmMinHoursSummaryWithRisk(allTasks, rangeRequest),
                     getPmMaxHoursSummaryWithRisk(allTasks, rangeRequest),
                     getPmMinHoursSummaryWithRisk(allTasks, pertRequest),
@@ -538,7 +543,7 @@ public class EstimationCalculator {
             }
 
             stats.add(new EstimationStatsResponse(
-                    messageBundle.getString("cellName.summary"),
+                    getRole(ReportConstants.SUM_ROLE),
                     minHoursRangeSummary,
                     maxHoursRangeSummary,
                     minHoursPertSummary,
@@ -551,7 +556,7 @@ public class EstimationCalculator {
 
     private EstimationStatsResponse mapToEstimationMath(Map.Entry<Role, List<Task>> entry) {
         return new EstimationStatsResponse(
-                entry.getKey().getDisplayValue(),
+                roleMapper.roleToRoleResponse(entry.getKey()),
                 getListMinHours(entry.getValue(), rangeRequest),
                 getListMaxHours(entry.getValue(), rangeRequest),
                 getListMinHours(entry.getValue(), pertRequest),
@@ -564,9 +569,9 @@ public class EstimationCalculator {
     }
 
     private boolean hasBugfixAddition(Task task) {
-        return task.getBagsReserveOn() != null &&
-                task.getBagsReserve() != null &&
-                task.getBagsReserveOn();
+        return task.getBugsReserveOn() != null &&
+                task.getBugsReserve() != null &&
+                task.getBugsReserveOn();
     }
 
     private boolean hasRiskAddition(Phase phase) {
@@ -580,7 +585,7 @@ public class EstimationCalculator {
             return 0;
         }
 
-        return getPercent(task.getBagsReserve());
+        return getPercent(task.getBugsReserve());
     }
 
     public Map<Role, List<Task>> getRolesMap(Estimation estimation) {
@@ -605,7 +610,7 @@ public class EstimationCalculator {
     }
 
     private boolean isRequiredTime(Task task) {
-        return task.getHoursMax() > 0;
+        return task.getMaxHours() > 0;
     }
 
     private double getRiskOnPhase(Phase phase) {
@@ -635,5 +640,18 @@ public class EstimationCalculator {
 
     private Calculable getMath(Map<String, String> request) {
         return Boolean.parseBoolean(request.get("pert")) ? pertMath : rangeMath;
+    }
+
+    private RoleResponse getRole(String roleValue) {
+        Role role = optionalRoles.stream()
+                .filter(r -> r.getValue().equals(roleValue))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Role " + roleValue + " not found"));
+
+        return roleMapper.roleToRoleResponse(role);
+    }
+
+    private void setOptionalRoles() {
+        optionalRoles = roleHelper.findOptionalRoles();
     }
 }

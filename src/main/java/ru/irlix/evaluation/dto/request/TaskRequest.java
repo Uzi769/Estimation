@@ -32,21 +32,21 @@ public class TaskRequest {
     @Positive(message = "{roleId.positive}")
     private Long roleId;
 
-    private Double hoursMax;
+    private Double minHours;
 
-    private Double hoursMin;
+    private Double maxHours;
 
-    private Integer bagsReserve;
+    private Integer bugsReserve;
 
     private Integer qaReserve;
 
-    private Integer managementReserve;
+    private Integer pmReserve;
 
     private String comment;
 
-    private Boolean bagsReserveOn;
+    private Boolean bugsReserveOn;
 
     private Boolean qaReserveOn;
 
-    private Boolean managementReserveOn;
+    private Boolean pmReserveOn;
 }
