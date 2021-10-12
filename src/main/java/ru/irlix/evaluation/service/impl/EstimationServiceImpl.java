@@ -8,6 +8,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.EventInfo;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
@@ -43,6 +44,7 @@ public class EstimationServiceImpl implements EstimationService {
     private final PhaseMapper phaseMapper;
     private final ReportHelper reportHelper;
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional
@@ -66,6 +68,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional

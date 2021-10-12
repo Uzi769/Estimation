@@ -12,4 +12,6 @@ public interface EstimationRepository extends PagingAndSortingRepository<Estimat
     @EntityGraph(value = "estimation.phases")
     @NonNull
     Optional<Estimation> findById(@NonNull Long id);
+
+    Optional<Estimation> findByName(@NonNull String name);
 }

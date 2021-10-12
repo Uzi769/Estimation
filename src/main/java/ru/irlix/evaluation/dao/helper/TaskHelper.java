@@ -19,4 +19,9 @@ public class TaskHelper {
         return taskRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Task with id " + id + " not found"));
     }
+
+    public Task findTaskByName(String name) {
+        return taskRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException("Task with id " + name + " not found"));
+    }
 }
