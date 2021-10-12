@@ -109,12 +109,6 @@ public class FileStorageHelper {
             throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
     }
 
-    @LogInfo
-    public List<FileStorage> findFilesByEstimationIdAndFolderId(Estimation estimation, Long folderId) {
-        Folder folder = folderHelper.findRoleById(folderId);
-        return fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
-    }
-
     private Map<Long, String> findFilesByEstimationAndFolder(Estimation estimation, Folder folder) {
         Map<Long, String> fileMap = new TreeMap<>();
         List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
