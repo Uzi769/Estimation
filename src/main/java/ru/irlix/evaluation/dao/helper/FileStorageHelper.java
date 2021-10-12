@@ -11,6 +11,7 @@ import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
 import ru.irlix.evaluation.dao.entity.Folder;
+import ru.irlix.evaluation.dao.mapper.FolderMapper;
 import ru.irlix.evaluation.dto.response.FileResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.exception.StorageException;
@@ -36,6 +37,7 @@ public class FileStorageHelper {
 
     private final FileStorageRepository fileStorageRepository;
     private final FolderHelper folderHelper;
+    private final FolderMapper folderMapper;
 
     @LogInfo
     public void storeFileList(List<MultipartFile> multipartFileList, Estimation estimation) {
@@ -78,9 +80,7 @@ public class FileStorageHelper {
 
     private FileResponse getFileResponse(Estimation estimation, Folder folder) {
         FileResponse fileResponse = new FileResponse();
-        fileResponse.setFolderId(folder.getId());
-        fileResponse.setFolderValue(folder.getValue());
-        fileResponse.setFolderDisplayValue(folder.getDisplayValue());
+        fileResponse.setFolderResponse(folderMapper.folderToFolderResponse(folder));
         fileResponse.setFileMap(findFilesByEstimationAndFolder(estimation, folder));
         return fileResponse;
     }
@@ -109,7 +109,8 @@ public class FileStorageHelper {
             throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
     }
 
-    public List<FileStorage> findFilesByEstimationIdAndTypeId(Estimation estimation, Long folderId) {
+    @LogInfo
+    public List<FileStorage> findFilesByEstimationIdAndFolderId(Estimation estimation, Long folderId) {
         Folder folder = folderHelper.findRoleById(folderId);
         return fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
     }

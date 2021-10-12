@@ -11,11 +11,7 @@ import java.util.Map;
 @ToString
 public class FileResponse {
 
-    private Long folderId;
-
-    private String folderValue;
-
-    private String folderDisplayValue;
+    private FolderResponse folderResponse;
 
     private Map<Long, String> fileMap;
 }

@@ -166,10 +166,10 @@ public class EstimationServiceImpl implements EstimationService {
     @LogInfo
     @Override
     @Transactional(readOnly = true)
-    public List<FileStorageResponse> findFileResponsesByEstimationId(Long estimationId, Long folderId) {
+    public List<FileStorageResponse> findFileResponsesByEstimationIdAndFolderId(Long estimationId, Long folderId) {
         Estimation estimation = findEstimationById(estimationId);
         log.info("Files of estimation with id " + estimation.getId() + " found");
-        List<FileStorage> fileStorageList = fileStorageHelper.findFilesByEstimationIdAndTypeId(estimation, folderId);
+        List<FileStorage> fileStorageList = fileStorageHelper.findFilesByEstimationIdAndFolderId(estimation, folderId);
         return fileStorageMapper.fileStoragesToFileStorageList(fileStorageList);
     }
 

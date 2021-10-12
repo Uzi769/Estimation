@@ -28,7 +28,7 @@ public interface EstimationService {
 
     List<PhaseResponse> findPhaseResponsesByEstimationId(Long id);
 
-    List<FileStorageResponse> findFileResponsesByEstimationId(Long estimationId, Long folderId);
+    List<FileStorageResponse> findFileResponsesByEstimationIdAndFolderId(Long estimationId, Long folderId);
 
     Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException;
 
