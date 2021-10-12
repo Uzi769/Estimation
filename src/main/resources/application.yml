@@ -16,6 +16,11 @@ spring:
     jwk-set-uri: ${JWK_SET_URI}
     issuer-uri: ${JWT_ISSUER_URI}
 
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: -1
+
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false

@@ -9,12 +9,12 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name="estimation")
+@Table(name = "estimation")
 @Getter
 @Setter
 @NamedEntityGraph(
-    name = "estimation.phases",
-    attributeNodes = @NamedAttributeNode("phases")
+        name = "estimation.phases",
+        attributeNodes = @NamedAttributeNode("phases")
 )
 public class Estimation {
 

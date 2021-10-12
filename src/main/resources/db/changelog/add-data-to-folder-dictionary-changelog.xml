@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="kiseleva_ev" id="add-data-to-folder_dictionary">
+        <insert tableName="folder_dictionary">
+            <column name="value" value="documents"/>
+            <column name="display_value" value="Документы"/>
+        </insert>
+        <insert tableName="folder_dictionary">
+            <column name="value" value="pictures"/>
+            <column name="display_value" value="Изображения"/>
+        </insert>
+        <insert tableName="folder_dictionary">
+            <column name="value" value="audio"/>
+            <column name="display_value" value="Аудио"/>
+        </insert>
+        <insert tableName="folder_dictionary">
+            <column name="value" value="video"/>
+            <column name="display_value" value="Видео"/>
+        </insert>
+        <insert tableName="folder_dictionary">
+            <column name="value" value="other"/>
+            <column name="display_value" value="Другое"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

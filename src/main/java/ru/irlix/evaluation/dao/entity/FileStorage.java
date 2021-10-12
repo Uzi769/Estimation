@@ -13,7 +13,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class FileStorage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -28,7 +27,11 @@ public class FileStorage {
     @Column(name = "doc_type")
     private String docType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estimation")
     private Estimation estimation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder")
+    private Folder folder;
 }

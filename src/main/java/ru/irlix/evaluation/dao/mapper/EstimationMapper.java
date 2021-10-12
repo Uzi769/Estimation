@@ -43,7 +43,7 @@ public abstract class EstimationMapper {
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "minHours", ignore = true)
     @Mapping(target = "maxHours", ignore = true)
-    @Mapping(target = "fileMap", ignore = true)
+    @Mapping(target = "fileResponseList", ignore = true)
     public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
     public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimation);
@@ -77,6 +77,6 @@ public abstract class EstimationMapper {
 
         response.setMinHours(math.getEstimationMinHours(estimation, null));
         response.setMaxHours(math.getEstimationMaxHours(estimation, null));
-        response.setFileMap(fileStorageHelper.getFileMap(estimation));
+        response.setFileResponseList(fileStorageHelper.getFileResponseList(estimation));
     }
 }

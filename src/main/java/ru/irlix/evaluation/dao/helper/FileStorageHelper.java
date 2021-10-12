@@ -10,6 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
+import ru.irlix.evaluation.dao.entity.Folder;
+import ru.irlix.evaluation.dao.mapper.FolderMapper;
+import ru.irlix.evaluation.dto.response.FileResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
@@ -33,6 +36,8 @@ public class FileStorageHelper {
     private String filePath;
 
     private final FileStorageRepository fileStorageRepository;
+    private final FolderHelper folderHelper;
+    private final FolderMapper folderMapper;
 
     @LogInfo
     public void storeFileList(List<MultipartFile> multipartFileList, Estimation estimation) {
@@ -52,6 +57,7 @@ public class FileStorageHelper {
                                 .uuid(uuid)
                                 .fileName(file.getOriginalFilename())
                                 .docType(file.getContentType())
+                                .folder(folderHelper.getFolder(file.getOriginalFilename()))
                                 .estimation(estimation)
                                 .build();
                         fileStorageList.add(fileStorage);
@@ -65,11 +71,18 @@ public class FileStorageHelper {
     }
 
     @LogInfo
-    public Map<Long, String> getFileMap(Estimation estimation) {
-        Map<Long, String> fileMap = new HashMap<>();
-        List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimation(estimation);
-        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
-        return fileMap;
+    public List<FileResponse> getFileResponseList(Estimation estimation) {
+        List<FileResponse> fileResponseList = new ArrayList<>();
+        List<Folder> folderList = folderHelper.findFolders();
+        folderList.forEach(folder -> fileResponseList.add(getFileResponse(estimation, folder)));
+        return fileResponseList;
+    }
+
+    private FileResponse getFileResponse(Estimation estimation, Folder folder) {
+        FileResponse fileResponse = new FileResponse();
+        fileResponse.setFolderResponse(folderMapper.folderToFolderResponse(folder));
+        fileResponse.setFileMap(findFilesByEstimationAndFolder(estimation, folder));
+        return fileResponse;
     }
 
     @LogInfo
@@ -94,5 +107,12 @@ public class FileStorageHelper {
             }
         else
             throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
+    }
+
+    private Map<Long, String> findFilesByEstimationAndFolder(Estimation estimation, Folder folder) {
+        Map<Long, String> fileMap = new TreeMap<>();
+        List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
+        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
+        return fileMap;
     }
 }
