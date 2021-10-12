@@ -11,6 +11,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_folder_dictionary"/>
             </column>
             <column name="value" type="VARCHAR(255)"/>
+            <column name="display_value" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
 

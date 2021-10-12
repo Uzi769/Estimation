@@ -10,13 +10,13 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name="estimation")
+@Table(name = "estimation")
 @Getter
 @Setter
 @ToString
 @NamedEntityGraph(
-    name = "estimation.phases",
-    attributeNodes = @NamedAttributeNode("phases")
+        name = "estimation.phases",
+        attributeNodes = @NamedAttributeNode("phases")
 )
 public class Estimation {
 
@@ -40,6 +40,7 @@ public class Estimation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "status")
+    @ToString.Exclude
     private Status status;
 
     @Column(name = "client")
@@ -50,6 +51,7 @@ public class Estimation {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     @OrderBy("sortOrder ASC")
+    @ToString.Exclude
     private List<Phase> phases;
 
     @ManyToMany
@@ -57,9 +59,11 @@ public class Estimation {
             name = "user_estimation",
             joinColumns = @JoinColumn(name = "estimation_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ToString.Exclude
     private List<User> users;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
+    @ToString.Exclude
     private List<FileStorage> fileStorages;
 
     @PrePersist

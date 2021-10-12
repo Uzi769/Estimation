@@ -20,6 +20,10 @@ public class Folder {
     @Column(name = "value")
     private String value;
 
+    @Column(name = "display_value")
+    private String displayValue;
+
+    @OrderBy("id ASC")
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL)
     private List<FileStorage> fileStorageList;
 }

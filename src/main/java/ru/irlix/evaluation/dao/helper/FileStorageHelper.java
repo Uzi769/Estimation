@@ -11,6 +11,7 @@ import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
 import ru.irlix.evaluation.dao.entity.Folder;
+import ru.irlix.evaluation.dto.response.FileResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.exception.StorageException;
 import ru.irlix.evaluation.repository.FileStorageRepository;
@@ -68,11 +69,20 @@ public class FileStorageHelper {
     }
 
     @LogInfo
-    public Map<Long, String> getFileMap(Estimation estimation) {
-        Map<Long, String> fileMap = new HashMap<>();
-        List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimation(estimation);
-        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
-        return fileMap;
+    public List<FileResponse> getFileResponseList(Estimation estimation) {
+        List<FileResponse> fileResponseList = new ArrayList<>();
+        List<Folder> folderList = folderHelper.findFolders();
+        folderList.forEach(folder -> fileResponseList.add(getFileResponse(estimation, folder)));
+        return fileResponseList;
+    }
+
+    private FileResponse getFileResponse(Estimation estimation, Folder folder) {
+        FileResponse fileResponse = new FileResponse();
+        fileResponse.setFolderId(folder.getId());
+        fileResponse.setFolderValue(folder.getValue());
+        fileResponse.setFolderDisplayValue(folder.getDisplayValue());
+        fileResponse.setFileMap(findFilesByEstimationAndFolder(estimation, folder));
+        return fileResponse;
     }
 
     @LogInfo
@@ -104,4 +114,10 @@ public class FileStorageHelper {
         return fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
     }
 
+    private Map<Long, String> findFilesByEstimationAndFolder(Estimation estimation, Folder folder) {
+        Map<Long, String> fileMap = new TreeMap<>();
+        List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
+        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
+        return fileMap;
+    }
 }

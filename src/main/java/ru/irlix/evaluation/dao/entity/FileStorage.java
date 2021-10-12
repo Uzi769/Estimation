@@ -27,7 +27,7 @@ public class FileStorage {
     @Column(name = "doc_type")
     private String docType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "estimation")
     private Estimation estimation;
 

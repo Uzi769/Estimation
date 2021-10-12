@@ -10,6 +10,7 @@ import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.FolderRepository;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Log4j2
 @Component
@@ -45,5 +46,9 @@ public class FolderHelper {
         if (Arrays.asList(AUDIO_LIST).contains(extension))
             return folderRepository.findByValue("audio");
         return folderRepository.findByValue("other");
+    }
+
+    public List<Folder> findFolders() {
+        return folderRepository.findAll();
     }
 }

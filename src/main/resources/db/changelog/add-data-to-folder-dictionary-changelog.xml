@@ -8,15 +8,19 @@
     <changeSet author="kiseleva_ev" id="add-data-to-folder_dictionary">
         <insert tableName="folder_dictionary">
             <column name="value" value="documents"/>
+            <column name="display_value" value="Документы"/>
         </insert>
         <insert tableName="folder_dictionary">
             <column name="value" value="pictures"/>
+            <column name="display_value" value="Изображения"/>
         </insert>
         <insert tableName="folder_dictionary">
             <column name="value" value="audio"/>
+            <column name="display_value" value="Аудио"/>
         </insert>
         <insert tableName="folder_dictionary">
             <column name="value" value="other"/>
+            <column name="display_value" value="Другое"/>
         </insert>
     </changeSet>
 
