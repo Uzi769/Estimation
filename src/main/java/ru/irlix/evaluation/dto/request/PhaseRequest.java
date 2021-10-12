@@ -25,21 +25,21 @@ public class PhaseRequest {
     @PositiveOrZero(message = "{sortOrder.positiveOrZero}")
     private Integer sortOrder;
 
-    private Integer managementReserve;
+    private Integer pmReserve;
 
     private Integer qaReserve;
 
-    private Integer bagsReserve;
+    private Integer bugsReserve;
 
     private Integer riskReserve;
 
     private Boolean done;
 
-    private Boolean managementReserveOn;
+    private Boolean pmReserveOn;
 
     private Boolean qaReserveOn;
 
-    private Boolean bagsReserveOn;
+    private Boolean bugsReserveOn;
 
     private Boolean riskReserveOn;
 }

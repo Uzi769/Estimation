@@ -6,5 +6,11 @@ public class ReportConstants {
 
     public static final String QA_COST = "qaCost";
 
-    public static final String PM_COST = "managementCost";
+    public static final String PM_COST = "pmCost";
+
+    public static final String QA_ROLE = "qa";
+
+    public static final String PM_ROLE = "pm";
+
+    public static final String SUM_ROLE = "sum";
 }

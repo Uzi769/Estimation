@@ -31,23 +31,23 @@ public class Task {
     @Column(name = "repeat_count")
     private Integer repeatCount;
 
-    @Column(name = "bags_reserve")
-    private Integer bagsReserve;
+    @Column(name = "bugs_reserve")
+    private Integer bugsReserve;
 
     @Column(name = "qa_reserve")
     private Integer qaReserve;
 
-    @Column(name = "management_reserve")
-    private Integer managementReserve;
+    @Column(name = "pm_reserve")
+    private Integer pmReserve;
 
     @Column(name = "comment")
     private String comment;
 
-    @Column(name = "hours_min")
-    private Double hoursMin;
+    @Column(name = "min_hours")
+    private Double minHours;
 
-    @Column(name = "hours_max")
-    private Double hoursMax;
+    @Column(name = "max_hours")
+    private Double maxHours;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "phase")
@@ -58,57 +58,57 @@ public class Task {
     private Role role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Task parent;
+    private Task feature;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.REMOVE)
     @OrderBy("id ASC")
     private List<Task> tasks;
 
-    @Column(name = "bags_reserve_on")
-    private Boolean bagsReserveOn;
+    @Column(name = "bugs_reserve_on")
+    private Boolean bugsReserveOn;
 
     @Column(name = "qa_reserve_on")
     private Boolean qaReserveOn;
 
-    @Column(name = "management_reserve_on")
-    private Boolean managementReserveOn;
+    @Column(name = "pm_reserve_on")
+    private Boolean pmReserveOn;
 
     @PrePersist
     public void prePersist() {
-        if (hoursMax == null) {
-            hoursMax = 0.0;
+        if (maxHours == null) {
+            maxHours = 0.0;
         }
 
-        if (hoursMin == null) {
-            hoursMin = 0.0;
+        if (minHours == null) {
+            minHours = 0.0;
         }
 
         if (repeatCount == null) {
             repeatCount = 1;
         }
 
-        if (bagsReserveOn == null) {
-            bagsReserveOn = false;
+        if (bugsReserveOn == null) {
+            bugsReserveOn = false;
         }
 
         if (qaReserveOn == null) {
             qaReserveOn = false;
         }
 
-        if (managementReserveOn == null) {
-            managementReserveOn = false;
+        if (pmReserveOn == null) {
+            pmReserveOn = false;
         }
 
-        if (bagsReserve == null) {
-            bagsReserve = 0;
+        if (bugsReserve == null) {
+            bugsReserve = 0;
         }
 
         if (qaReserve == null) {
             qaReserve = 0;
         }
 
-        if (managementReserve == null) {
-            managementReserve = 0;
+        if (pmReserve == null) {
+            pmReserve = 0;
         }
     }
 }

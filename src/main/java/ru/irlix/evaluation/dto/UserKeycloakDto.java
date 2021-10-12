@@ -10,7 +10,10 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 public class UserKeycloakDto {
+
     private UUID id;
+
     private String firstName;
+
     private String LastName;
 }

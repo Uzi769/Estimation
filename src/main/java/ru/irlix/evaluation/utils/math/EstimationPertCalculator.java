@@ -27,10 +27,10 @@ public class EstimationPertCalculator extends Calculable {
     }
 
     private double calcTaskMinHoursPertWithoutRepeatCount(Task task) {
-        return calcTaskMaxHoursPertWithoutRepeatCount(task) - (task.getHoursMax() - task.getHoursMin()) / 6;
+        return calcTaskMaxHoursPertWithoutRepeatCount(task) - (task.getMaxHours() - task.getMinHours()) / 6;
     }
 
     private double calcTaskMaxHoursPertWithoutRepeatCount(Task task) {
-        return (task.getHoursMin() + task.getHoursMax() + 2 * (task.getHoursMin() + task.getHoursMax())) / 6;
+        return (task.getMinHours() + task.getMaxHours() + 2 * (task.getMinHours() + task.getMaxHours())) / 6;
     }
 }

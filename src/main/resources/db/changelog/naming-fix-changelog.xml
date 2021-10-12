@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.10.xsd">
+
+    <changeSet  author="ivan-kalachikov"  id="renamePhaseManagementReserve">
+        <renameColumn newColumnName="pm_reserve"
+                       oldColumnName="management_reserve"
+                       tableName="phase"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renamePhaseManagementReserveOn">
+        <renameColumn newColumnName="pm_reserve_on"
+                      oldColumnName="management_reserve_on"
+                      tableName="phase"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renamePhaseBagsReserve">
+        <renameColumn newColumnName="bugs_reserve"
+                      oldColumnName="bags_reserve"
+                      tableName="phase"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renamePhaseBagsReserveOn">
+        <renameColumn newColumnName="bugs_reserve_on"
+                      oldColumnName="bags_reserve_on"
+                      tableName="phase"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskManagementReserve">
+        <renameColumn newColumnName="pm_reserve"
+                      oldColumnName="management_reserve"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskManagementReserveOn">
+        <renameColumn newColumnName="pm_reserve_on"
+                      oldColumnName="management_reserve_on"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskBagsReserve">
+        <renameColumn newColumnName="bugs_reserve"
+                      oldColumnName="bags_reserve"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskBagsReserveOn">
+        <renameColumn newColumnName="bugs_reserve_on"
+                      oldColumnName="bags_reserve_on"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskParent">
+        <renameColumn newColumnName="feature_id"
+                      oldColumnName="parent_id"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskHoursMin">
+        <renameColumn newColumnName="min_hours"
+                      oldColumnName="hours_min"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskHoursMax">
+        <renameColumn newColumnName="max_hours"
+                      oldColumnName="hours_max"
+                      tableName="task"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskDictHoursMin">
+        <renameColumn newColumnName="min_hours"
+                      oldColumnName="hours_min"
+                      tableName="task_dictionary"/>
+    </changeSet>
+
+    <changeSet  author="ivan-kalachikov"  id="renameTaskDictHoursMax">
+        <renameColumn newColumnName="max_hours"
+                      oldColumnName="hours_max"
+                      tableName="task_dictionary"/>
+    </changeSet>
+
+</databaseChangeLog>

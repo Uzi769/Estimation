@@ -9,9 +9,13 @@ import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dto.response.EstimationCostResponse;
 import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
 import ru.irlix.evaluation.dto.response.PhaseStatsResponse;
+import ru.irlix.evaluation.utils.constant.ReportConstants;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -210,6 +214,8 @@ public class EstimationMath {
     }
 
     public EstimationCostResponse getEstimationCost(Estimation estimation, Map<String, String> request) {
+        checkRolesInRequest(estimation, request);
+
         return new EstimationCostResponse(
                 getEstimationMinCost(estimation, request),
                 getEstimationMaxCost(estimation, request)
@@ -220,8 +226,8 @@ public class EstimationMath {
         stats.setMinHours(round(stats.getMinHours()));
         stats.setMaxHours(round(stats.getMaxHours()));
 
-        stats.setBugfixMinHours(round(stats.getBugfixMinHours()));
-        stats.setBugfixMaxHours(round(stats.getBugfixMaxHours()));
+        stats.setBugsMinHours(round(stats.getBugsMinHours()));
+        stats.setBugsMaxHours(round(stats.getBugsMaxHours()));
 
         stats.setQaMinHours(round(stats.getQaMinHours()));
         stats.setQaMaxHours(round(stats.getQaMaxHours()));
@@ -249,7 +255,37 @@ public class EstimationMath {
         estimationMath.setMaxHoursPert(roundToHalf(estimationMath.getMaxHoursPert()));
     }
 
-    public Map<Role, List<Task>> getRolesMap(Estimation estimation) {
+    public void checkRolesInRequest(Estimation estimation, Map<String, String> request) {
+        List<String> roleCosts = getRoleList(estimation, request);
+        if (!request.keySet().containsAll(roleCosts)) {
+            throw new IllegalArgumentException("Costs are not shown for all roles.");
+        }
+    }
+
+    private List<String> getRoleList(Estimation estimation, Map<String, String> request) {
+        Map<Role, List<Task>> rolesMap = getRolesMap(estimation);
+        Set<Role> roles = rolesMap.keySet();
+
+        List<String> rolesStrings = roles.stream()
+                .map(r -> r.getValue() + ReportConstants.COST)
+                .collect(Collectors.toList());
+
+        List<Task> allTasks = rolesMap.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        if (getQaSummaryMaxHours(allTasks, request) > 0) {
+            rolesStrings.add(ReportConstants.QA_COST);
+        }
+
+        if (getPmSummaryMaxHours(allTasks, request) > 0) {
+            rolesStrings.add(ReportConstants.PM_COST);
+        }
+
+        return rolesStrings;
+    }
+
+    private Map<Role, List<Task>> getRolesMap(Estimation estimation) {
         return calculator.getRolesMap(estimation);
     }
 

@@ -21,11 +21,11 @@ public class TaskDictionary {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "hours_min")
-    private Integer hoursMin;
+    @Column(name = "min_hours")
+    private Integer minHours;
 
-    @Column(name = "hours_max")
-    private Integer hoursMax;
+    @Column(name = "max_hours")
+    private Integer maxHours;
 
     @ManyToOne
     @JoinColumn(name = "type")

@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class EstimationStatsResponse {
 
-    private String value;
+    private RoleResponse role;
 
     private double minHoursRange;
 

@@ -12,5 +12,4 @@ public class FileStorageResponse {
     private Long id;
 
     private String fileName;
-
 }

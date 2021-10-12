@@ -41,7 +41,7 @@ public abstract class TaskMapper {
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "phase", ignore = true)
     @Mapping(target = "role", ignore = true)
-    @Mapping(target = "parent", ignore = true)
+    @Mapping(target = "feature", ignore = true)
     public abstract Task taskRequestToTask(TaskRequest taskRequest);
 
     public abstract List<Task> taskRequestToTask(List<TaskRequest> taskRequest);
@@ -49,7 +49,7 @@ public abstract class TaskMapper {
     @Mapping(target = "type", ignore = true)
     @Mapping(target = "phaseId", ignore = true)
     @Mapping(target = "roleId", ignore = true)
-    @Mapping(target = "parentId", ignore = true)
+    @Mapping(target = "featureId", ignore = true)
     @Mapping(target = "tasks", ignore = true)
     public abstract TaskResponse taskToResponse(Task task);
 
@@ -77,7 +77,7 @@ public abstract class TaskMapper {
 
             if (request.getFeatureId() != null) {
                 Task feature = taskHelper.findTaskById(request.getFeatureId());
-                task.setParent(feature);
+                task.setFeature(feature);
             }
         }
     }
@@ -90,8 +90,8 @@ public abstract class TaskMapper {
             response.setType(task.getType().getId());
         }
 
-        if (task.getParent() != null) {
-            response.setParentId(task.getParent().getId());
+        if (task.getFeature() != null) {
+            response.setFeatureId(task.getFeature().getId());
         }
 
         if (task.getRole() != null) {
@@ -107,13 +107,13 @@ public abstract class TaskMapper {
 
             for (Task nestedTask : task.getTasks()) {
                 tasksRepeatCountSum += nestedTask.getRepeatCount();
-                tasksHoursMinSum += nestedTask.getHoursMin();
-                tasksHoursMaxSum += nestedTask.getHoursMax();
+                tasksHoursMinSum += nestedTask.getMinHours();
+                tasksHoursMaxSum += nestedTask.getMaxHours();
             }
 
             response.setRepeatCount(tasksRepeatCountSum);
-            response.setHoursMin(math.roundToHalf(tasksHoursMinSum));
-            response.setHoursMax(math.roundToHalf(tasksHoursMaxSum));
+            response.setMinHours(math.roundToHalf(tasksHoursMinSum));
+            response.setMaxHours(math.roundToHalf(tasksHoursMaxSum));
         }
     }
 }

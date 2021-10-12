@@ -24,6 +24,7 @@ public class ReportHelper {
     private final EstimationMath math;
 
     public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
+        math.checkRolesInRequest(estimation, request);
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
         List<EstimationReportSheet> sheets = new ArrayList<>();
@@ -31,11 +32,6 @@ public class ReportHelper {
         sheets.add(new EstimationWithoutDetailsSheet(math, excelWorkbook));
         sheets.add(new TasksByRolesSheet(math, excelWorkbook));
         sheets.add(new PhaseEstimationSheet(math, excelWorkbook));
-
-        List<String> roleCosts = sheets.get(0).getRoleCosts(estimation, request);
-        if (!request.keySet().containsAll(roleCosts)) {
-            throw new IllegalArgumentException("Costs are not shown for all roles.");
-        }
 
         sheets.forEach(s -> s.getSheet(estimation, request));
 
