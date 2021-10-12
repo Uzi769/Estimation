@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 public class PhaseStatsResponse {
 
-    private String value;
+    private RoleResponse role;
 
     private double minHours;
 

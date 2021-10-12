@@ -45,7 +45,7 @@ public class Phase {
     private Integer riskReserve;
 
     @OneToMany(mappedBy = "phase", cascade = CascadeType.ALL)
-    @Where(clause = "parent_id IS NULL")
+    @Where(clause = "feature_id IS NULL")
     @OrderBy("id ASC")
     private List<Task> tasks;
 
