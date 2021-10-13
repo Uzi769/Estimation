@@ -26,7 +26,7 @@ public class FolderHelper {
 
     static {
         docList = List.of("word", "docx", "doc", "txt", "pdf", "xls", "xlsx", "html", "doc", "xml",
-                "rtf", "ppt", "pptx", "epub", "odt");
+                "rtf", "ppt", "pptx", "epub", "odt", "log");
         picList = List.of("png", "jpeg", "jpg", "svg", "gif", "bmp");
         audioList = List.of("mid", "mp3", "wav", "aif", "ac3", "aac");
         videoList = List.of("avi", "mp4", "wmv", "mkv", "webm", "mov", "mpg", "mpeg");
@@ -38,7 +38,7 @@ public class FolderHelper {
     }
 
     public Folder getFolder(String fileName) {
-        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
         if (docList.contains(extension))
             return folderRepository.findByValue("documents");
         if (picList.contains(extension))
