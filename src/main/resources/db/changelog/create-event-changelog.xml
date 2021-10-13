@@ -16,7 +16,6 @@
             <column name="estimation_name" type="VARCHAR(255)"/>
             <column name="phase_name" type="VARCHAR(255)"/>
             <column name="task_name" type="VARCHAR(255)"/>
-            <column name="user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
 

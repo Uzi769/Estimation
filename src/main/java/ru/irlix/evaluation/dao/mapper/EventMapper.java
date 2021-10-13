@@ -18,7 +18,7 @@ public abstract class EventMapper {
     protected EventService eventService;
 
     @Mappings({
-            @Mapping(target = "userName", expression = "java(event.getUser().getFirstName() + \" \" + event.getUser().getLastName())"),
+            @Mapping(target = "userName", expression = "java(event.getUserName())"),
             @Mapping(target = "description", expression = "java(event.getValue())"),
             @Mapping(target = "target", expression = "java(event.getEstimationName())")
 
