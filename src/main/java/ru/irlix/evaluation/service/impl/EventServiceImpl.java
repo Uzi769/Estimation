@@ -75,50 +75,61 @@ public class EventServiceImpl implements EventService {
                 eventRepository.save(event);
                 break;
             case "getEstimationsReport":
-                Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
-                Long id = (Long) objectEvent;
-                Estimation estimation = estimationHelper.findEstimationById(id);
-                EstimationResponse estimationResponse1 = estimationMapper.estimationToEstimationResponse(estimation);
-                event = mapper.EstimationResponseToEvent(estimationResponse1);
-                event.setValue("Отчет выгружен");
-                eventRepository.save(event);
+                eventRepository.save(prepareReportEvent(joinPoint));
                 break;
             case "updateEstimation":
-                Object objectEvent1 = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
-                Long id1 = (Long) objectEvent1;
-                Estimation estimation1 = estimationHelper.findEstimationById(id1);
-                EstimationRequest estimationRequest = (joinPoint.getArgs()[1] instanceof EstimationRequest) ?
-                        (EstimationRequest) joinPoint.getArgs()[1]
-                        : null;
-                StringBuilder value = new StringBuilder();
-                if (estimationRequest != null) {
-                    List<User> oldUserList = estimation1.getUsers();
-                    List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
-
-                    //список удаленных пользователей:
-                    List<User> deletedUserList = oldUserList.stream().filter(oldUser ->
-                            !newUserList.contains(oldUser)).collect(Collectors.toList());
-                    //список добавленных пользователей:
-                    List<User> insertedUserList = newUserList.stream().filter(newUser ->
-                            !oldUserList.contains(newUser)).collect(Collectors.toList());
-
-                    if (deletedUserList.size() != 0) {
-                        value.append("Добавленные пользователи: ");
-                        insertedUserList.forEach(user -> setUserString(value, user));
-                    }
-                    if (insertedUserList.size() != 0) {
-                        value.append("Удаленные пользователи: ");
-                        deletedUserList.forEach(user -> setUserString(value, user));
-                    }
-                }
-                if (!value.toString().equals("")) {
-                    EstimationResponse estimationResponse2 = estimationMapper.estimationToEstimationResponse(estimation1);
-                    event = mapper.EstimationResponseToEvent(estimationResponse2);
-                    event.setValue(value.toString());
+                event = prepareUserEvent(joinPoint);
+                if (event != null)
                     eventRepository.save(event);
-                }
                 break;
         }
+    }
+
+    private Event prepareUserEvent(JoinPoint joinPoint) {
+        Event event = null;
+        Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+        Long id = (Long) objectEvent;
+        Estimation estimation = estimationHelper.findEstimationById(id);
+        EstimationRequest estimationRequest = (joinPoint.getArgs()[1] instanceof EstimationRequest) ?
+                (EstimationRequest) joinPoint.getArgs()[1]
+                : null;
+        StringBuilder value = new StringBuilder();
+        if (estimationRequest != null) {
+            List<User> oldUserList = estimation.getUsers();
+            List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
+
+            //список удаленных пользователей:
+            List<User> deletedUserList = oldUserList.stream().filter(oldUser ->
+                    !newUserList.contains(oldUser)).collect(Collectors.toList());
+            //список добавленных пользователей:
+            List<User> insertedUserList = newUserList.stream().filter(newUser ->
+                    !oldUserList.contains(newUser)).collect(Collectors.toList());
+
+            if (insertedUserList.size() != 0) {
+                value.append("Добавленные пользователи: ");
+                insertedUserList.forEach(user -> setUserString(value, user));
+            }
+            if (deletedUserList.size() != 0) {
+                value.append("Удаленные пользователи: ");
+                deletedUserList.forEach(user -> setUserString(value, user));
+            }
+        }
+        if (!value.toString().equals("")) {
+            EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
+            event = mapper.EstimationResponseToEvent(estimationResponse);
+            event.setValue(value.toString());
+        }
+        return event;
+    }
+
+    private Event prepareReportEvent(JoinPoint joinPoint) {
+        Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+        Long id = (Long) objectEvent;
+        Estimation estimation = estimationHelper.findEstimationById(id);
+        EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
+        Event event = mapper.EstimationResponseToEvent(estimationResponse);
+        event.setValue("Отчет выгружен");
+        return event;
     }
 
     private void setUserString(StringBuilder value, User user) {
