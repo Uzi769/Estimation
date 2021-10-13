@@ -50,53 +50,72 @@ public class EventServiceImpl implements EventService {
         String methodName = joinPoint.getSignature().getName();
         switch (methodName) {
             case "createEstimation":
-                EstimationResponse estimationResponse = (EstimationResponse) value;
-                event = mapper.estimationResponseToEvent(estimationResponse);
-                event.setValue("Создана оценка");
-                eventRepository.save(event);
+                event = getEvent((EstimationResponse) value);
                 break;
             case "createPhase":
-                PhaseResponse phaseResponse = (PhaseResponse) value;
-                event = mapper.phaseResponseToEvent(phaseResponse);
-                event.setValue("Создана фаза");
-                eventRepository.save(event);
+                event = getEvent((PhaseResponse) value);
                 break;
             case "createTask":
-                TaskResponse taskResponse = (TaskResponse) value;
-                event = mapper.taskResponseToEvent(taskResponse);
-                if (taskResponse.getType() == 1) {
-                    event.setValue("Создана фича");
-                } else if (taskResponse.getType() == 2) {
-                    event.setValue("Создана задача");
-                }
-                eventRepository.save(event);
+                event = getEvent((TaskResponse) value);
                 break;
             case "deleteEstimation":
-                Estimation estimation = (Estimation) value;
-                event = mapper.estimationToEvent(estimation);
-                event.setValue("Оценка удалена");
-                eventRepository.save(event);
+                event = getEvent((Estimation) value);
                 break;
             case "deletePhase":
-                Phase phase = (Phase) value;
-                event = mapper.phaseToEvent(phase);
-                event.setValue("Фаза удалена");
-                eventRepository.save(event);
+                event = getEvent((Phase) value);
                 break;
             case "deleteTask":
-                Task task = (Task) value;
-                event = mapper.taskToEvent(task);
-                if (task.getType().getId() == 1) {
-                    event.setValue("Фича удалена");
-                } else if (task.getType().getId() == 2) {
-                    event.setValue("Задача удалена");
-                }
+                event = getEvent((Task) value);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + methodName);
         }
 
         eventRepository.save(event);
+    }
+
+    private Event getEvent(EstimationResponse estimationResponse) {
+        Event event = mapper.estimationResponseToEvent(estimationResponse);
+        event.setValue("Создана оценка");
+        return event;
+    }
+
+    private Event getEvent(PhaseResponse phaseResponse) {
+        Event event = mapper.phaseResponseToEvent(phaseResponse);
+        event.setValue("Создана фаза");
+        return event;
+    }
+
+    private Event getEvent(TaskResponse taskResponse) {
+        Event event = mapper.taskResponseToEvent(taskResponse);
+        if (taskResponse.getType() == 1) {
+            event.setValue("Создана фича");
+        } else if (taskResponse.getType() == 2) {
+            event.setValue("Создана задача");
+        }
+        return event;
+    }
+
+    private Event getEvent(Estimation estimation) {
+        Event event = mapper.estimationToEvent(estimation);
+        event.setValue("Оценка удалена");
+        return event;
+    }
+
+    private Event getEvent(Phase phase) {
+        Event event = mapper.phaseToEvent(phase);
+        event.setValue("Фаза удалена");
+        return event;
+    }
+
+    private Event getEvent(Task task) {
+        Event event = mapper.taskToEvent(task);
+        if (task.getType().getId() == 1) {
+            event.setValue("Фича удалена");
+        } else if (task.getType().getId() == 2) {
+            event.setValue("Задача удалена");
+        }
+        return event;
     }
 
     @Override

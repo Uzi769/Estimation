@@ -28,13 +28,13 @@ public class EventInfoAspect {
     @Around(value = "@annotation(ru.irlix.evaluation.aspect.EventInfo)")
     public Object makeDeletingEvent(ProceedingJoinPoint jp) throws Throwable {
         String methodName = jp.getSignature().getName();
-        if (methodName.contains("delete")) {
-            Object elementToDelete = eventService.getElementToDelete(jp);
-            Object proceed = jp.proceed();
-            eventService.createEvent(jp, elementToDelete);
-            return proceed;
-        } else {
+        if (!methodName.contains("delete")) {
             return jp.proceed();
         }
+
+        Object elementToDelete = eventService.getElementToDelete(jp);
+        Object proceed = jp.proceed();
+        eventService.createEvent(jp, elementToDelete);
+        return proceed;
     }
 }
