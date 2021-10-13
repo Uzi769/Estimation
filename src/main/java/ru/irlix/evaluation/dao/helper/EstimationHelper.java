@@ -19,4 +19,9 @@ public class EstimationHelper {
         return estimationRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Estimation with id " + id + " not found"));
     }
+
+    public Estimation findEstimationByName(String name) {
+        return estimationRepository.findByName(name)
+                .orElseThrow(() -> new NotFoundException("Estimation with id " + name + " not found"));
+    }
 }

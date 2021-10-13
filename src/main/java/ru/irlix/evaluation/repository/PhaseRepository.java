@@ -14,4 +14,6 @@ public interface PhaseRepository extends JpaRepository<Phase, Long> {
     @EntityGraph(value = "phase.tasks")
     @NonNull
     Optional<Phase> findById(@NonNull Long id);
+
+    Optional<Phase> findByName(@NonNull String name);
 }

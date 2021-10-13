@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.EventInfo;
 import ru.irlix.evaluation.dao.entity.*;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.TaskMapper;
@@ -36,6 +37,7 @@ public class TaskServiceImpl implements TaskService {
     private final RoleHelper roleHelper;
     private final PhaseHelper phaseHelper;
 
+    @EventInfo
     @Override
     @Transactional
     public TaskResponse createTask(TaskRequest request) {
@@ -104,6 +106,7 @@ public class TaskServiceImpl implements TaskService {
         return mapper.taskToResponse(tasks);
     }
 
+    @EventInfo
     @Override
     @Transactional
     public void deleteTask(Long id) {

@@ -29,6 +29,7 @@
     <include file="alter-estimation-description-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-info-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-event-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-file-storage-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-folder-dictionary-changelog.xml" relativeToChangelogFile="true"/>
     <include file="add-data-to-folder-dictionary-changelog.xml" relativeToChangelogFile="true"/>
