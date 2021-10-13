@@ -463,17 +463,17 @@ public class EstimationCalculator {
         request.put("pert", "false");
 
         for (Task task : entry.getValue()) {
-            minHours += task.getMinHours();
-            maxHours += task.getMaxHours();
+            minHours += getMinHours(task);
+            maxHours += getMaxHours(task);
 
-            bugfixMinHours += task.getMinHours() * getBugfixPercent(task);
-            bugfixMaxHours += task.getMaxHours() * getBugfixPercent(task);
+            bugfixMinHours += getMinHours(task) * getBugfixPercent(task);
+            bugfixMaxHours += getMaxHours(task) * getBugfixPercent(task);
 
-            qaMinHours += task.getMinHours() * getQaPercent(task, request);
-            qaMaxHours += task.getMaxHours() * getQaPercent(task, request);
+            qaMinHours += getMinHours(task) * getQaPercent(task, request);
+            qaMaxHours += getMaxHours(task) * getQaPercent(task, request);
 
-            pmMinHours += task.getMinHours() * getPmPercent(task, request);
-            pmMaxHours += task.getMaxHours() * getPmPercent(task, request);
+            pmMinHours += getMinHours(task) * getPmPercent(task, request);
+            pmMaxHours += getMaxHours(task) * getPmPercent(task, request);
         }
 
         double minHoursSummary = minHours + qaMinHours + bugfixMinHours + pmMinHours;
@@ -493,6 +493,14 @@ public class EstimationCalculator {
                 minHoursSummary * getRiskOnPhase(phase),
                 maxHoursSummary * getRiskOnPhase(phase)
         );
+    }
+
+    private double getMinHours(Task task) {
+        return task.getMinHours() * task.getRepeatCount();
+    }
+
+    private double getMaxHours(Task task) {
+        return task.getMaxHours() * task.getRepeatCount();
     }
 
     public List<EstimationStatsResponse> getEstimationStats(Estimation estimation) {
