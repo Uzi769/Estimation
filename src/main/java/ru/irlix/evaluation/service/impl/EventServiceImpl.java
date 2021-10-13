@@ -81,7 +81,6 @@ public class EventServiceImpl implements EventService {
             switch (methodName) {
                 case "createEstimation":
                     EstimationRequest estimationRequest = (EstimationRequest) objectEvent;
-                    //Uzi переделать по id
                     Estimation estimation = estimationHelper.findEstimationByName(estimationRequest.getName());
                     event = mapper.EstimationToEvent(estimation);
                     event.setValue("Создана оценка");
@@ -89,7 +88,6 @@ public class EventServiceImpl implements EventService {
                     break;
                 case "createPhase":
                     PhaseRequest phaseRequest = (PhaseRequest) objectEvent;
-                    //Uzi переделать по id
                     Phase phase = phaseHelper.findPhaseByName(phaseRequest.getName());
                     event = mapper.PhaseToEvent(phase);
                     event.setValue("Создана фаза");
@@ -97,7 +95,6 @@ public class EventServiceImpl implements EventService {
                     break;
                 case "createTask":
                     TaskRequest taskRequest = (TaskRequest) objectEvent;
-                    //Uzi переделать по id
                     Task task = taskHelper.findTaskByName(taskRequest.getName());
                     event = mapper.TaskToEvent(task);
                     if (task.getType().getId() == 1) {
