@@ -8,10 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
 import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dao.helper.EstimationHelper;
 import ru.irlix.evaluation.dao.helper.TaskHelper;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.EventMapper;
+import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.EventResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
@@ -34,6 +37,7 @@ public class EventServiceImpl implements EventService {
 
     private final EstimationHelper estimationHelper;
     private final TaskHelper taskHelper;
+    private final UserHelper userHelper;
 
     @Transactional(readOnly = true)
     @Override
@@ -73,15 +77,55 @@ public class EventServiceImpl implements EventService {
             case "getEstimationsReport":
                 Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
                 Long id = (Long) objectEvent;
-                System.out.println("id = " + id);
                 Estimation estimation = estimationHelper.findEstimationById(id);
                 EstimationResponse estimationResponse1 = estimationMapper.estimationToEstimationResponse(estimation);
                 event = mapper.EstimationResponseToEvent(estimationResponse1);
                 event.setValue("Отчет выгружен");
-                System.out.println("event.getValue() = " + event.getValue());
                 eventRepository.save(event);
                 break;
+            case "updateEstimation":
+                Object objectEvent1 = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+                Long id1 = (Long) objectEvent1;
+                Estimation estimation1 = estimationHelper.findEstimationById(id1);
+                EstimationRequest estimationRequest = (joinPoint.getArgs()[1] instanceof EstimationRequest) ?
+                        (EstimationRequest) joinPoint.getArgs()[1]
+                        : null;
+                StringBuilder value = new StringBuilder();
+                if (estimationRequest != null) {
+                    List<User> oldUserList = estimation1.getUsers();
+                    List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
+
+                    //список удаленных пользователей:
+                    List<User> deletedUserList = oldUserList.stream().filter(oldUser ->
+                            !newUserList.contains(oldUser)).collect(Collectors.toList());
+                    //список добавленных пользователей:
+                    List<User> insertedUserList = newUserList.stream().filter(newUser ->
+                            !oldUserList.contains(newUser)).collect(Collectors.toList());
+
+                    if (deletedUserList.size() != 0) {
+                        value.append("Добавленные пользователи: ");
+                        insertedUserList.forEach(user -> setUserString(value, user));
+                    }
+                    if (insertedUserList.size() != 0) {
+                        value.append("Удаленные пользователи: ");
+                        deletedUserList.forEach(user -> setUserString(value, user));
+                    }
+                }
+                if (!value.toString().equals("")) {
+                    EstimationResponse estimationResponse2 = estimationMapper.estimationToEstimationResponse(estimation1);
+                    event = mapper.EstimationResponseToEvent(estimationResponse2);
+                    event.setValue(value.toString());
+                    eventRepository.save(event);
+                }
+                break;
         }
+    }
+
+    private void setUserString(StringBuilder value, User user) {
+        value.append(user.getFirstName());
+        value.append(" ");
+        value.append(user.getLastName());
+        value.append(" ");
     }
 
     @Transactional
