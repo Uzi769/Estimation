@@ -10,6 +10,8 @@ import java.time.Instant;
 @Builder
 public class EventResponse {
 
+    private Long id;
+
     private String description;
 
     private Instant date;
@@ -17,5 +19,4 @@ public class EventResponse {
     private String userName;
 
     private String target;
-
 }

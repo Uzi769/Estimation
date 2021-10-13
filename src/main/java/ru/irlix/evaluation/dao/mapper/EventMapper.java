@@ -2,95 +2,67 @@ package ru.irlix.evaluation.dao.mapper;
 
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
 import ru.irlix.evaluation.dao.entity.Phase;
-import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.dao.helper.EstimationHelper;
+import ru.irlix.evaluation.dao.helper.PhaseHelper;
+import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.EventResponse;
-import ru.irlix.evaluation.service.EventService;
+import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.dto.response.TaskResponse;
+import ru.irlix.evaluation.utils.security.SecurityUtils;
+
+import java.time.Instant;
 
 @Mapper(componentModel = "spring")
 public abstract class EventMapper {
 
-    @Lazy
     @Autowired
-    protected EventService eventService;
+    private EstimationHelper estimationHelper;
 
-    @Mappings({
-            @Mapping(target = "userName", expression = "java(event.getUserName())"),
-            @Mapping(target = "description", expression = "java(event.getValue())"),
-            @Mapping(target = "target", expression = "java(event.getEstimationName())")
+    @Autowired
+    private PhaseHelper phaseHelper;
 
-    })
     public abstract EventResponse EventToEventResponse(Event event);
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "date", ignore = true)
-    @Mapping(target = "userName", ignore = true)
-    @Mapping(target = "estimationName", ignore = true)
-    @Mapping(target = "phaseName", ignore = true)
-    @Mapping(target = "taskName", ignore = true)
-    public abstract Event EstimationToEvent(Estimation estimation);
+    @Mapping(target = "userName", source = "creator")
+    @Mapping(target = "estimationName", source = "name")
+    public abstract Event EstimationResponseToEvent(EstimationResponse estimation);
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "date", ignore = true)
-    @Mapping(target = "userName", ignore = true)
-    @Mapping(target = "estimationName", ignore = true)
-    @Mapping(target = "phaseName", ignore = true)
-    @Mapping(target = "taskName", ignore = true)
-    public abstract Event PhaseToEvent(Phase phase);
+    @Mapping(target = "phaseName", source = "name")
+    public abstract Event phaseResponseToEvent(PhaseResponse phase);
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "date", ignore = true)
-    @Mapping(target = "userName", ignore = true)
-    @Mapping(target = "estimationName", ignore = true)
-    @Mapping(target = "phaseName", ignore = true)
-    @Mapping(target = "taskName", ignore = true)
-    public abstract Event TaskToEvent(Task task);
+    @Mapping(target = "taskName", source = "name")
+    public abstract Event TaskResponseToEvent(TaskResponse task);
 
     @AfterMapping
-    protected void map(@MappingTarget Event event, Task task) {
-
-        event.setUserName(task.getPhase().getEstimation().getUsers()
-                        .stream()
-                        .findFirst()
-                        .map(a -> a.getFirstName() + a.getLastName())
-                        .orElse(null));
-        event.setEstimationName(task.getPhase().getEstimation().getName());
-        event.setDate(eventService.getEventCreationDate());
-        event.setEstimationName(task.getPhase().getEstimation().getName());
-        event.setPhaseName(task.getPhase().getName());
-        event.setTaskName(task.getName());
+    protected void map(@MappingTarget Event event) {
+        event.setUserName(SecurityUtils.getUserName());
+        event.setDate(Instant.now());
     }
 
     @AfterMapping
-    protected void map(@MappingTarget Event event, Phase phase) {
-
-        event.setUserName(phase.getEstimation().getUsers()
-                .stream()
-                .findFirst()
-                .map(a -> a.getFirstName() + a.getLastName())
-                .orElse(null));
-        event.setEstimationName(phase.getEstimation().getName());
-        event.setDate(eventService.getEventCreationDate());
-        event.setEstimationName(phase.getEstimation().getName());
-        event.setPhaseName(phase.getName());
+    protected void map(@MappingTarget Event event, PhaseResponse phase) {
+        Estimation estimation = estimationHelper.findEstimationById(phase.getEstimationId());
+        String estimationName = estimation.getName();
+        event.setEstimationName(estimationName);
     }
 
     @AfterMapping
-    protected void map(@MappingTarget Event event, Estimation estimation) {
+    protected void map(@MappingTarget Event event, TaskResponse task) {
+        Phase phase = phaseHelper.findPhaseById(task.getPhaseId());
+        String phaseName = phase.getName();
+        event.setPhaseName(phaseName);
 
-        event.setUserName(estimation.getUsers()
-                .stream()
-                .findFirst()
-                .map(a -> a.getFirstName() + a.getLastName())
-                .orElse(null));
-        event.setEstimationName(estimation.getName());
-        event.setDate(eventService.getEventCreationDate());
-        event.setEstimationName(estimation.getName());
+        Estimation estimation = phase.getEstimation();
+        String estimationName = estimation.getName();
+        event.setEstimationName(estimationName);
     }
 }
