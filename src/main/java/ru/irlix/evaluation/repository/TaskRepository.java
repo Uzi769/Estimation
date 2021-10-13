@@ -18,6 +18,4 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByPhaseId(Long phaseId);
 
     Optional<Task> findByName(@NonNull String name);
-
-
 }

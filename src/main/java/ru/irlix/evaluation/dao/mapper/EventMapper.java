@@ -3,7 +3,6 @@ package ru.irlix.evaluation.dao.mapper;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
 import ru.irlix.evaluation.dao.entity.Phase;
@@ -28,7 +27,6 @@ public abstract class EventMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "date", ignore = true)
     @Mapping(target = "userName", ignore = true)
     @Mapping(target = "estimationName", ignore = true)
@@ -38,7 +36,6 @@ public abstract class EventMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "date", ignore = true)
     @Mapping(target = "userName", ignore = true)
     @Mapping(target = "estimationName", ignore = true)
@@ -48,7 +45,6 @@ public abstract class EventMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "user", ignore = true)
     @Mapping(target = "date", ignore = true)
     @Mapping(target = "userName", ignore = true)
     @Mapping(target = "estimationName", ignore = true)
@@ -65,10 +61,6 @@ public abstract class EventMapper {
                         .map(a -> a.getFirstName() + a.getLastName())
                         .orElse(null));
         event.setEstimationName(task.getPhase().getEstimation().getName());
-        event.setUser(task.getPhase().getEstimation().getUsers()
-                        .stream()
-                        .findFirst()
-                        .orElse(null));
         event.setDate(eventService.getEventCreationDate());
         event.setEstimationName(task.getPhase().getEstimation().getName());
         event.setPhaseName(task.getPhase().getName());
@@ -84,10 +76,6 @@ public abstract class EventMapper {
                 .map(a -> a.getFirstName() + a.getLastName())
                 .orElse(null));
         event.setEstimationName(phase.getEstimation().getName());
-        event.setUser(phase.getEstimation().getUsers()
-                .stream()
-                .findFirst()
-                .orElse(null));
         event.setDate(eventService.getEventCreationDate());
         event.setEstimationName(phase.getEstimation().getName());
         event.setPhaseName(phase.getName());
@@ -102,10 +90,6 @@ public abstract class EventMapper {
                 .map(a -> a.getFirstName() + a.getLastName())
                 .orElse(null));
         event.setEstimationName(estimation.getName());
-        event.setUser(estimation.getUsers()
-                .stream()
-                .findFirst()
-                .orElse(null));
         event.setDate(eventService.getEventCreationDate());
         event.setEstimationName(estimation.getName());
     }

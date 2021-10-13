@@ -39,6 +39,7 @@ public class EventServiceImpl implements EventService {
 
     private final TaskHelper taskHelper;
 
+    @Transactional(readOnly = true)
     @Override
     public List<EventResponse> getAllEvents() {
         return eventRepository.findAll()
@@ -47,14 +48,12 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public Event saveTheEventBeforeDeletingEstimation(Long estimationId) {
         Estimation estimation = estimationHelper.findEstimationById(estimationId);
         return mapper.EstimationToEvent(estimation);
     }
 
-    @Transactional
     @Override
     public Event saveTheEventBeforeDeletingPhase(Long phaseId) {
         Phase phase = phaseHelper.findPhaseById(phaseId);
@@ -72,7 +71,7 @@ public class EventServiceImpl implements EventService {
         return mapper.TaskToEvent(task);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public void createEvent(JoinPoint joinPoint, String methodName) {
         Event event;
@@ -106,15 +105,14 @@ public class EventServiceImpl implements EventService {
                     break;
             }
         }
-
     }
 
+    @Transactional(readOnly = true)
     @Override
     public void deleteEvent(Event eventMediator, String methodName, JoinPoint joinPoint) {
         Event event = new Event();
         event.setUserName(eventMediator.getUserName());
         event.setEstimationName(eventMediator.getEstimationName());
-        event.setUser(eventMediator.getUser());
         event.setDate(eventMediator.getDate());
 
         switch (methodName) {

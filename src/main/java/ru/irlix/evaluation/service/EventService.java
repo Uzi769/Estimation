@@ -9,15 +9,18 @@ import java.util.List;
 
 public interface EventService {
     List<EventResponse> getAllEvents();
+
     Instant getEventCreationDate();
 
     void createEvent(JoinPoint joinPoint, String methodName);
+
     void deleteEvent(Event eventMediator, String methodName, JoinPoint joinPoint);
+
     Event saveTheEventBeforeDeletingEstimation(Long estimationId);
+
     Event saveTheEventBeforeDeletingPhase(Long phaseId);
+
     Event saveTheEventBeforeDeletingTask(Long phaseId);
-
-
 }
 
 

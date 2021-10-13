@@ -77,5 +77,4 @@ public class EventInfoAspect {
             eventMediator = eventService.saveTheEventBeforeDeletingTask(taskId);
         }
     }
-
 }

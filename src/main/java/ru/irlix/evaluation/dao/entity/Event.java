@@ -12,7 +12,6 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@Builder(toBuilder = true)
 public class Event {
 
     @Id
@@ -28,10 +27,6 @@ public class Event {
 
     @Column(name = "date")
     private Instant date;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Column(name = "estimation_name")
     private String estimationName;
