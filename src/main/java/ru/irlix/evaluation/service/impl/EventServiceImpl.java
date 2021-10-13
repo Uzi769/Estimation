@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
+import ru.irlix.evaluation.dao.entity.Phase;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dao.helper.EstimationHelper;
 import ru.irlix.evaluation.dao.helper.PhaseHelper;
@@ -38,29 +40,30 @@ public class EventServiceImpl implements EventService {
     public List<EventResponse> getAllEvents() {
         return eventRepository.findAll()
                 .stream()
-                .map(mapper::EventToEventResponse)
+                .map(mapper::eventToEventResponse)
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public void createEvent(JoinPoint joinPoint, Object returnValue) {
+    @Transactional
+    public void createEvent(JoinPoint joinPoint, Object value) {
+        Event event;
         String methodName = joinPoint.getSignature().getName();
         switch (methodName) {
             case "createEstimation":
-                EstimationResponse estimationResponse = (EstimationResponse) returnValue;
-                Event event = mapper.EstimationResponseToEvent(estimationResponse);
+                EstimationResponse estimationResponse = (EstimationResponse) value;
+                event = mapper.estimationResponseToEvent(estimationResponse);
                 event.setValue("Создана оценка");
                 eventRepository.save(event);
                 break;
             case "createPhase":
-                PhaseResponse phaseResponse = (PhaseResponse) returnValue;
+                PhaseResponse phaseResponse = (PhaseResponse) value;
                 event = mapper.phaseResponseToEvent(phaseResponse);
                 event.setValue("Создана фаза");
                 eventRepository.save(event);
                 break;
             case "createTask":
-                TaskResponse taskResponse = (TaskResponse) returnValue;
-                event = mapper.TaskResponseToEvent(taskResponse);
+                TaskResponse taskResponse = (TaskResponse) value;
+                event = mapper.taskResponseToEvent(taskResponse);
                 if (taskResponse.getType() == 1) {
                     event.setValue("Создана фича");
                 } else if (taskResponse.getType() == 2) {
@@ -68,39 +71,52 @@ public class EventServiceImpl implements EventService {
                 }
                 eventRepository.save(event);
                 break;
+            case "deleteEstimation":
+                Estimation estimation = (Estimation) value;
+                event = mapper.estimationToEvent(estimation);
+                event.setValue("Оценка удалена");
+                eventRepository.save(event);
+                break;
+            case "deletePhase":
+                Phase phase = (Phase) value;
+                event = mapper.phaseToEvent(phase);
+                event.setValue("Фаза удалена");
+                eventRepository.save(event);
+                break;
+            case "deleteTask":
+                Task task = (Task) value;
+                event = mapper.taskToEvent(task);
+                if (task.getType().getId() == 1) {
+                    event.setValue("Фича удалена");
+                } else if (task.getType().getId() == 2) {
+                    event.setValue("Задача удалена");
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + methodName);
         }
+
+        eventRepository.save(event);
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public void deleteEvent(Event eventMediator, String methodName, JoinPoint joinPoint) {
-        Event event = new Event();
-        event.setUserName(eventMediator.getUserName());
-        event.setEstimationName(eventMediator.getEstimationName());
-        event.setDate(eventMediator.getDate());
+    @Transactional(readOnly = true)
+    public Object getElementToDelete(JoinPoint joinPoint) {
+        String methodName = joinPoint.getSignature().getName();
+        Long id = Arrays.stream(joinPoint.getArgs())
+                .mapToLong(a -> (Long) a)
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Id not found"));
 
         switch (methodName) {
             case "deleteEstimation":
-                event.setValue("Удалена оценка");
-                break;
+                return estimationHelper.findEstimationById(id);
             case "deletePhase":
-                event.setValue("Удалена фаза");
-                event.setPhaseName(eventMediator.getPhaseName());
-                break;
+                return phaseHelper.findPhaseById(id);
             case "deleteTask":
-                Long id = (Long) Arrays.stream(joinPoint.getArgs()).findFirst()
-                        .orElseThrow(() -> new NotFoundException("Id not found"));
-                Task task = taskHelper.findTaskById(id);
-                if (task.getType().getId() == 1)
-                    event.setValue("Удалена фича");
-                else if (task.getType().getId() == 2) {
-                    event.setValue("Удалена задача");
-                }
-
-                event.setPhaseName(eventMediator.getPhaseName());
-                event.setTaskName(eventMediator.getTaskName());
-                break;
+                return taskHelper.findTaskById(id);
+            default:
+                throw new NotFoundException("Method " + methodName + " not found");
         }
-        eventRepository.save(event);
     }
 }
