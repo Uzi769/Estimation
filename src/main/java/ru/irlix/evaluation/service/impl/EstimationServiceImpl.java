@@ -166,6 +166,7 @@ public class EstimationServiceImpl implements EstimationService {
         }
     }
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional(readOnly = true)

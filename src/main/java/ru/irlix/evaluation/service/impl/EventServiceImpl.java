@@ -3,12 +3,14 @@ package ru.irlix.evaluation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
 import ru.irlix.evaluation.dao.entity.Task;
 import ru.irlix.evaluation.dao.helper.EstimationHelper;
-import ru.irlix.evaluation.dao.helper.PhaseHelper;
 import ru.irlix.evaluation.dao.helper.TaskHelper;
+import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.EventMapper;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.EventResponse;
@@ -28,9 +30,9 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final EventMapper mapper;
+    private final EstimationMapper estimationMapper;
 
     private final EstimationHelper estimationHelper;
-    private final PhaseHelper phaseHelper;
     private final TaskHelper taskHelper;
 
     @Transactional(readOnly = true)
@@ -42,7 +44,7 @@ public class EventServiceImpl implements EventService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createEvent(JoinPoint joinPoint, Object returnValue) {
         String methodName = joinPoint.getSignature().getName();
         switch (methodName) {
@@ -68,10 +70,21 @@ public class EventServiceImpl implements EventService {
                 }
                 eventRepository.save(event);
                 break;
+            case "getEstimationsReport":
+                Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+                Long id = (Long) objectEvent;
+                System.out.println("id = " + id);
+                Estimation estimation = estimationHelper.findEstimationById(id);
+                EstimationResponse estimationResponse1 = estimationMapper.estimationToEstimationResponse(estimation);
+                event = mapper.EstimationResponseToEvent(estimationResponse1);
+                event.setValue("Отчет выгружен");
+                System.out.println("event.getValue() = " + event.getValue());
+                eventRepository.save(event);
+                break;
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public void deleteEvent(Event eventMediator, String methodName, JoinPoint joinPoint) {
         Event event = new Event();
