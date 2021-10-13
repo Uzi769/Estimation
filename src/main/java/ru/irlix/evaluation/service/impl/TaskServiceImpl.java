@@ -43,8 +43,8 @@ public class TaskServiceImpl implements TaskService {
     public TaskResponse createTask(TaskRequest request) {
         Task task = mapper.taskRequestToTask(request);
         checkAccessToEstimation(task);
-
         Task savedTask = taskRepository.save(task);
+
         log.info("Task with id " + savedTask.getId() + " saved");
         return mapper.taskToResponse(savedTask);
     }
@@ -155,28 +155,28 @@ public class TaskServiceImpl implements TaskService {
             task.setType(type);
         }
 
-        if (request.getManagementReserve() != null) {
-            task.setManagementReserve(request.getManagementReserve());
+        if (request.getPmReserve() != null) {
+            task.setPmReserve(request.getPmReserve());
         }
 
         if (request.getQaReserve() != null) {
             task.setQaReserve(request.getQaReserve());
         }
 
-        if (request.getBagsReserve() != null) {
-            task.setBagsReserve(request.getBagsReserve());
+        if (request.getBugsReserve() != null) {
+            task.setBugsReserve(request.getBugsReserve());
         }
 
-        if (request.getManagementReserveOn() != null) {
-            task.setManagementReserveOn(request.getManagementReserveOn());
+        if (request.getPmReserveOn() != null) {
+            task.setPmReserveOn(request.getPmReserveOn());
         }
 
         if (request.getQaReserveOn() != null) {
             task.setQaReserveOn(request.getQaReserveOn());
         }
 
-        if (request.getBagsReserveOn() != null) {
-            task.setBagsReserveOn(request.getBagsReserveOn());
+        if (request.getBugsReserveOn() != null) {
+            task.setBugsReserveOn(request.getBugsReserveOn());
         }
 
         if (request.getComment() != null) {
@@ -193,12 +193,12 @@ public class TaskServiceImpl implements TaskService {
                 task.setRepeatCount(request.getRepeatCount());
             }
 
-            if (request.getHoursMin() != null) {
-                task.setHoursMin(request.getHoursMin());
+            if (request.getMinHours() != null) {
+                task.setMinHours(request.getMinHours());
             }
 
-            if (request.getHoursMax() != null) {
-                task.setHoursMax(request.getHoursMax());
+            if (request.getMaxHours() != null) {
+                task.setMaxHours(request.getMaxHours());
             }
 
             if (request.getRoleId() != null) {
@@ -208,7 +208,7 @@ public class TaskServiceImpl implements TaskService {
 
             if (request.getFeatureId() != null) {
                 Task parent = findTaskById(request.getFeatureId());
-                task.setParent(parent);
+                task.setFeature(parent);
             }
         }
     }

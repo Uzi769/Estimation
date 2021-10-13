@@ -43,16 +43,13 @@ public class UserHelper {
         if (!Objects.equals(user.getFirstName(), userKeycloakDto.getFirstName()) && userKeycloakDto.getFirstName() != null) {
             user.setFirstName(userKeycloakDto.getFirstName());
         }
+
         if (!Objects.equals(user.getLastName(), userKeycloakDto.getLastName()) && userKeycloakDto.getLastName() != null) {
             user.setLastName(userKeycloakDto.getLastName());
         }
+
         user.setDeleted(false);
         userRepository.save(user);
-        log.info("User with id " + user.getUserId() + " updated");
-    }
-
-    public boolean contains(UUID keycloakId) {
-        return userRepository.existsByKeycloakId(keycloakId);
     }
 
     public List<User> findAllUsers() {
@@ -61,6 +58,5 @@ public class UserHelper {
 
     public void saveUsers(List<User> users) {
         userRepository.saveAll(users);
-        users.forEach(user -> log.info("Users with id " + user.getUserId() + " updated"));
     }
 }

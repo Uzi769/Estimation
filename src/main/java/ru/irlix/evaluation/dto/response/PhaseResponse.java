@@ -19,9 +19,9 @@ public class PhaseResponse {
 
     private Integer sortOrder;
 
-    private Integer managementReserve;
+    private Integer pmReserve;
 
-    private Integer bagsReserve;
+    private Integer bugsReserve;
 
     private Integer qaReserve;
 
@@ -29,11 +29,11 @@ public class PhaseResponse {
 
     private Boolean done;
 
-    private Boolean managementReserveOn;
+    private Boolean pmReserveOn;
 
     private Boolean qaReserveOn;
 
-    private Boolean bagsReserveOn;
+    private Boolean bugsReserveOn;
 
     private List<TaskResponse> tasks;
 

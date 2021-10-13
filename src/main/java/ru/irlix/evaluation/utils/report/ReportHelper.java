@@ -1,9 +1,11 @@
 package ru.irlix.evaluation.utils.report;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import ru.irlix.evaluation.dao.entity.Estimation;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.report.sheet.*;
 
 import java.io.IOException;
@@ -13,24 +15,23 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class ReportHelper {
 
     @Value("${document-path}")
     private String path;
 
-    public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
-        List<String> roleCosts = EstimationReportSheet.getRoleCosts(estimation, request);
-        if (!request.keySet().containsAll(roleCosts)) {
-            throw new IllegalArgumentException("Costs are not shown for all roles.");
-        }
+    private final EstimationMath math;
 
+    public Resource getEstimationReportResource(Estimation estimation, Map<String, String> request) throws IOException {
+        math.checkRolesInRequest(estimation, request);
         ExcelWorkbook excelWorkbook = new ExcelWorkbook();
 
         List<EstimationReportSheet> sheets = new ArrayList<>();
-        sheets.add(new EstimationWithDetailsSheet(excelWorkbook));
-        sheets.add(new EstimationWithoutDetailsSheet(excelWorkbook));
-        sheets.add(new TasksByRolesSheet(excelWorkbook));
-        sheets.add(new PhaseEstimationSheet(excelWorkbook));
+        sheets.add(new EstimationWithDetailsSheet(math, excelWorkbook));
+        sheets.add(new EstimationWithoutDetailsSheet(math, excelWorkbook));
+        sheets.add(new TasksByRolesSheet(math, excelWorkbook));
+        sheets.add(new PhaseEstimationSheet(math, excelWorkbook));
 
         sheets.forEach(s -> s.getSheet(estimation, request));
 

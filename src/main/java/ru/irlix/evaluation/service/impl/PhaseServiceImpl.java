@@ -16,10 +16,12 @@ import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
+import ru.irlix.evaluation.dto.response.PhaseStatsResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.PhaseRepository;
 import ru.irlix.evaluation.service.PhaseService;
+import ru.irlix.evaluation.utils.math.EstimationMath;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.util.List;
@@ -34,6 +36,7 @@ public class PhaseServiceImpl implements PhaseService {
     private final EstimationHelper estimationHelper;
     private final UserHelper userHelper;
     private final PhaseMapper mapper;
+    private final EstimationMath math;
 
     @EventInfo
     @LogInfo
@@ -42,8 +45,8 @@ public class PhaseServiceImpl implements PhaseService {
     public PhaseResponse createPhase(PhaseRequest phaseRequest) {
         Phase phase = mapper.phaseRequestToPhase(phaseRequest);
         checkAccessToEstimation(phase);
-
         Phase savedPhase = phaseRepository.save(phase);
+
         log.info("Phase with id " + savedPhase.getId() + " saved");
         return mapper.phaseToPhaseResponse(savedPhase);
     }
@@ -106,16 +109,16 @@ public class PhaseServiceImpl implements PhaseService {
             phase.setSortOrder(phaseRequest.getSortOrder());
         }
 
-        if (phaseRequest.getManagementReserve() != null) {
-            phase.setManagementReserve(phaseRequest.getManagementReserve());
+        if (phaseRequest.getPmReserve() != null) {
+            phase.setPmReserve(phaseRequest.getPmReserve());
         }
 
         if (phaseRequest.getQaReserve() != null) {
             phase.setQaReserve(phaseRequest.getQaReserve());
         }
 
-        if (phaseRequest.getBagsReserve() != null) {
-            phase.setBagsReserve(phaseRequest.getBagsReserve());
+        if (phaseRequest.getBugsReserve() != null) {
+            phase.setBugsReserve(phaseRequest.getBugsReserve());
         }
 
         if (phaseRequest.getRiskReserve() != null) {
@@ -126,16 +129,16 @@ public class PhaseServiceImpl implements PhaseService {
             phase.setDone(phaseRequest.getDone());
         }
 
-        if (phaseRequest.getManagementReserveOn() != null) {
-            phase.setManagementReserveOn(phaseRequest.getManagementReserveOn());
+        if (phaseRequest.getPmReserveOn() != null) {
+            phase.setPmReserveOn(phaseRequest.getPmReserveOn());
         }
 
         if (phaseRequest.getQaReserveOn() != null) {
             phase.setQaReserveOn(phaseRequest.getQaReserveOn());
         }
 
-        if (phaseRequest.getBagsReserveOn() != null) {
-            phase.setBagsReserveOn(phaseRequest.getBagsReserveOn());
+        if (phaseRequest.getBugsReserveOn() != null) {
+            phase.setBugsReserveOn(phaseRequest.getBugsReserveOn());
         }
         if (phaseRequest.getRiskReserveOn() != null) {
             phase.setRiskReserveOn(phaseRequest.getRiskReserveOn());
@@ -159,6 +162,17 @@ public class PhaseServiceImpl implements PhaseService {
         Phase phase = findPhaseById(id);
         phaseRepository.delete(phase);
         log.info("Phase with id " + phase.getId() + " deleted");
+    }
+
+    @LogInfo
+    @Override
+    @Transactional
+    public List<PhaseStatsResponse> getPhaseStats(Long id) {
+        Phase phase = findPhaseById(id);
+        List<PhaseStatsResponse> phaseStats = math.getPhaseStats(phase);
+
+        log.info("Phase stats by id " + id + " calculated");
+        return phaseStats;
     }
 
     private Phase findPhaseById(Long id) {

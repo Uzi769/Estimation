@@ -30,5 +30,12 @@
     <include file="alter-user-changelog.xml" relativeToChangelogFile="true"/>
     <include file="alter-user-info-changelog.xml" relativeToChangelogFile="true"/>
     <include file="create-event-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-file-storage-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="create-folder-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-data-to-folder-dictionary-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="alter-file-storage-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-roles-tables-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="naming-fix-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="optional-roles-default-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

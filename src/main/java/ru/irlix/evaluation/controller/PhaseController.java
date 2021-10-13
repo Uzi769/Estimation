@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.request.PhaseUpdateRequest;
+import ru.irlix.evaluation.dto.response.PhaseStatsResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.service.PhaseService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
@@ -63,6 +64,12 @@ public class PhaseController {
     public PhaseResponse findPhaseById(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
         return phaseService.findPhaseResponseById(id);
+    }
+
+    @GetMapping("/{id}/stats")
+    public List<PhaseStatsResponse> getPhaseStats(@PathVariable("id") @Positive(message = "{id.positive}") Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return phaseService.getPhaseStats(id);
     }
 
     @PreAuthorize("!hasRole('ROLE_ADMIN') or hasRole('ROLE_SALES')")

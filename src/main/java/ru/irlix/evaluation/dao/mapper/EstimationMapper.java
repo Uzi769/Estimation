@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Status;
 import ru.irlix.evaluation.dao.entity.User;
+import ru.irlix.evaluation.dao.helper.FileStorageHelper;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
@@ -30,12 +31,19 @@ public abstract class EstimationMapper {
     @Autowired
     protected UserHelper userHelper;
 
+    @Autowired
+    protected EstimationMath math;
+
+    @Autowired
+    protected FileStorageHelper fileStorageHelper;
+
     @Mapping(target = "status", ignore = true)
     public abstract Estimation estimationRequestToEstimation(EstimationRequest estimationRequest);
 
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "hoursMin", ignore = true)
-    @Mapping(target = "hoursMax", ignore = true)
+    @Mapping(target = "minHours", ignore = true)
+    @Mapping(target = "maxHours", ignore = true)
+    @Mapping(target = "fileResponseList", ignore = true)
     public abstract EstimationResponse estimationToEstimationResponse(Estimation estimation);
 
     public abstract List<EstimationResponse> estimationToEstimationResponse(List<Estimation> estimation);
@@ -67,7 +75,8 @@ public abstract class EstimationMapper {
             response.setStatus(estimation.getStatus().getId());
         }
 
-        response.setHoursMin(EstimationMath.calcEstimationMinHours(estimation, null));
-        response.setHoursMax(EstimationMath.calcEstimationMaxHours(estimation, null));
+        response.setMinHours(math.getEstimationMinHours(estimation, null));
+        response.setMaxHours(math.getEstimationMaxHours(estimation, null));
+        response.setFileResponseList(fileStorageHelper.getFileResponseList(estimation));
     }
 }

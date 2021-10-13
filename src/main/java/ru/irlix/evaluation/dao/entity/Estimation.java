@@ -2,7 +2,6 @@ package ru.irlix.evaluation.dao.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -10,13 +9,12 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Table(name="estimation")
+@Table(name = "estimation")
 @Getter
 @Setter
-@ToString
 @NamedEntityGraph(
-    name = "estimation.phases",
-    attributeNodes = @NamedAttributeNode("phases")
+        name = "estimation.phases",
+        attributeNodes = @NamedAttributeNode("phases")
 )
 public class Estimation {
 
@@ -59,10 +57,25 @@ public class Estimation {
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> users;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
+    private List<FileStorage> fileStorages;
+
     @PrePersist
     public void prePersist() {
         if (risk == null) {
             risk = 0;
+        }
+
+        if (name == null) {
+            name = "Новая оценка";
+        }
+
+        if (description == null) {
+            description = "";
+        }
+
+        if (client == null) {
+            client = "Клиент";
         }
     }
 }

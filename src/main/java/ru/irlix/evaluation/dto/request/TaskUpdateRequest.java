@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class TaskUpdateRequest extends TaskRequest {
-    private Long id;
 
+    private Long id;
 }

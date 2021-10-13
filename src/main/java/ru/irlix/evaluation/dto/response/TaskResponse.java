@@ -19,25 +19,25 @@ public class TaskResponse {
 
     private Integer repeatCount;
 
-    private Double hoursMin;
+    private Double minHours;
 
-    private Double hoursMax;
+    private Double maxHours;
 
     private Long roleId;
 
-    private Long parentId;
+    private Long featureId;
 
-    private Integer bagsReserve;
+    private Integer bugsReserve;
 
     private Integer qaReserve;
 
-    private Integer managementReserve;
+    private Integer pmReserve;
 
-    private boolean bagsReserveOn;
+    private boolean bugsReserveOn;
 
     private boolean qaReserveOn;
 
-    private boolean managementReserveOn;
+    private boolean pmReserveOn;
 
     private String comment;
 

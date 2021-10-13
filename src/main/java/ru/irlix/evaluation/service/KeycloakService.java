@@ -10,5 +10,5 @@ public interface KeycloakService {
 
     List<UserKeycloakDto> getAllUsers();
 
-    void update();
+    void updateUsers();
 }

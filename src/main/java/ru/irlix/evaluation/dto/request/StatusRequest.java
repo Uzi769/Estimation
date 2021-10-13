@@ -8,6 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class StatusRequest {
+
     private String value;
+
     private String displayValue;
 }
