@@ -148,11 +148,17 @@ public class EventServiceImpl implements EventService {
 
             if (insertedUserList.size() != 0) {
                 value.append("Добавленные пользователи: ");
-                insertedUserList.forEach(user -> setUserString(value, user));
+                List<String> userList = insertedUserList.stream()
+                        .map(user -> user.getFirstName() + " " + user.getLastName())
+                        .collect(Collectors.toList());
+                value.append(userList).append(" ");
             }
             if (deletedUserList.size() != 0) {
                 value.append("Удаленные пользователи: ");
-                deletedUserList.forEach(user -> setUserString(value, user));
+                List<String> userList = deletedUserList.stream()
+                        .map(user -> user.getFirstName() + " " + user.getLastName())
+                        .collect(Collectors.toList());
+                value.append(userList);
             }
         }
         if (!value.toString().equals("")) {
@@ -171,13 +177,6 @@ public class EventServiceImpl implements EventService {
         Event event = mapper.estimationResponseToEvent(estimationResponse);
         event.setValue("Отчет выгружен");
         return event;
-    }
-
-    private void setUserString(StringBuilder value, User user) {
-        value.append(user.getFirstName());
-        value.append(" ");
-        value.append(user.getLastName());
-        value.append(" ");
     }
 
     @Override
