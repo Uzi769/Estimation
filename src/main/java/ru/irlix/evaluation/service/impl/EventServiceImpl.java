@@ -100,7 +100,7 @@ public class EventServiceImpl implements EventService {
         Event event = mapper.taskResponseToEvent(taskResponse);
         if (taskResponse.getType().equals(EntitiesIdConstants.FEATURE_ID)) {
             event.setValue("Создана фича");
-        } else if (taskResponse.getType() == 2) {
+        } else if (taskResponse.getType().equals(EntitiesIdConstants.TASK_ID)) {
             event.setValue("Создана задача");
         }
         return event;
@@ -120,7 +120,7 @@ public class EventServiceImpl implements EventService {
 
     private Event getEvent(Task task) {
         Event event = mapper.taskToEvent(task);
-        if (task.getType().getId() == 1) {
+        if (task.getType().getId().equals(EntitiesIdConstants.FEATURE_ID)) {
             event.setValue("Фича удалена");
         } else if (task.getType().getId().equals(EntitiesIdConstants.TASK_ID)) {
             event.setValue("Задача удалена");

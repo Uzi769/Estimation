@@ -20,9 +20,7 @@ public class EventInfoAspect {
     @AfterReturning(value = "@annotation(ru.irlix.evaluation.aspect.EventInfo)", returning = "value")
     public void makeSavingEvent(JoinPoint jp, Object value) {
         String methodName = jp.getSignature().getName();
-        if (methodName.contains("create") ||
-                methodName.contains("Report") ||
-                methodName.contains("update")) {
+        if (checkMethodName(methodName)) {
             eventService.createEvent(jp, value);
         }
     }
@@ -38,5 +36,9 @@ public class EventInfoAspect {
         Object proceed = jp.proceed();
         eventService.createEvent(jp, elementToDelete);
         return proceed;
+    }
+
+    private boolean checkMethodName(String methodName) {
+        return methodName.contains("create") || methodName.contains("Report") || methodName.contains("update");
     }
 }
