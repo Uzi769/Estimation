@@ -107,15 +107,24 @@ public class FileStorageHelper {
                 e.printStackTrace();
                 log.error(e.getMessage());
             }
-        else
-            throw new NotFoundException("File '" + fileStorage.getFileName() + "' with id " + fileStorage.getId() + " not found");
     }
 
     private Map<Long, String> findFilesByEstimationAndFolder(Estimation estimation, Folder folder) {
         Map<Long, String> fileMap = new TreeMap<>();
         List<FileStorage> fileStorageList = fileStorageRepository.findAllByEstimationAndFolder(estimation, folder);
-        fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
+        fileStorageList.forEach(file -> {
+            if (checkExist(file))
+                fileMap.put(file.getId(), file.getFileName());
+        });
         return fileMap;
+    }
+
+    private boolean checkExist(FileStorage fileStorage) {
+        Path rootLocation = Paths.get(filePath);
+        String fileName = fileStorage.getFileName();
+        String extension = fileName.substring(fileName.lastIndexOf("."));
+        Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
+        return Files.exists(filePath);
     }
 
     public FileStorage findFileById(Long id) {
