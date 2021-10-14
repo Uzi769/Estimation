@@ -141,12 +141,10 @@ public class EventServiceImpl implements EventService {
             List<User> oldUserList = estimation.getUsers();
             List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
 
-            //список удаленных пользователей:
-            List<User> deletedUserList = oldUserList.stream().filter(oldUser ->
-                    !newUserList.contains(oldUser)).collect(Collectors.toList());
-            //список добавленных пользователей:
-            List<User> insertedUserList = newUserList.stream().filter(newUser ->
-                    !oldUserList.contains(newUser)).collect(Collectors.toList());
+            List<User> deletedUserList = oldUserList.stream()
+                    .filter(oldUser -> !newUserList.contains(oldUser)).collect(Collectors.toList());
+            List<User> insertedUserList = newUserList.stream()
+                    .filter(newUser -> !oldUserList.contains(newUser)).collect(Collectors.toList());
 
             if (insertedUserList.size() != 0) {
                 value.append("Добавленные пользователи: ");
