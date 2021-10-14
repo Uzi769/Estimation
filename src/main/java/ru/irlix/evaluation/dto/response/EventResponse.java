@@ -17,6 +17,4 @@ public class EventResponse {
     private Instant date;
 
     private String userName;
-
-    private String target;
 }
