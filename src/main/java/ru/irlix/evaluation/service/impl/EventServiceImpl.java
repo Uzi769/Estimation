@@ -129,7 +129,6 @@ public class EventServiceImpl implements EventService {
     }
 
     private Event getUserEvent(JoinPoint joinPoint) {
-        System.out.println("getUserEvent");
         Event event = null;
         Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
         Long id = (Long) objectEvent;
@@ -141,9 +140,6 @@ public class EventServiceImpl implements EventService {
         if (estimationRequest != null) {
             List<User> oldUserList = estimation.getUsers();
             List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
-
-            System.out.println("oldUserList = " + oldUserList);
-            System.out.println("newUserList = " + newUserList);
 
             //список удаленных пользователей:
             List<User> deletedUserList = oldUserList.stream().filter(oldUser ->
