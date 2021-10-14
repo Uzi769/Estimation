@@ -1,13 +1,13 @@
 package ru.irlix.evaluation.service;
 
 import org.aspectj.lang.JoinPoint;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.irlix.evaluation.dto.response.EventResponse;
-
-import java.util.List;
 
 public interface EventService {
 
-    List<EventResponse> getAllEvents();
+    Page<EventResponse> getAllEvents(Pageable pageable);
 
     void createEvent(JoinPoint joinPoint, Object value);
 
