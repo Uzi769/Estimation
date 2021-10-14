@@ -120,6 +120,6 @@ public class FileStorageHelper {
 
     public FileStorage findFileById(Long id) {
         return fileStorageRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Ашду with id " + id + " not found"));
+                .orElseThrow(() -> new NotFoundException("File with id " + id + " not found"));
     }
 }
