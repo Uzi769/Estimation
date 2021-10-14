@@ -42,6 +42,6 @@ public class EventInfoAspect {
         return methodName.contains("create") ||
                 methodName.contains("Report") ||
                 methodName.contains("update") ||
-                methodName.contains("File");
+                methodName.contains("storeFile");
     }
 }

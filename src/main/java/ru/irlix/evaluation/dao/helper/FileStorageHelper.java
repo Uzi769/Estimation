@@ -117,4 +117,9 @@ public class FileStorageHelper {
         fileStorageList.forEach(file -> fileMap.put(file.getId(), file.getFileName()));
         return fileMap;
     }
+
+    public FileStorage findFileById(Long id) {
+        return fileStorageRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Ашду with id " + id + " not found"));
+    }
 }

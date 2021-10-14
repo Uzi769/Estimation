@@ -7,10 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.dao.entity.*;
-import ru.irlix.evaluation.dao.helper.EstimationHelper;
-import ru.irlix.evaluation.dao.helper.PhaseHelper;
-import ru.irlix.evaluation.dao.helper.TaskHelper;
-import ru.irlix.evaluation.dao.helper.UserHelper;
+import ru.irlix.evaluation.dao.helper.*;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.EventMapper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
@@ -41,6 +38,7 @@ public class EventServiceImpl implements EventService {
     private final PhaseHelper phaseHelper;
     private final TaskHelper taskHelper;
     private final UserHelper userHelper;
+    private final FileStorageHelper fileStorageHelper;
 
     @Transactional(readOnly = true)
     @Override
@@ -81,7 +79,10 @@ public class EventServiceImpl implements EventService {
                 event = getUserEvent(joinPoint);
                 break;
             case "storeFileList":
-                event = getFileEvent(joinPoint);
+                event = getStoredFileEvent(joinPoint);
+                break;
+            case "deleteFile":
+                event = getDeletedFileEvent((FileStorage) value);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + methodName);
@@ -134,7 +135,7 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
-    private Event getFileEvent(JoinPoint joinPoint) {
+    private Event getStoredFileEvent(JoinPoint joinPoint) {
         Event event = null;
         Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
         List<?> multipartFileList = (List<?>) objectEvent;
@@ -153,6 +154,12 @@ public class EventServiceImpl implements EventService {
             String value = "Прикрепленные файлы: " + fileNameList;
             event.setValue(value);
         }
+        return event;
+    }
+
+    private Event getDeletedFileEvent(FileStorage fileStorage) {
+        Event event = mapper.estimationToEvent(fileStorage.getEstimation());
+        event.setValue("Удален файл: " + fileStorage.getFileName());
         return event;
     }
 
@@ -224,6 +231,8 @@ public class EventServiceImpl implements EventService {
                 return phaseHelper.findPhaseById(id);
             case "deleteTask":
                 return taskHelper.findTaskById(id);
+            case "deleteFile":
+                return fileStorageHelper.findFileById(id);
             default:
                 throw new NotFoundException("Method " + methodName + " not found");
         }
