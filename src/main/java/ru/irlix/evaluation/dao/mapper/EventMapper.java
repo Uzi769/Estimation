@@ -29,7 +29,6 @@ public abstract class EventMapper {
     private PhaseHelper phaseHelper;
 
     @Mapping(target = "description", source = "value")
-    @Mapping(target = "target", ignore = true)
     public abstract EventResponse eventToEventResponse(Event event);
 
     @Mapping(target = "id", ignore = true)
@@ -55,19 +54,6 @@ public abstract class EventMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "taskName", source = "name")
     public abstract Event taskToEvent(Task task);
-
-    @AfterMapping
-    protected void map(@MappingTarget EventResponse eventResponse, Event event) {
-        if (event.getTaskName() != null) {
-            eventResponse.setTarget(event.getTaskName());
-        } else if (event.getPhaseName() != null) {
-            eventResponse.setTarget(event.getPhaseName());
-        } else if (event.getEstimationName() != null) {
-            eventResponse.setTarget(event.getEstimationName());
-        } else {
-            eventResponse.setTarget("");
-        }
-    }
 
     @AfterMapping
     protected void map(@MappingTarget Event event) {

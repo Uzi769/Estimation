@@ -61,6 +61,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @EventInfo
     @Transactional
     public TaskResponse updateTask(Long id, TaskRequest taskRequest) {
         Task task = updateTaskById(id, taskRequest);

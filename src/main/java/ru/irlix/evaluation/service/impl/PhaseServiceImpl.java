@@ -64,6 +64,7 @@ public class PhaseServiceImpl implements PhaseService {
     }
 
     @LogInfo
+    @EventInfo
     @Override
     @Transactional
     public PhaseResponse updatePhase(Long id, PhaseRequest phaseRequest) {
