@@ -5,6 +5,7 @@ import org.aspectj.lang.JoinPoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import ru.irlix.evaluation.dao.entity.*;
 import ru.irlix.evaluation.dao.helper.EstimationHelper;
 import ru.irlix.evaluation.dao.helper.PhaseHelper;
@@ -22,8 +23,10 @@ import ru.irlix.evaluation.repository.EventRepository;
 import ru.irlix.evaluation.service.EventService;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,6 +80,9 @@ public class EventServiceImpl implements EventService {
             case "updateEstimation":
                 event = getUserEvent(joinPoint);
                 break;
+            case "storeFileList":
+                event = getFileEvent(joinPoint);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + methodName);
         }
@@ -128,6 +134,28 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
+    private Event getFileEvent(JoinPoint joinPoint) {
+        Event event = null;
+        Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+        List<?> multipartFileList = (List<?>) objectEvent;
+        List<String> fileNameList = new ArrayList<>();
+
+        Objects.requireNonNull(multipartFileList).forEach(file -> {
+            MultipartFile multipartFile = (MultipartFile) file;
+            fileNameList.add(multipartFile.getOriginalFilename());
+        });
+
+        Estimation estimation = (joinPoint.getArgs()[1] instanceof Estimation) ?
+                (Estimation) joinPoint.getArgs()[1]
+                : null;
+        if (fileNameList.size() != 0) {
+            event = mapper.estimationToEvent(estimation);
+            String value = "Прикрепленные файлы: " + fileNameList;
+            event.setValue(value);
+        }
+        return event;
+    }
+
     private Event getUserEvent(JoinPoint joinPoint) {
         Event event = null;
         Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
@@ -137,7 +165,7 @@ public class EventServiceImpl implements EventService {
                 (EstimationRequest) joinPoint.getArgs()[1]
                 : null;
         StringBuilder value = new StringBuilder();
-        if (estimationRequest != null) {
+        if (estimationRequest != null && estimationRequest.getUserIdList() != null) {
             List<User> oldUserList = estimation.getUsers();
             List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
 

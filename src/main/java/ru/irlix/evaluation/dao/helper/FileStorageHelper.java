@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.irlix.evaluation.aspect.EventInfo;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.FileStorage;
@@ -39,6 +40,7 @@ public class FileStorageHelper {
     private final FolderHelper folderHelper;
     private final FolderMapper folderMapper;
 
+    @EventInfo
     @LogInfo
     public void storeFileList(List<MultipartFile> multipartFileList, Estimation estimation) {
         Path rootLocation = Paths.get(filePath);
