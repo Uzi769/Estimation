@@ -137,7 +137,7 @@ public class EventServiceImpl implements EventService {
                 (EstimationRequest) joinPoint.getArgs()[1]
                 : null;
         StringBuilder value = new StringBuilder();
-        if (estimationRequest != null) {
+        if (estimationRequest != null && estimationRequest.getUserIdList() != null) {
             List<User> oldUserList = estimation.getUsers();
             List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
 
