@@ -2,6 +2,8 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,11 +51,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<EventResponse> getAllEvents() {
-        return eventRepository.findAll()
-                .stream()
-                .map(mapper::eventToEventResponse)
-                .collect(Collectors.toList());
+    public Page<EventResponse> getAllEvents(Pageable pageable) {
+        Page<Event> eventsPage = eventRepository.findAllByOrderByIdDesc(pageable);
+        return mapper.eventToEventResponse(eventsPage);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

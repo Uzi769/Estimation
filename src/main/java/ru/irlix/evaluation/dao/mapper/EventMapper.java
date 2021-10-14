@@ -5,6 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.Event;
 import ru.irlix.evaluation.dao.entity.Phase;
@@ -18,6 +20,7 @@ import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.time.Instant;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class EventMapper {
@@ -30,6 +33,13 @@ public abstract class EventMapper {
 
     @Mapping(target = "description", source = "value")
     public abstract EventResponse eventToEventResponse(Event event);
+
+    public abstract List<EventResponse> eventToEventResponse(List<Event> event);
+
+    public Page<EventResponse> eventToEventResponse(Page<Event> events) {
+        List<EventResponse> responses = eventToEventResponse(events.getContent());
+        return new PageImpl<>(responses, events.getPageable(), events.getTotalElements());
+    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "estimationName", source = "name")
