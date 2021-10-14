@@ -39,6 +39,9 @@ public class EventInfoAspect {
     }
 
     private boolean checkMethodName(String methodName) {
-        return methodName.contains("create") || methodName.contains("Report") || methodName.contains("update");
+        return methodName.contains("create") ||
+                methodName.contains("Report") ||
+                methodName.contains("update") ||
+                methodName.contains("storeFile");
     }
 }

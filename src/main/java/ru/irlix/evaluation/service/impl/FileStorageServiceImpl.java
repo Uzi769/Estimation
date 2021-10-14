@@ -9,6 +9,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.irlix.evaluation.aspect.EventInfo;
 import ru.irlix.evaluation.aspect.LogInfo;
 import ru.irlix.evaluation.dao.entity.FileStorage;
 import ru.irlix.evaluation.dao.entity.User;
@@ -58,6 +59,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
     }
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional
