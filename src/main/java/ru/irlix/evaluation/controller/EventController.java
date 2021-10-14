@@ -16,10 +16,10 @@ import ru.irlix.evaluation.utils.constant.UrlConstants;
 import java.util.List;
 
 @RestController
-@RequestMapping("/events")
+@RequestMapping(UrlConstants.BASE_URL + "/events")
 @RequiredArgsConstructor
 @Validated
-@CrossOrigin(exposedHeaders = "Content-Disposition")
+@CrossOrigin
 public class EventController {
 
     private final EventService eventService;
