@@ -62,6 +62,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
     }
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional
@@ -127,7 +128,6 @@ public class EstimationServiceImpl implements EstimationService {
 
         String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userHelper.findUserByKeycloakId(keycloakId);
-
         if (!SecurityUtils.hasAccessToAllEstimations() && !estimation.getUsers().contains(user)) {
             throw new AccessDeniedException("User with id " + keycloakId + " cant get access to estimation");
         }
@@ -166,6 +166,7 @@ public class EstimationServiceImpl implements EstimationService {
         }
     }
 
+    @EventInfo
     @LogInfo
     @Override
     @Transactional(readOnly = true)
