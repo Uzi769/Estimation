@@ -173,7 +173,9 @@ public class EventServiceImpl implements EventService {
 
         if (fileNameList.size() != 0) {
             event = mapper.estimationToEvent(estimation);
-            String value = "Прикрепленные файлы: " + fileNameList;
+            String value = "Файл(ы): " + fileNameList + " прикреплен(ы) к оценке "
+                    + Objects.requireNonNull(estimation).getName()
+                    + "(" + estimation.getId() + ")";
             event.setValue(value);
         }
         return event;
@@ -181,7 +183,9 @@ public class EventServiceImpl implements EventService {
 
     private Event getEvent(FileStorage fileStorage) {
         Event event = mapper.estimationToEvent(fileStorage.getEstimation());
-        event.setValue("Удален файл: " + fileStorage.getFileName());
+        event.setValue("Файл " + fileStorage.getFileName() + " удален из оценки "
+                + fileStorage.getEstimation().getName()
+                + "(" + fileStorage.getEstimation().getId() + ")");
         return event;
     }
 
