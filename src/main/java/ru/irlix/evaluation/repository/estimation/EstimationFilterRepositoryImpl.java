@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import ru.irlix.evaluation.dao.entity.Estimation;
 import ru.irlix.evaluation.dao.entity.User;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationPageRequest;
+import ru.irlix.evaluation.dto.request.PageableAndSortableRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -111,7 +111,7 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         return manager.createQuery(countQuery).getSingleResult();
     }
 
-    private Pageable getPageable(EstimationPageRequest request) {
+    private Pageable getPageable(PageableAndSortableRequest request) {
         return PageRequest.of(
                 request.getPage(),
                 request.getSize(),
@@ -120,11 +120,11 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
         );
     }
 
-    private String getSortFields(EstimationPageRequest request) {
+    private String getSortFields(PageableAndSortableRequest request) {
         return request.getNameSortField() == null ? "createDate" : request.getNameSortField();
     }
 
-    private Sort.Direction getSort(EstimationPageRequest request) {
+    private Sort.Direction getSort(PageableAndSortableRequest request) {
         if (request.getSortAsc() == null) {
             return Sort.Direction.DESC;
         }

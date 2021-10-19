@@ -42,68 +42,72 @@ public abstract class EventMapper {
     }
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "estimationId", source = "id")
     @Mapping(target = "estimationName", source = "name")
     public abstract Event estimationResponseToEvent(EstimationResponse estimation);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "phaseId", source = "id")
     @Mapping(target = "phaseName", source = "name")
     public abstract Event phaseResponseToEvent(PhaseResponse phase);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "taskId", source = "id")
     @Mapping(target = "taskName", source = "name")
     public abstract Event taskResponseToEvent(TaskResponse task);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "estimationId", source = "id")
     @Mapping(target = "estimationName", source = "name")
     public abstract Event estimationToEvent(Estimation estimation);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "phaseId", source = "id")
     @Mapping(target = "phaseName", source = "name")
     public abstract Event phaseToEvent(Phase phase);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "taskId", source = "id")
     @Mapping(target = "taskName", source = "name")
     public abstract Event taskToEvent(Task task);
 
     @AfterMapping
     protected void map(@MappingTarget Event event) {
-        event.setUserName(SecurityUtils.getUserName());
+        event.setUsername(SecurityUtils.getUserName());
         event.setDate(Instant.now());
     }
 
     @AfterMapping
     protected void map(@MappingTarget Event event, PhaseResponse phase) {
         Estimation estimation = estimationHelper.findEstimationById(phase.getEstimationId());
-        String estimationName = estimation.getName();
-        event.setEstimationName(estimationName);
+        event.setEstimationName(estimation.getName());
     }
 
     @AfterMapping
     protected void map(@MappingTarget Event event, TaskResponse task) {
         Phase phase = phaseHelper.findPhaseById(task.getPhaseId());
-        String phaseName = phase.getName();
-        event.setPhaseName(phaseName);
+        event.setPhaseName(phase.getName());
 
         Estimation estimation = phase.getEstimation();
-        String estimationName = estimation.getName();
-        event.setEstimationName(estimationName);
+        event.setEstimationId(estimation.getId());
+        event.setEstimationName(estimation.getName());
     }
 
     @AfterMapping
     protected void map(@MappingTarget Event event, Phase phase) {
         Estimation estimation = phase.getEstimation();
-        String estimationName = estimation.getName();
-        event.setEstimationName(estimationName);
+        event.setEstimationId(estimation.getId());
+        event.setEstimationName(estimation.getName());
     }
 
     @AfterMapping
     protected void map(@MappingTarget Event event, Task task) {
         Phase phase = task.getPhase();
-        String phaseName = phase.getName();
-        event.setPhaseName(phaseName);
+        event.setPhaseId(phase.getId());
+        event.setPhaseName(phase.getName());
 
         Estimation estimation = phase.getEstimation();
-        String estimationName = estimation.getName();
-        event.setEstimationName(estimationName);
+        event.setEstimationId(estimation.getId());
+        event.setEstimationName(estimation.getName());
     }
 }
