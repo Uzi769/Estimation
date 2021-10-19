@@ -37,5 +37,6 @@
     <include file="add-roles-tables-changelog.xml" relativeToChangelogFile="true"/>
     <include file="naming-fix-changelog.xml" relativeToChangelogFile="true"/>
     <include file="optional-roles-default-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="add-id-to-event-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

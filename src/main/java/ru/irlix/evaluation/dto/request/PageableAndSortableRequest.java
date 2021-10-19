@@ -12,7 +12,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class EstimationPageRequest {
+public class PageableAndSortableRequest {
 
     @PositiveOrZero(message = "{page.positiveOrZero}")
     private Integer page = 0;

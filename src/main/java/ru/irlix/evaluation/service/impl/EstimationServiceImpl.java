@@ -20,7 +20,7 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.FileStorageMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.EstimationPageRequest;
+import ru.irlix.evaluation.dto.request.PageableAndSortableRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
 import ru.irlix.evaluation.dto.response.*;
 import ru.irlix.evaluation.exception.NotFoundException;
@@ -117,7 +117,7 @@ public class EstimationServiceImpl implements EstimationService {
         return estimationMapper.estimationToEstimationResponse(estimationList);
     }
 
-    private void addUserIdToRequestIfRequired(EstimationPageRequest request) {
+    private void addUserIdToRequestIfRequired(PageableAndSortableRequest request) {
         if (!SecurityUtils.hasAccessToAllEstimations()) {
             String keycloakId = SecurityContextHolder.getContext().getAuthentication().getName();
             Long userId = userHelper.findUserByKeycloakId(keycloakId).getUserId();

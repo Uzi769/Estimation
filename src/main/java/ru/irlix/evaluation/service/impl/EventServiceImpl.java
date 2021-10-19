@@ -3,7 +3,6 @@ package ru.irlix.evaluation.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +14,7 @@ import ru.irlix.evaluation.dao.mapper.EventMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dao.mapper.TaskMapper;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.request.EventFilterRequest;
 import ru.irlix.evaluation.dto.request.PhaseRequest;
 import ru.irlix.evaluation.dto.request.TaskRequest;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
@@ -22,7 +22,7 @@ import ru.irlix.evaluation.dto.response.EventResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
 import ru.irlix.evaluation.dto.response.TaskResponse;
 import ru.irlix.evaluation.exception.NotFoundException;
-import ru.irlix.evaluation.repository.EventRepository;
+import ru.irlix.evaluation.repository.event.EventRepository;
 import ru.irlix.evaluation.service.EventService;
 import ru.irlix.evaluation.utils.constant.EntitiesIdConstants;
 
@@ -51,8 +51,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<EventResponse> getAllEvents(Pageable pageable) {
-        Page<Event> eventsPage = eventRepository.findAllByOrderByIdDesc(pageable);
+    public Page<EventResponse> getAllEvents(EventFilterRequest request) {
+        Page<Event> eventsPage = eventRepository.filter(request);
         return mapper.eventToEventResponse(eventsPage);
     }
 
@@ -83,7 +83,7 @@ public class EventServiceImpl implements EventService {
                 event = getReportEvent(joinPoint);
                 break;
             case "updateEstimation":
-                eventRepository.saveAll(getEsimtaionUpdateEvent(joinPoint));
+                eventRepository.saveAll(getEstimationUpdateEvent(joinPoint));
                 break;
             case "updatePhase":
                 eventRepository.saveAll(getPhaseUpdateEvent(joinPoint));
@@ -108,51 +108,57 @@ public class EventServiceImpl implements EventService {
 
     private Event getEvent(EstimationResponse estimationResponse) {
         Event event = mapper.estimationResponseToEvent(estimationResponse);
-        event.setValue("Создана оценка " + estimationResponse.getName() + " (" + estimationResponse.getId() + ")");
+        event.setValue("Создана оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ")");
         return event;
     }
 
     private Event getEvent(PhaseResponse phaseResponse) {
         Event event = mapper.phaseResponseToEvent(phaseResponse);
-        event.setValue("Создана фаза " + phaseResponse.getName() + " (" + phaseResponse.getId() + ")" + " у оценки "
-                + event.getEstimationName() + " (" + phaseResponse.getEstimationId() + ")");
+        event.setValue("Создана фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ")" + " у оценки "
+                + event.getEstimationName() + " (" + event.getEstimationId() + ")");
         return event;
     }
 
     private Event getEvent(TaskResponse taskResponse) {
         Event event = mapper.taskResponseToEvent(taskResponse);
+        String taskTypeAction;
         if (taskResponse.getType().equals(EntitiesIdConstants.FEATURE_ID)) {
-            event.setValue("Создана фича " + event.getTaskName() + " (" + taskResponse.getId() + ") у фазы "
-                    + event.getPhaseName() + " (" + taskResponse.getPhaseId() + ")");
-        } else if (taskResponse.getType().equals(EntitiesIdConstants.TASK_ID)) {
-            event.setValue("Создана задача" + event.getTaskName() + " (" + taskResponse.getId() + ") у фазы "
-                    + event.getPhaseName() + " (" + taskResponse.getPhaseId() + ")");
+            taskTypeAction = "Создана фича ";
+        } else {
+            taskTypeAction = "Создана задача ";
         }
+
+        event.setValue(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") у фазы "
+                + event.getPhaseName() + " (" + event.getPhaseId() + ") в оценке " + event.getEstimationName()
+                + " (" + event.getEstimationId() + ")");
         return event;
     }
 
     private Event getEvent(Estimation estimation) {
         Event event = mapper.estimationToEvent(estimation);
-        event.setValue("Оценка " + estimation.getName() + " (" + estimation.getId() + ") удалена");
+        event.setValue("Оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ") удалена");
         return event;
     }
 
     private Event getEvent(Phase phase) {
         Event event = mapper.phaseToEvent(phase);
-        event.setValue("Фаза " + phase.getName() + " (" + phase.getId() + ") удалена из оценки "
-                + phase.getEstimation().getName() + " (" + phase.getEstimation().getId() + ")");
+        event.setValue("Фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ") удалена из оценки "
+                + event.getEstimationName() + " (" + event.getEstimationId() + ")");
         return event;
     }
 
     private Event getEvent(Task task) {
         Event event = mapper.taskToEvent(task);
+        String taskTypeAction;
         if (task.getType().getId().equals(EntitiesIdConstants.FEATURE_ID)) {
-            event.setValue("Фича " + task.getName() + " (" + task.getId() + ") удалена из фазы "
-                    + task.getPhase().getName() + " (" + task.getPhase().getId() + ")");
-        } else if (task.getType().getId().equals(EntitiesIdConstants.TASK_ID)) {
-            event.setValue("Задача " + task.getName() + " (" + task.getId() + ") удалена из фазы "
-                    + task.getPhase().getName() + " (" + task.getPhase().getId() + ")");
+            taskTypeAction = "Фича ";
+        } else {
+            taskTypeAction = "Задача ";
         }
+
+        event.setValue(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") удалена из фазы "
+                + event.getPhaseName() + " (" + event.getPhaseId() + ") в оценке " + event.getEstimationName()
+                + " (" + event.getEstimationId() + ")");
         return event;
     }
 
@@ -184,12 +190,11 @@ public class EventServiceImpl implements EventService {
     private Event getEvent(FileStorage fileStorage) {
         Event event = mapper.estimationToEvent(fileStorage.getEstimation());
         event.setValue("Файл " + fileStorage.getFileName() + " удален из оценки "
-                + fileStorage.getEstimation().getName()
-                + "(" + fileStorage.getEstimation().getId() + ")");
+                + event.getEstimationName() + "(" + event.getEstimationId() + ")");
         return event;
     }
 
-    private List<Event> getEsimtaionUpdateEvent(JoinPoint joinPoint) {
+    private List<Event> getEstimationUpdateEvent(JoinPoint joinPoint) {
         List<Event> events = new ArrayList<>();
         Object objectId = Arrays.stream(joinPoint.getArgs())
                 .findFirst()
@@ -211,7 +216,7 @@ public class EventServiceImpl implements EventService {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
                 String newStatus = statusHelper.findStatusById(newStatusId).getDisplayValue();
-                event.setValue("У оценки " + getEstimationNameWithId(estimation) + " сменен статус с \""
+                event.setValue("У оценки " + estimation.getName() + " (" + estimation.getId() + ") сменен статус с \""
                         + estimation.getStatus().getDisplayValue() + "\" на \"" + newStatus + "\"");
                 events.add(event);
             }
@@ -223,7 +228,7 @@ public class EventServiceImpl implements EventService {
             if (!Objects.equals(newName, oldName)) {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
-                event.setValue("Оценка " + getEstimationNameWithId(estimation) + " переименована на "
+                event.setValue("Оценка " + estimation.getName() + " (" + estimation.getId() + ") переименована на "
                         + newName);
                 events.add(event);
             }
@@ -347,10 +352,6 @@ public class EventServiceImpl implements EventService {
         }
 
         return events;
-    }
-
-    private String getEstimationNameWithId(Estimation estimation) {
-        return estimation.getName() + " (" + estimation.getId() + ")";
     }
 
     private Event getReportEvent(JoinPoint joinPoint) {

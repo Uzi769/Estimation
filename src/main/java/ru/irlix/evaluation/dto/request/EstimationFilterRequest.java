@@ -9,7 +9,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-public class EstimationFilterRequest extends EstimationPageRequest {
+public class EstimationFilterRequest extends PageableAndSortableRequest {
 
     private String text;
 
