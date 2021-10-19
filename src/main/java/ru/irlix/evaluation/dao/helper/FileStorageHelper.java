@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Component
@@ -72,6 +73,25 @@ public class FileStorageHelper {
         fileStorageRepository.saveAll(fileStorageList);
     }
 
+    public void storeFileListByIds(List<Long> idList, Estimation estimation) {
+        List<FileStorage> existedFileStorageList = fileStorageRepository.findByIdIn(idList);
+        List<FileStorage> copiedFileStorageList = existedFileStorageList.stream()
+                .filter(this::checkExist)
+                .map(file -> getFileStorage(file, estimation))
+                .collect(Collectors.toList());
+        fileStorageRepository.saveAll(copiedFileStorageList);
+    }
+
+    private FileStorage getFileStorage(FileStorage file, Estimation estimation) {
+        return FileStorage.builder()
+                .uuid(file.getUuid())
+                .fileName(file.getFileName())
+                .docType(file.getDocType())
+                .folder(file.getFolder())
+                .estimation(estimation)
+                .build();
+    }
+
     @LogInfo
     public List<FileResponse> getFileResponseList(Estimation estimation) {
         List<FileResponse> fileResponseList = new ArrayList<>();
@@ -100,13 +120,19 @@ public class FileStorageHelper {
         String extension = fileName.substring(fileName.lastIndexOf("."));
         Path filePath = rootLocation.resolve(fileStorage.getUuid().toString() + extension).normalize();
         if (Files.exists(filePath))
-            try {
-                Files.delete(filePath);
-                log.info("File with id " + fileStorage.getId() + " deleted");
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.error(e.getMessage());
+            if (!checkBind(fileStorage)) {
+                try {
+                    Files.delete(filePath);
+                    log.info("File with id " + fileStorage.getId() + " deleted");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    log.error(e.getMessage());
+                }
             }
+    }
+
+    private boolean checkBind(FileStorage fileStorage) {
+        return fileStorageRepository.findAllByUuid(fileStorage.getUuid()).size() > 1;
     }
 
     private Map<Long, String> findFilesByEstimationAndFolder(Estimation estimation, Folder folder) {

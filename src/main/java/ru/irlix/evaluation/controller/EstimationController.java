@@ -12,10 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.response.EstimationCostResponse;
-import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
-import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.dto.response.*;
 import ru.irlix.evaluation.service.EstimationService;
 import ru.irlix.evaluation.utils.constant.UrlConstants;
 
@@ -98,4 +95,11 @@ public class EstimationController {
         log.info(UrlConstants.RECEIVED_ID + id);
         return estimationService.getEstimationCost(id, params);
     }
+
+    @GetMapping("/{id}/files")
+    public List<FileStorageResponse> findFilesByEstimationId(@PathVariable Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return estimationService.findFileResponsesByEstimationId(id);
+    }
+
 }

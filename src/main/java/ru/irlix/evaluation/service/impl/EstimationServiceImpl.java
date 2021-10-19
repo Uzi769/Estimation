@@ -17,14 +17,12 @@ import ru.irlix.evaluation.dao.helper.FileStorageHelper;
 import ru.irlix.evaluation.dao.helper.StatusHelper;
 import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dao.mapper.EstimationMapper;
+import ru.irlix.evaluation.dao.mapper.FileStorageMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
 import ru.irlix.evaluation.dto.request.EstimationPageRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
-import ru.irlix.evaluation.dto.response.EstimationCostResponse;
-import ru.irlix.evaluation.dto.response.EstimationResponse;
-import ru.irlix.evaluation.dto.response.EstimationStatsResponse;
-import ru.irlix.evaluation.dto.response.PhaseResponse;
+import ru.irlix.evaluation.dto.response.*;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
 import ru.irlix.evaluation.service.EstimationService;
@@ -49,6 +47,7 @@ public class EstimationServiceImpl implements EstimationService {
     private final ReportHelper reportHelper;
     private final EstimationMath estimationMath;
     private final FileStorageHelper fileStorageHelper;
+    private final FileStorageMapper fileStorageMapper;
 
     @EventInfo
     @LogInfo
@@ -57,6 +56,10 @@ public class EstimationServiceImpl implements EstimationService {
     public EstimationResponse createEstimation(EstimationRequest estimationRequest) {
         Estimation estimation = estimationMapper.estimationRequestToEstimation(estimationRequest);
         Estimation savedEstimation = estimationRepository.save(estimation);
+
+        if (estimationRequest.getFileIds() != null) {
+            fileStorageHelper.storeFileListByIds(estimationRequest.getFileIds(), estimation);
+        }
 
         log.info("Estimation with id " + savedEstimation.getId() + " saved");
         return estimationMapper.estimationToEstimationResponse(savedEstimation);
@@ -199,4 +202,14 @@ public class EstimationServiceImpl implements EstimationService {
         log.info("Estimation cost by id" + id + " calculated");
         return estimationCost;
     }
+
+    @LogInfo
+    @Override
+    @Transactional(readOnly = true)
+    public List<FileStorageResponse> findFileResponsesByEstimationId(Long id) {
+        Estimation estimation = findEstimationById(id);
+        log.info("Files of estimation with id " + estimation.getId() + " found");
+        return fileStorageMapper.fileStoragesToFileStorageList(estimation.getFileStorages());
+    }
+
 }

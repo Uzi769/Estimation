@@ -31,4 +31,6 @@ public class EstimationRequest {
 
     private List<MultipartFile> multipartFiles;
 
+    private List<Long> fileIds;
+
 }
