@@ -25,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Component
@@ -74,20 +75,21 @@ public class FileStorageHelper {
 
     public void storeFileListByIds(List<Long> idList, Estimation estimation) {
         List<FileStorage> existedFileStorageList = fileStorageRepository.findByIdIn(idList);
-        List<FileStorage> copiedFileStorageList = new ArrayList<>();
-        existedFileStorageList.forEach(file -> {
-            if (checkExist(file)) {
-                FileStorage fileStorage = FileStorage.builder()
-                        .uuid(file.getUuid())
-                        .fileName(file.getFileName())
-                        .docType(file.getDocType())
-                        .folder(file.getFolder())
-                        .estimation(estimation)
-                        .build();
-                copiedFileStorageList.add(fileStorage);
-            }
-        });
+        List<FileStorage> copiedFileStorageList = existedFileStorageList.stream()
+                .filter(this::checkExist)
+                .map(file -> getFileStorage(file, estimation))
+                .collect(Collectors.toList());
         fileStorageRepository.saveAll(copiedFileStorageList);
+    }
+
+    private FileStorage getFileStorage(FileStorage file, Estimation estimation) {
+        return FileStorage.builder()
+                .uuid(file.getUuid())
+                .fileName(file.getFileName())
+                .docType(file.getDocType())
+                .folder(file.getFolder())
+                .estimation(estimation)
+                .build();
     }
 
     @LogInfo
