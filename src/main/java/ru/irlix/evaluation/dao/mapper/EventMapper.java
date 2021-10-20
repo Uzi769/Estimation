@@ -22,7 +22,7 @@ import ru.irlix.evaluation.utils.security.SecurityUtils;
 import java.time.Instant;
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = ActionMapper.class)
 public abstract class EventMapper {
 
     @Autowired
@@ -31,7 +31,6 @@ public abstract class EventMapper {
     @Autowired
     private PhaseHelper phaseHelper;
 
-    @Mapping(target = "description", source = "value")
     public abstract EventResponse eventToEventResponse(Event event);
 
     public abstract List<EventResponse> eventToEventResponse(List<Event> event);

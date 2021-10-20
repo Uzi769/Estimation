@@ -22,8 +22,12 @@ public class Event {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "value")
-    private String value;
+    @Column(name = "description")
+    private String description;
+
+    @ManyToOne
+    @JoinColumn(name = "action_id")
+    private Action action;
 
     @Column(name = "date")
     private Instant date;
