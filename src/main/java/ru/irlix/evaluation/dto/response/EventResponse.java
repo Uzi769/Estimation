@@ -17,4 +17,14 @@ public class EventResponse {
     private Instant date;
 
     private String username;
+
+    private String estimationName;
+
+    private ActionResponse action;
+
+    private Long estimationId;
+
+    private Long phaseId;
+
+    private Long taskId;
 }

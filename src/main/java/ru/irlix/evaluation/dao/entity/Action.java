@@ -1,16 +1,20 @@
 package ru.irlix.evaluation.dao.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "role_dictionary")
+@Table(name = "action")
 @Getter
 @Setter
-public class Role {
+@NoArgsConstructor
+@AllArgsConstructor
+public class Action {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +27,6 @@ public class Role {
     @Column(name = "display_value")
     private String displayValue;
 
-    @OneToMany(mappedBy = "role")
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "action")
+    private List<Event> events;
 }

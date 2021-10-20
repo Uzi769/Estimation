@@ -55,7 +55,7 @@ public class EventFilterRepositoryImpl implements EventFilterRepository {
             String pattern = "%" + request.getText().toLowerCase() + "%";
             List<Predicate> textPredicates = List.of(
                     builder.like(builder.lower(root.get("username")), pattern),
-                    builder.like(builder.lower(root.get("value")), pattern),
+                    builder.like(builder.lower(root.get("description")), pattern),
                     builder.like(builder.lower(root.get("estimationName")), pattern),
                     builder.like(builder.lower(root.get("phaseName")), pattern),
                     builder.like(builder.lower(root.get("taskName")), pattern)
@@ -71,7 +71,7 @@ public class EventFilterRepositoryImpl implements EventFilterRepository {
 
         if (StringUtils.isNotEmpty(request.getDescription())) {
             String pattern = "%" + request.getDescription().toLowerCase() + "%";
-            filterPredicates.add(builder.like(builder.lower(root.get("value")), pattern));
+            filterPredicates.add(builder.like(builder.lower(root.get("description")), pattern));
         }
 
         if (StringUtils.isNotEmpty(request.getEstimationName())) {
@@ -99,6 +99,10 @@ public class EventFilterRepositoryImpl implements EventFilterRepository {
 
         if (request.getTaskId() != null) {
             filterPredicates.add(builder.equal(root.get("taskId"), request.getTaskId()));
+        }
+
+        if (request.getActionId() != null) {
+            filterPredicates.add(builder.equal(root.get("action").get("id"), request.getActionId()));
         }
 
         if (request.getBeginDate() != null) {

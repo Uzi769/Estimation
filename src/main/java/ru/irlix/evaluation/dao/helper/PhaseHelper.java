@@ -19,9 +19,4 @@ public class PhaseHelper {
         return phaseRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Phase with id " + id + " not found"));
     }
-
-    public Phase findPhaseByName(String name) {
-        return phaseRepository.findByName(name)
-                .orElseThrow(() -> new NotFoundException("Phase with id " + name + " not found"));
-    }
 }

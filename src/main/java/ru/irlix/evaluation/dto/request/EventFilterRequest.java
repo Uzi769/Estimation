@@ -27,6 +27,8 @@ public class EventFilterRequest extends PageableAndSortableRequest {
 
     private Long taskId;
 
+    private Long actionId;
+
     private String username;
 
     private Instant beginDate;

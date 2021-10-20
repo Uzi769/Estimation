@@ -48,6 +48,7 @@ public class EventServiceImpl implements EventService {
     private final UserHelper userHelper;
     private final StatusHelper statusHelper;
     private final FileStorageHelper fileStorageHelper;
+    private final ActionHelper actionHelper;
 
     @Transactional(readOnly = true)
     @Override
@@ -108,14 +109,16 @@ public class EventServiceImpl implements EventService {
 
     private Event getEvent(EstimationResponse estimationResponse) {
         Event event = mapper.estimationResponseToEvent(estimationResponse);
-        event.setValue("Создана оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ")");
+        event.setDescription("Создана оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findCreateAction());
         return event;
     }
 
     private Event getEvent(PhaseResponse phaseResponse) {
         Event event = mapper.phaseResponseToEvent(phaseResponse);
-        event.setValue("Создана фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ")" + " у оценки "
+        event.setDescription("Создана фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ")" + " у оценки "
                 + event.getEstimationName() + " (" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findCreateAction());
         return event;
     }
 
@@ -128,22 +131,25 @@ public class EventServiceImpl implements EventService {
             taskTypeAction = "Создана задача ";
         }
 
-        event.setValue(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") у фазы "
+        event.setDescription(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") у фазы "
                 + event.getPhaseName() + " (" + event.getPhaseId() + ") в оценке " + event.getEstimationName()
                 + " (" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findCreateAction());
         return event;
     }
 
     private Event getEvent(Estimation estimation) {
         Event event = mapper.estimationToEvent(estimation);
-        event.setValue("Оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ") удалена");
+        event.setDescription("Оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ") удалена");
+        event.setAction(actionHelper.findDeleteAction());
         return event;
     }
 
     private Event getEvent(Phase phase) {
         Event event = mapper.phaseToEvent(phase);
-        event.setValue("Фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ") удалена из оценки "
+        event.setDescription("Фаза " + event.getPhaseName() + " (" + event.getPhaseId() + ") удалена из оценки "
                 + event.getEstimationName() + " (" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findDeleteAction());
         return event;
     }
 
@@ -156,9 +162,10 @@ public class EventServiceImpl implements EventService {
             taskTypeAction = "Задача ";
         }
 
-        event.setValue(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") удалена из фазы "
+        event.setDescription(taskTypeAction + event.getTaskName() + " (" + event.getTaskId() + ") удалена из фазы "
                 + event.getPhaseName() + " (" + event.getPhaseId() + ") в оценке " + event.getEstimationName()
                 + " (" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findDeleteAction());
         return event;
     }
 
@@ -182,15 +189,18 @@ public class EventServiceImpl implements EventService {
             String value = "Файл(ы): " + fileNameList + " прикреплен(ы) к оценке "
                     + Objects.requireNonNull(estimation).getName()
                     + "(" + estimation.getId() + ")";
-            event.setValue(value);
+            event.setDescription(value);
+            event.setAction(actionHelper.findEditFilesAction());
         }
+
         return event;
     }
 
     private Event getEvent(FileStorage fileStorage) {
         Event event = mapper.estimationToEvent(fileStorage.getEstimation());
-        event.setValue("Файл " + fileStorage.getFileName() + " удален из оценки "
+        event.setDescription("Файл " + fileStorage.getFileName() + " удален из оценки "
                 + event.getEstimationName() + "(" + event.getEstimationId() + ")");
+        event.setAction(actionHelper.findEditFilesAction());
         return event;
     }
 
@@ -216,8 +226,9 @@ public class EventServiceImpl implements EventService {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
                 String newStatus = statusHelper.findStatusById(newStatusId).getDisplayValue();
-                event.setValue("У оценки " + estimation.getName() + " (" + estimation.getId() + ") сменен статус с \""
+                event.setDescription("У оценки " + estimation.getName() + " (" + estimation.getId() + ") сменен статус с \""
                         + estimation.getStatus().getDisplayValue() + "\" на \"" + newStatus + "\"");
+                event.setAction(actionHelper.findChangeStatusAction());
                 events.add(event);
             }
         }
@@ -228,8 +239,9 @@ public class EventServiceImpl implements EventService {
             if (!Objects.equals(newName, oldName)) {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
-                event.setValue("Оценка " + estimation.getName() + " (" + estimation.getId() + ") переименована на "
+                event.setDescription("Оценка " + estimation.getName() + " (" + estimation.getId() + ") переименована на "
                         + newName);
+                event.setAction(actionHelper.findRenameAction());
                 events.add(event);
             }
         }
@@ -266,7 +278,8 @@ public class EventServiceImpl implements EventService {
             if (!log.equals("")) {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
-                event.setValue(log);
+                event.setDescription(log);
+                event.setAction(actionHelper.findEditUsersAction());
                 events.add(event);
             }
         }
@@ -296,11 +309,12 @@ public class EventServiceImpl implements EventService {
                 PhaseResponse phaseResponse = phaseMapper.phaseToPhaseResponse(phase);
                 Event event = mapper.phaseResponseToEvent(phaseResponse);
                 if (newDone) {
-                    event.setValue("Фаза " + phase.getName() + " (" + phase.getId() + ") переведена в статус \"Завершена\"");
+                    event.setDescription("Фаза " + phase.getName() + " (" + phase.getId() + ") переведена в статус \"Завершена\"");
                 } else {
-                    event.setValue("Фаза " + phase.getName() + " (" + phase.getId() + ") переведена в статус \"В работе\"");
+                    event.setDescription("Фаза " + phase.getName() + " (" + phase.getId() + ") переведена в статус \"В работе\"");
                 }
 
+                event.setAction(actionHelper.findChangeStatusAction());
                 events.add(event);
             }
         }
@@ -311,7 +325,8 @@ public class EventServiceImpl implements EventService {
             if (!Objects.equals(newName, oldName)) {
                 PhaseResponse phaseResponse = phaseMapper.phaseToPhaseResponse(phase);
                 Event event = mapper.phaseResponseToEvent(phaseResponse);
-                event.setValue("Фаза " + phase.getName() + " (" + phase.getId() + ") переименована на " + newName);
+                event.setDescription("Фаза " + phase.getName() + " (" + phase.getId() + ") переименована на " + newName);
+                event.setAction(actionHelper.findRenameAction());
                 events.add(event);
             }
         }
@@ -341,12 +356,13 @@ public class EventServiceImpl implements EventService {
                 TaskResponse taskResponse = taskMapper.taskToResponse(task);
                 Event event = mapper.taskResponseToEvent(taskResponse);
                 if (task.getType().getId().equals(EntitiesIdConstants.FEATURE_ID)) {
-                    event.setValue("Фича " + task.getName() + " (" + task.getId() + ") переименована на "
+                    event.setDescription("Фича " + task.getName() + " (" + task.getId() + ") переименована на "
                             + newName);
                 } else if (task.getType().getId().equals(EntitiesIdConstants.TASK_ID)) {
-                    event.setValue("Задача " + task.getName() + " (" + task.getId() + ") переименована на "
+                    event.setDescription("Задача " + task.getName() + " (" + task.getId() + ") переименована на "
                             + newName);
                 }
+                event.setAction(actionHelper.findRenameAction());
                 events.add(event);
             }
         }
@@ -360,7 +376,8 @@ public class EventServiceImpl implements EventService {
         Estimation estimation = estimationHelper.findEstimationById(id);
         EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
         Event event = mapper.estimationResponseToEvent(estimationResponse);
-        event.setValue("Отчет по оценке " + estimation.getName() + " (" + estimation.getId() + ") выгружен");
+        event.setDescription("Отчет по оценке " + estimation.getName() + " (" + estimation.getId() + ") выгружен");
+        event.setAction(actionHelper.findLoadReportAction());
         return event;
     }
 
