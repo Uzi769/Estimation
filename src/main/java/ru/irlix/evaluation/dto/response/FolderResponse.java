@@ -1,6 +1,7 @@
 package ru.irlix.evaluation.dto.response;
 
 import lombok.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,4 +15,6 @@ public class FolderResponse {
     private String value;
 
     private String displayValue;
+
+    private Set<String> typeDoc;
 }
