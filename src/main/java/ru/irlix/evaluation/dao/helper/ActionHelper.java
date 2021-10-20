@@ -17,47 +17,41 @@ public class ActionHelper {
 
     public Action findCreateAction() {
         String value = "create";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findDeleteAction() {
         String value = "delete";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findRenameAction() {
         String value = "rename";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findEditUsersAction() {
         String value = "editUsers";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findEditFilesAction() {
         String value = "editFiles";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findChangeStatusAction() {
         String value = "changeStatus";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
     public Action findLoadReportAction() {
         String value = "loadReport";
-        return repository.findByValue(value)
-                .orElseThrow(() -> getNotFoundException(value));
+        return findAction(value);
     }
 
-    private NotFoundException getNotFoundException(String value) {
-        return new NotFoundException("Action with value " + value + " not found");
+    private Action findAction(String value) {
+        return repository.findByValue(value)
+                .orElseThrow(() -> new NotFoundException("Action with value " + value + " not found"));
     }
 }
