@@ -27,4 +27,6 @@ public class EventResponse {
     private Long phaseId;
 
     private Long taskId;
+
+    private Long userId;
 }

@@ -7,12 +7,10 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import ru.irlix.evaluation.dao.entity.Estimation;
-import ru.irlix.evaluation.dao.entity.Event;
-import ru.irlix.evaluation.dao.entity.Phase;
-import ru.irlix.evaluation.dao.entity.Task;
+import ru.irlix.evaluation.dao.entity.*;
 import ru.irlix.evaluation.dao.helper.EstimationHelper;
 import ru.irlix.evaluation.dao.helper.PhaseHelper;
+import ru.irlix.evaluation.dao.helper.UserHelper;
 import ru.irlix.evaluation.dto.response.EstimationResponse;
 import ru.irlix.evaluation.dto.response.EventResponse;
 import ru.irlix.evaluation.dto.response.PhaseResponse;
@@ -30,6 +28,9 @@ public abstract class EventMapper {
 
     @Autowired
     private PhaseHelper phaseHelper;
+
+    @Autowired
+    private UserHelper userHelper;
 
     public abstract EventResponse eventToEventResponse(Event event);
 
@@ -72,6 +73,10 @@ public abstract class EventMapper {
 
     @AfterMapping
     protected void map(@MappingTarget Event event) {
+        String keycloakId = SecurityUtils.getKeycloakId();
+        User user = userHelper.findUserByKeycloakId(keycloakId);
+
+        event.setUserId(user.getUserId());
         event.setUsername(SecurityUtils.getUserName());
         event.setDate(Instant.now());
     }
