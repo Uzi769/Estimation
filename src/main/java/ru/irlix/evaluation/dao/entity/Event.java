@@ -50,5 +50,6 @@ public class Event {
     @Column(name = "task_name")
     private String taskName;
 
-
+    @Column(name = "user_id")
+    private Long userId;
 }

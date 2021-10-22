@@ -105,6 +105,10 @@ public class EventFilterRepositoryImpl implements EventFilterRepository {
             filterPredicates.add(builder.equal(root.get("action").get("id"), request.getActionId()));
         }
 
+        if (request.getUserId() != null) {
+            filterPredicates.add(builder.equal(root.get("userId"), request.getUserId()));
+        }
+
         if (request.getBeginDate() != null) {
             filterPredicates.add(builder.greaterThanOrEqualTo(root.get("date"), request.getBeginDate()));
         }
