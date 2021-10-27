@@ -37,4 +37,6 @@ public class EstimationResponse {
     private List<UserResponse> users;
 
     private List<FileResponse> fileResponseList;
+
+    private Instant deleteDate;
 }

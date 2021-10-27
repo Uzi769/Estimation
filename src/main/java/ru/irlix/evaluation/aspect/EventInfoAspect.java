@@ -28,7 +28,7 @@ public class EventInfoAspect {
     @Around(value = "@annotation(ru.irlix.evaluation.aspect.EventInfo)")
     public Object makeDeletingEvent(ProceedingJoinPoint jp) throws Throwable {
         String methodName = jp.getSignature().getName();
-        if (!methodName.contains("delete")) {
+        if (!methodName.toLowerCase().contains("delete")) {
             return jp.proceed();
         }
 
@@ -42,6 +42,7 @@ public class EventInfoAspect {
         return methodName.contains("create") ||
                 methodName.contains("Report") ||
                 methodName.contains("update") ||
-                methodName.contains("storeFile");
+                methodName.contains("storeFile") ||
+                methodName.contains("restore");
     }
 }

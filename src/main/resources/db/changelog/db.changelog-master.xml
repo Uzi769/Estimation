@@ -41,5 +41,6 @@
     <include file="rename-event-value.xml" relativeToChangelogFile="true"/>
     <include file="create-action-table.xml" relativeToChangelogFile="true"/>
     <include file="add-user-id-to-event-changelog.xml" relativeToChangelogFile="true"/>
+    <include file="estimation-delete-date-changelog.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

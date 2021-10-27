@@ -51,7 +51,7 @@ public class EstimationController {
     @DeleteMapping("/{id}")
     public void deleteEstimation(@PathVariable @Positive(message = "{id.positive}") Long id) {
         log.info(UrlConstants.RECEIVED_ID + id);
-        estimationService.deleteEstimation(id);
+        estimationService.setEstimationDeleted(id);
     }
 
     @GetMapping
@@ -102,4 +102,10 @@ public class EstimationController {
         return estimationService.findFileResponsesByEstimationId(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{id}/restore")
+    public EstimationResponse restoreEstimation(@PathVariable Long id) {
+        log.info(UrlConstants.RECEIVED_ID + id);
+        return estimationService.restoreEstimation(id);
+    }
 }

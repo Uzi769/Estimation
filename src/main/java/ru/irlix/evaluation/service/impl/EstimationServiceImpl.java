@@ -2,8 +2,11 @@ package ru.irlix.evaluation.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,8 +23,8 @@ import ru.irlix.evaluation.dao.mapper.EstimationMapper;
 import ru.irlix.evaluation.dao.mapper.FileStorageMapper;
 import ru.irlix.evaluation.dao.mapper.PhaseMapper;
 import ru.irlix.evaluation.dto.request.EstimationFilterRequest;
-import ru.irlix.evaluation.dto.request.PageableAndSortableRequest;
 import ru.irlix.evaluation.dto.request.EstimationRequest;
+import ru.irlix.evaluation.dto.request.PageableAndSortableRequest;
 import ru.irlix.evaluation.dto.response.*;
 import ru.irlix.evaluation.exception.NotFoundException;
 import ru.irlix.evaluation.repository.estimation.EstimationRepository;
@@ -31,6 +34,8 @@ import ru.irlix.evaluation.utils.report.ReportHelper;
 import ru.irlix.evaluation.utils.security.SecurityUtils;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.Period;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +87,22 @@ public class EstimationServiceImpl implements EstimationService {
     @LogInfo
     @Override
     @Transactional
+    public void setEstimationDeleted(Long id) {
+        Estimation estimationToDelete = findEstimationById(id);
+        Instant deleteDate = Instant.now().plus(Period.ofDays(7));
+
+        if (estimationToDelete.getDeleteDate() != null) {
+            throw new IllegalArgumentException("Estimation with id " + id + " has already been deleted");
+        }
+
+        estimationToDelete.setDeleteDate(deleteDate);
+        log.info("Estimation with id " + estimationToDelete.getId() + " mark deleted");
+    }
+
+    @EventInfo
+    @LogInfo
+    @Override
+    @Transactional
     public void deleteEstimation(Long id) {
         Estimation estimationToDelete = findEstimationById(id);
         fileStorageHelper.deleteFilesByEstimation(estimationToDelete);
@@ -115,6 +136,38 @@ public class EstimationServiceImpl implements EstimationService {
         Page<Estimation> estimationList = estimationRepository.filter(request);
         log.info("Estimations filtered and found");
         return estimationMapper.estimationToEstimationResponse(estimationList);
+    }
+
+    @LogInfo
+    @EventInfo
+    @Override
+    @Transactional
+    public EstimationResponse restoreEstimation(Long id) {
+        Estimation estimationToRestore = findEstimationById(id);
+
+        if (estimationToRestore.getDeleteDate() == null) {
+            throw new IllegalArgumentException("Estimation with id " + id + " not deleted");
+        }
+
+        estimationToRestore.setDeleteDate(null);
+        Estimation estimation = estimationRepository.save(estimationToRestore);
+        log.info("Estimation + id + restored");
+        return estimationMapper.estimationToEstimationResponse(estimation);
+    }
+
+    @Scheduled(cron = "0 10 * * * ?")
+    @Transactional
+    @EventListener(ApplicationReadyEvent.class)
+    public void deleteEstimationFromRecycleBin() {
+        EstimationFilterRequest request = new EstimationFilterRequest();
+        request.setDeleted(true);
+        request.setSize(500);
+
+        List<Estimation> estimations = estimationRepository.filter(request).getContent();
+        estimations.forEach(fileStorageHelper::deleteFilesByEstimation);
+
+        estimationRepository.deleteByDeleteDateLessThanEqual(Instant.now());
+        log.info("Estimations deleted from recycle bin");
     }
 
     private void addUserIdToRequestIfRequired(PageableAndSortableRequest request) {

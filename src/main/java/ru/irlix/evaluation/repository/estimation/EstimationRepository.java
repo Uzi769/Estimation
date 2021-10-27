@@ -5,6 +5,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.lang.NonNull;
 import ru.irlix.evaluation.dao.entity.Estimation;
 
+import java.time.Instant;
 import java.util.Optional;
 
 public interface EstimationRepository extends PagingAndSortingRepository<Estimation, Long>, EstimationFilterRepository {
@@ -12,4 +13,6 @@ public interface EstimationRepository extends PagingAndSortingRepository<Estimat
     @EntityGraph(value = "estimation.phases")
     @NonNull
     Optional<Estimation> findById(@NonNull Long id);
+
+    void deleteByDeleteDateLessThanEqual(Instant deleteDate);
 }
