@@ -24,4 +24,6 @@ public class EstimationFilterRequest extends PageableAndSortableRequest {
     private Instant beginDate;
 
     private Instant endDate;
+
+    private boolean isDeleted = false;
 }

@@ -71,7 +71,7 @@ public class EventServiceImpl implements EventService {
             case "createTask":
                 event = getEvent((TaskResponse) value);
                 break;
-            case "deleteEstimation":
+            case "setEstimationDeleted":
                 event = getEvent((Estimation) value);
                 break;
             case "deletePhase":
@@ -97,6 +97,9 @@ public class EventServiceImpl implements EventService {
                 break;
             case "deleteFile":
                 event = getEvent((FileStorage) value);
+                break;
+            case "restoreEstimation":
+                event = getRestoreEvent(joinPoint);
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + methodName);
@@ -140,7 +143,7 @@ public class EventServiceImpl implements EventService {
 
     private Event getEvent(Estimation estimation) {
         Event event = mapper.estimationToEvent(estimation);
-        event.setDescription("Оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ") удалена");
+        event.setDescription("Оценка " + event.getEstimationName() + " (" + event.getEstimationId() + ") помечена как удаленная");
         event.setAction(actionHelper.findDeleteAction());
         return event;
     }
@@ -248,7 +251,7 @@ public class EventServiceImpl implements EventService {
 
         if (estimationRequest.getUserIdList() != null) {
             StringBuilder builder = new StringBuilder();
-            builder.append("Изменение участиников оценки ").append(estimation.getName()).append(" (")
+            builder.append("Изменение участников оценки ").append(estimation.getName()).append(" (")
                     .append(estimation.getId()).append(") ");
             List<User> oldUserList = estimation.getUsers();
             List<User> newUserList = userHelper.findByUserIdIn(estimationRequest.getUserIdList());
@@ -386,6 +389,17 @@ public class EventServiceImpl implements EventService {
         return event;
     }
 
+    private Event getRestoreEvent(JoinPoint joinPoint) {
+        Object objectEvent = Arrays.stream(joinPoint.getArgs()).findFirst().orElse(null);
+        Long id = (Long) objectEvent;
+        Estimation estimation = estimationHelper.findEstimationById(id);
+        EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
+        Event event = mapper.estimationResponseToEvent(estimationResponse);
+        event.setDescription("Оценка " + estimation.getName() + " (" + estimation.getId() + ") восстановлена");
+        event.setAction(actionHelper.findChangeStatusAction());
+        return event;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Object getElementToDelete(JoinPoint joinPoint) {
@@ -396,7 +410,7 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Id not found"));
 
         switch (methodName) {
-            case "deleteEstimation":
+            case "setEstimationDeleted":
                 return estimationHelper.findEstimationById(id);
             case "deletePhase":
                 return phaseHelper.findPhaseById(id);

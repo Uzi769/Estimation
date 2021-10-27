@@ -60,6 +60,9 @@ public class Estimation {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estimation")
     private List<FileStorage> fileStorages;
 
+    @Column(name = "delete_date")
+    private Instant deleteDate;
+
     @PrePersist
     public void prePersist() {
         if (risk == null) {

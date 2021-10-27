@@ -16,6 +16,8 @@ public interface EstimationService {
 
     EstimationResponse updateEstimation(Long id, EstimationRequest request);
 
+    void setEstimationDeleted(Long id);
+
     void deleteEstimation(Long id);
 
     Page<EstimationResponse> filterEstimations(EstimationFilterRequest request);
@@ -23,6 +25,8 @@ public interface EstimationService {
     EstimationResponse findEstimationResponseById(Long id);
 
     List<PhaseResponse> findPhaseResponsesByEstimationId(Long id);
+
+    EstimationResponse restoreEstimation(Long id);
 
     Resource getEstimationsReport(Long id, Map<String, String> request) throws IOException;
 

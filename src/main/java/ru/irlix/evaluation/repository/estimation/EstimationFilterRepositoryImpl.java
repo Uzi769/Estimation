@@ -56,6 +56,12 @@ public class EstimationFilterRepositoryImpl implements EstimationFilterRepositor
     private Predicate getPredicate(EstimationFilterRequest request) {
         List<Predicate> filterPredicates = new ArrayList<>();
 
+        if (request.isDeleted()) {
+            filterPredicates.add(builder.isNotNull(root.get("deleteDate")));
+        } else {
+            filterPredicates.add(builder.isNull(root.get("deleteDate")));
+        }
+
         if (StringUtils.isNotEmpty(request.getText())) {
             String pattern = "%" + request.getText().toLowerCase() + "%";
             List<Predicate> textPredicates = List.of(
