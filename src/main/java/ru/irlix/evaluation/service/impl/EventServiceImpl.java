@@ -275,6 +275,11 @@ public class EventServiceImpl implements EventService {
             }
 
             String log = builder.toString();
+            if (log.chars().count() > 250) {
+                log = "Изменение участников оценки  (" + estimation.getId()
+                        + "), значительные изменения состава экспертов";
+            }
+
             if (!log.equals("")) {
                 EstimationResponse estimationResponse = estimationMapper.estimationToEstimationResponse(estimation);
                 Event event = mapper.estimationResponseToEvent(estimationResponse);
